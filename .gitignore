@@ -5,6 +5,7 @@ node_modules/
 dist/
 !apps/api/dist/
 !packages/db/dist/
+!packages/db/generated/
 build/
 .env
 .env.local
