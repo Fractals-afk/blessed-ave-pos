@@ -1,0 +1,19 @@
+node_modules/
+**/node_modules/
+**/.next/
+.next/
+dist/
+build/
+.env
+.env.local
+.env.production
+.env.production.local
+.env.development.local
+.env.test.local
+*.log
+.DS_Store
+.turbo/
+coverage/
+prisma/dev.db
+# Added by code-review-graph
+.code-review-graph/

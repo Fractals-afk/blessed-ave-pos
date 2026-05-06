@@ -1,0 +1,400 @@
+// Blessed Ave Cafe — Prisma Schema
+// Database: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Users & Auth ─────────────────────────────────────────────────────────────
+
+enum UserRole {
+  OWNER
+  MANAGER
+  STAFF
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(STAFF)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orders       Order[]
+  shifts       Shift[]
+  clockEvents  ClockEvent[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+// ─── Menu ─────────────────────────────────────────────────────────────────────
+
+model MenuCategory {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  sortOrder   Int        @default(0)
+  active      Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  items MenuItem[]
+
+  @@map("menu_categories")
+}
+
+model MenuItem {
+  id          String       @id @default(cuid())
+  categoryId  String
+  name        String
+  description String?
+  price       Int          // in centavos (PHP)
+  imageUrl    String?
+  available   Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  category        MenuCategory    @relation(fields: [categoryId], references: [id])
+  modifierGroups  ModifierGroup[]
+  orderItems      OrderItem[]
+  recipeItems     RecipeItem[]
+
+  @@map("menu_items")
+}
+
+model ModifierGroup {
+  id          String           @id @default(cuid())
+  menuItemId  String
+  name        String           // e.g. "Size", "Milk Type", "Add-ons"
+  required    Boolean          @default(false)
+  multiSelect Boolean          @default(false)
+  sortOrder   Int              @default(0)
+
+  menuItem    MenuItem         @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  options     ModifierOption[]
+
+  @@map("modifier_groups")
+}
+
+model ModifierOption {
+  id              String  @id @default(cuid())
+  groupId         String
+  name            String
+  priceAdjustment Int     @default(0) // centavos, can be 0 or negative
+
+  group               ModifierGroup        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  selectedOptions     SelectedOption[]
+
+  @@map("modifier_options")
+}
+
+// ─── Tables ───────────────────────────────────────────────────────────────────
+
+model CafeTable {
+  id       String  @id @default(cuid())
+  name     String  // e.g. "Table 1"
+  qrToken  String  @unique @default(cuid())
+  active   Boolean @default(true)
+
+  orders Order[]
+
+  @@map("cafe_tables")
+}
+
+// ─── Orders ───────────────────────────────────────────────────────────────────
+
+enum OrderSource {
+  ONLINE
+  QR_TABLE
+  POS
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  COLLECTED
+  CANCELLED
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  source        OrderSource
+  status        OrderStatus @default(PENDING)
+  tableId       String?
+  staffId       String?     // for POS orders
+  customerName  String?
+  customerPhone String?
+  customerEmail String?
+  notes         String?
+  subtotal      Int         // centavos
+  total         Int         // centavos (subtotal after any discounts)
+  discountAmount Int        @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  table   CafeTable?  @relation(fields: [tableId], references: [id])
+  staff   User?       @relation(fields: [staffId], references: [id])
+  items   OrderItem[]
+  payment Payment?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id           String @id @default(cuid())
+  orderId      String
+  menuItemId   String
+  menuItemName String // snapshot at time of order
+  quantity     Int
+  unitPrice    Int    // centavos, snapshot at time of order
+  subtotal     Int    // centavos
+  notes        String?
+
+  order           Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem        MenuItem         @relation(fields: [menuItemId], references: [id])
+  selectedOptions SelectedOption[]
+
+  @@map("order_items")
+}
+
+model SelectedOption {
+  id               String @id @default(cuid())
+  orderItemId      String
+  modifierOptionId String
+  name             String // snapshot
+  priceAdjustment  Int    // snapshot
+
+  orderItem      OrderItem      @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+  modifierOption ModifierOption @relation(fields: [modifierOptionId], references: [id])
+
+  @@map("selected_options")
+}
+
+// ─── Payments ─────────────────────────────────────────────────────────────────
+
+enum PaymentMethod {
+  GCASH
+  MAYA
+  CARD
+  CASH
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id                      String        @id @default(cuid())
+  orderId                 String        @unique
+  method                  PaymentMethod
+  status                  PaymentStatus @default(PENDING)
+  amount                  Int           // centavos
+  paymongoPaymentIntentId String?
+  paymongoSourceId        String?
+  receiptUrl              String?
+  paidAt                  DateTime?
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("payments")
+}
+
+// ─── Inventory ────────────────────────────────────────────────────────────────
+
+enum InventoryUnit {
+  KG
+  G
+  L
+  ML
+  PCS
+  PACK
+  BOTTLE
+}
+
+model InventoryItem {
+  id                String        @id @default(cuid())
+  name              String
+  unit              InventoryUnit
+  currentStock      Float         @default(0)
+  lowStockThreshold Float         @default(0)
+  cost              Int           @default(0) // centavos per unit
+  supplierId        String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  supplier         Supplier?         @relation(fields: [supplierId], references: [id])
+  inventoryLogs    InventoryLog[]
+  recipeItems      RecipeItem[]
+  purchaseOrderItems PurchaseOrderItem[]
+
+  @@map("inventory_items")
+}
+
+enum InventoryLogReason {
+  SALE
+  PURCHASE
+  WASTE
+  ADJUSTMENT
+  OPENING_STOCK
+}
+
+model InventoryLog {
+  id              String             @id @default(cuid())
+  inventoryItemId String
+  reason          InventoryLogReason
+  quantityChange  Float              // negative for consumption, positive for purchase
+  stockAfter      Float
+  notes           String?
+  createdAt       DateTime           @default(now())
+
+  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
+
+  @@map("inventory_logs")
+}
+
+// Recipe mapping — how much of each ingredient a menu item uses
+model RecipeItem {
+  id              String @id @default(cuid())
+  menuItemId      String
+  inventoryItemId String
+  quantity        Float  // amount consumed per 1 of this menu item
+
+  menuItem      MenuItem      @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
+
+  @@unique([menuItemId, inventoryItemId])
+  @@map("recipe_items")
+}
+
+// ─── Suppliers ────────────────────────────────────────────────────────────────
+
+model Supplier {
+  id          String  @id @default(cuid())
+  name        String
+  contactName String?
+  phone       String?
+  email       String?
+  notes       String?
+  active      Boolean @default(true)
+
+  inventoryItems InventoryItem[]
+  purchaseOrders PurchaseOrder[]
+
+  @@map("suppliers")
+}
+
+model PurchaseOrder {
+  id         String    @id @default(cuid())
+  supplierId String
+  total      Int       // centavos
+  notes      String?
+  createdAt  DateTime  @default(now())
+  receivedAt DateTime?
+
+  supplier Supplier           @relation(fields: [supplierId], references: [id])
+  items    PurchaseOrderItem[]
+
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderItem {
+  id              String @id @default(cuid())
+  purchaseOrderId String
+  inventoryItemId String
+  quantity        Float
+  unitCost        Int    // centavos
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
+
+  @@map("purchase_order_items")
+}
+
+// ─── Staff & Scheduling ───────────────────────────────────────────────────────
+
+model Shift {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime @db.Date
+  startTime String   // "HH:mm"
+  endTime   String   // "HH:mm"
+  notes     String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("shifts")
+}
+
+model ClockEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // "CLOCK_IN" | "CLOCK_OUT"
+  timestamp DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("clock_events")
+}
+
+// ─── Operating Costs ──────────────────────────────────────────────────────────
+
+enum CostCategory {
+  RENT
+  UTILITIES
+  WAGES
+  PACKAGING
+  MARKETING
+  EQUIPMENT
+  MAINTENANCE
+  OTHER
+}
+
+enum CostFrequency {
+  ONE_TIME
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+model OperatingCost {
+  id          String        @id @default(cuid())
+  name        String        // e.g. "Monthly Rent", "Electricity Bill"
+  category    CostCategory
+  frequency   CostFrequency
+  amount      Int           // centavos
+  date        DateTime      @db.Date // the date this cost was incurred
+  notes       String?
+  createdAt   DateTime      @default(now())
+
+  @@map("operating_costs")
+}

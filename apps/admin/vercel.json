@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "installCommand": "cd ../.. && pnpm install",
+  "buildCommand": "cd ../.. && pnpm --filter @blessed-ave/types build && pnpm --filter @blessed-ave/admin build",
+  "outputDirectory": ".next"
+}
