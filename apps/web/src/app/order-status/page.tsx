@@ -1,7 +1,8 @@
 "use client";
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import type { Order } from "@blessed-ave/types";
 import { io } from "socket.io-client";
@@ -24,15 +25,16 @@ const STATUS_EMOJI: Record<string, string> = {
   CANCELLED: "❌",
 };
 
-export default function OrderStatusPage() {
-  const { id } = useParams<{ id: string }>();
+function OrderStatusInner() {
   const searchParams = useSearchParams();
+  const id = searchParams.get("id") ?? "";
   const paymentResult = searchParams.get("payment");
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!id) { setLoading(false); return; }
     api.orders.getById(id).then((r) => {
       setOrder(r.data);
       setLoading(false);
@@ -66,7 +68,6 @@ export default function OrderStatusPage() {
 
   return (
     <div className="min-h-screen bg-cream-100 px-4 py-12">
-      {/* Header */}
       <div className="mx-auto max-w-md mb-8 flex items-center gap-3">
         <div className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-gold-500 bg-brown-800">
           <span className="font-display text-lg font-black text-cream-200">B</span>
@@ -97,7 +98,6 @@ export default function OrderStatusPage() {
           )}
         </div>
 
-        {/* Progress steps */}
         {order.status !== "CANCELLED" && (
           <div className="mt-10 flex items-center justify-between">
             {STATUS_STEPS.map((step, i) => (
@@ -119,7 +119,6 @@ export default function OrderStatusPage() {
           </div>
         )}
 
-        {/* Step labels */}
         {order.status !== "CANCELLED" && (
           <div className="mt-2 flex justify-between text-[10px] text-brown-400 px-0.5">
             {["Confirmed", "Preparing", "Ready", "Done"].map((label) => (
@@ -128,7 +127,6 @@ export default function OrderStatusPage() {
           </div>
         )}
 
-        {/* Order items */}
         <div className="mt-10 rounded-2xl bg-white p-5 shadow-sm border border-cream-200">
           <h2 className="font-semibold text-brown-800 mb-4">Your order</h2>
           <div className="space-y-2">
@@ -158,5 +156,17 @@ export default function OrderStatusPage() {
         </a>
       </div>
     </div>
+  );
+}
+
+export default function OrderStatusPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-cream-100">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gold-500 border-t-transparent" />
+      </div>
+    }>
+      <OrderStatusInner />
+    </Suspense>
   );
 }

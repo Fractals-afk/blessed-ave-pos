@@ -55,7 +55,7 @@ export function CartDrawer({ open, onClose, isTableOrder }: Props) {
 
       if (isTableOrder || method === "CASH") {
         clearCart();
-        router.push(`/order/${orderId}?payment=cash`);
+        router.push(`/order-status?id=${orderId}&payment=cash`);
         return;
       }
 
@@ -71,7 +71,7 @@ export function CartDrawer({ open, onClose, isTableOrder }: Props) {
   function handleQrDone() {
     if (!qrOrderId) return;
     clearCart();
-    router.push(`/order/${qrOrderId}?payment=pending`);
+    router.push(`/order-status?id=${qrOrderId}&payment=pending`);
   }
 
   return (
@@ -98,7 +98,7 @@ export function CartDrawer({ open, onClose, isTableOrder }: Props) {
               <div className="rounded-2xl border-4 border-slate-100 overflow-hidden shadow-md mb-4">
                 {qrUrl
                   ? <img src={qrUrl} alt={`${method} QR`} className="w-64 h-64 object-contain" />
-                  : <QrPlaceholder method={method} size={256} />
+                  : <QrPlaceholder method={method as "GCASH" | "MAYA"} size={256} />
                 }
               </div>
               <p className="text-sm text-slate-600 mb-1">

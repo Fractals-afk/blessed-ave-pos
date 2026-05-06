@@ -1,15 +1,18 @@
 "use client";
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { useCart } from "@/store/cart";
 import type { MenuCategory } from "@blessed-ave/types";
 import { MenuCategorySection } from "@/components/MenuCategorySection";
 import { CartDrawer } from "@/components/CartDrawer";
 
-export default function TableOrderPage() {
-  const { token } = useParams<{ token: string }>();
+function TableOrderInner() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token") ?? "";
+
   const [categories, setCategories] = useState<MenuCategory[]>([]);
   const [tableName, setTableName] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -23,6 +26,7 @@ export default function TableOrderPage() {
   const itemCount = items.reduce((s, i) => s + i.quantity, 0);
 
   useEffect(() => {
+    if (!token) { setError("No table token provided."); setLoading(false); return; }
     Promise.all([api.tables.getByToken(token), api.menu.getAll()])
       .then(([tableRes, menuRes]) => {
         setTableName(tableRes.data.name);
@@ -84,7 +88,6 @@ export default function TableOrderPage() {
           </button>
         </div>
 
-        {/* Category tabs */}
         <nav className="flex gap-1.5 overflow-x-auto px-4 pb-3 scrollbar-hide">
           {categories.map((cat) => (
             <a
@@ -120,5 +123,17 @@ export default function TableOrderPage() {
 
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} isTableOrder />
     </div>
+  );
+}
+
+export default function TableOrderPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-cream-100">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-gold-500 border-t-transparent" />
+      </div>
+    }>
+      <TableOrderInner />
+    </Suspense>
   );
 }

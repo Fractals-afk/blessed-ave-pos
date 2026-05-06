@@ -20,7 +20,7 @@ export default function TablesPage() {
 
   useEffect(() => {
     if (qrModal && canvasRef.current) {
-      QRCode.toCanvas(canvasRef.current, `${CLIENT_URL}/table/${qrModal.qrToken}`, { width: 240, margin: 2 });
+      QRCode.toCanvas(canvasRef.current, `${CLIENT_URL}/table?token=${qrModal.qrToken}`, { width: 240, margin: 2 });
     }
   }, [qrModal]);
 
@@ -99,7 +99,7 @@ export default function TablesPage() {
           <div className="rounded-2xl bg-white p-8 shadow-xl border border-slate-200 text-center mx-4" onClick={(e) => e.stopPropagation()}>
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">QR Code</p>
             <h3 className="text-xl font-bold text-slate-900 mb-1">{qrModal.name}</h3>
-            <p className="text-xs text-slate-400 mb-5 font-mono">{CLIENT_URL}/table/{qrModal.qrToken}</p>
+            <p className="text-xs text-slate-400 mb-5 font-mono">{CLIENT_URL}/table?token={qrModal.qrToken}</p>
             <canvas ref={canvasRef} className="rounded-xl mx-auto border border-slate-100" />
             <div className="mt-5 flex gap-3 justify-center">
               <button onClick={() => downloadQR(qrModal)} className="rounded-lg bg-[#0f172a] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition">
