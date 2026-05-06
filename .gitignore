@@ -3,6 +3,7 @@ node_modules/
 **/.next/
 .next/
 dist/
+!apps/api/dist/
 build/
 .env
 .env.local
