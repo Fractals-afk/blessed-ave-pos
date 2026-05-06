@@ -88,7 +88,7 @@ ordersRouter.post("/", async (req, res, next) => {
       })
     );
 
-    const order = await prisma.order.create({
+    const order = await (prisma.order.create as any)({
       data: {
         source: body.source,
         tableId: body.tableId,

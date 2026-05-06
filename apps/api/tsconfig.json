@@ -5,7 +5,10 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     "rootDir": "./src",
-    "lib": ["ES2020"]
+    "lib": ["ES2020"],
+    "skipLibCheck": true,
+    "declaration": false,
+    "declarationMap": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

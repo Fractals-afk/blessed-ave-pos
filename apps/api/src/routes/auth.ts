@@ -27,10 +27,10 @@ authRouter.post("/login", async (req, res, next) => {
     const payload: AuthPayload = { userId: user.id, role: user.role as any };
 
     const accessToken = jwt.sign(payload, process.env.JWT_SECRET!, {
-      expiresIn: process.env.JWT_EXPIRES_IN ?? "15m",
+      expiresIn: (process.env.JWT_EXPIRES_IN ?? "15m") as any,
     });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET!, {
-      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN ?? "7d",
+      expiresIn: (process.env.JWT_REFRESH_EXPIRES_IN ?? "7d") as any,
     });
 
     // Store refresh token
@@ -79,7 +79,7 @@ authRouter.post("/refresh", async (req, res, next) => {
     };
 
     const accessToken = jwt.sign(payload, process.env.JWT_SECRET!, {
-      expiresIn: process.env.JWT_EXPIRES_IN ?? "15m",
+      expiresIn: (process.env.JWT_EXPIRES_IN ?? "15m") as any,
     });
 
     res.json({ data: { accessToken } });
