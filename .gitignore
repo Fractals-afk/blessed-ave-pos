@@ -4,6 +4,7 @@ node_modules/
 .next/
 dist/
 !apps/api/dist/
+!packages/db/dist/
 build/
 .env
 .env.local
