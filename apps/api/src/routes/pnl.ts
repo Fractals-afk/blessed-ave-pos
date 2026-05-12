@@ -18,7 +18,7 @@ pnlRouter.get("/", requireAuth, requireRole("OWNER", "MANAGER"), async (req, res
     const paidPayments = await prisma.payment.findMany({
       where: { status: "PAID", paidAt: { gte: fromDate, lte: toDate } },
     });
-    const totalRevenue = paidPayments.reduce((s, p) => s + p.amount, 0);
+    const totalRevenue = paidPayments.reduce((s: number, p: typeof paidPayments[number]) => s + p.amount, 0);
 
     // Revenue by payment method
     const revenueByMethod: Record<string, number> = { GCASH: 0, MAYA: 0, CARD: 0, CASH: 0 };
@@ -49,7 +49,7 @@ pnlRouter.get("/", requireAuth, requireRole("OWNER", "MANAGER"), async (req, res
 
         // Cost per unit = sum of (ingredient qty × ingredient cost)
         const itemCOGS = recipes.reduce(
-          (s, r) => s + r.quantity * r.inventoryItem.cost,
+          (s: number, r: typeof recipes[number]) => s + r.quantity * r.inventoryItem.cost,
           0
         ) * orderItem.quantity;
 
@@ -88,7 +88,7 @@ pnlRouter.get("/", requireAuth, requireRole("OWNER", "MANAGER"), async (req, res
       orderBy: { date: "asc" },
     });
 
-    const totalOpCosts = opCosts.reduce((s, c) => s + c.amount, 0);
+    const totalOpCosts = opCosts.reduce((s: number, c: typeof opCosts[number]) => s + c.amount, 0);
 
     // Operating costs by category
     const opCostsByCategory: Record<string, number> = {};

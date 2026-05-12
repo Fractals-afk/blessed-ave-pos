@@ -41,7 +41,7 @@ reportsRouter.get(
         }),
       ]);
 
-      const totalRevenue = payments.reduce((s, p) => s + p.amount, 0);
+      const totalRevenue = payments.reduce((s: number, p: typeof payments[number]) => s + p.amount, 0);
       const totalOrders = orders.length;
 
       // Revenue by payment method
@@ -138,13 +138,13 @@ reportsRouter.get(
         }),
       ]);
 
-      const weekRevenue = weekOrders.reduce((s, o) => s + o.total, 0);
+      const weekRevenue = weekOrders.reduce((s: number, o: typeof weekOrders[number]) => s + o.total, 0);
 
       // Low stock: currentStock <= lowStockThreshold
       const allItems = await prisma.inventoryItem.findMany({
         select: { currentStock: true, lowStockThreshold: true },
       });
-      const lowStockItems = allItems.filter((i) => i.currentStock <= i.lowStockThreshold).length;
+      const lowStockItems = allItems.filter((i: typeof allItems[number]) => i.currentStock <= i.lowStockThreshold).length;
 
       res.json({
         data: {

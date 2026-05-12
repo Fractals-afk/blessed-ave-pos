@@ -45,12 +45,12 @@ ordersRouter.post("/", async (req, res, next) => {
       throw new AppError("One or more menu items not found or unavailable");
     }
 
-    const menuMap = new Map(menuItems.map((m) => [m.id, m]));
+    const menuMap = new Map(menuItems.map((m: typeof menuItems[number]) => [m.id, m]));
 
     let subtotal = 0;
     const orderItemsData = await Promise.all(
-      body.items.map(async (item) => {
-        const menuItem = menuMap.get(item.menuItemId)!;
+      body.items.map(async (item: typeof body.items[number]) => {
+        const menuItem = menuMap.get(item.menuItemId)! as typeof menuItems[number];
         let unitPrice = menuItem.price;
 
         // Fetch selected modifier options for snapshot + price
@@ -62,7 +62,7 @@ ordersRouter.post("/", async (req, res, next) => {
           : [];
 
         const optionAdjustments = options.reduce(
-          (sum, o) => sum + o.priceAdjustment,
+          (sum: number, o: typeof options[number]) => sum + o.priceAdjustment,
           0
         );
         unitPrice += optionAdjustments;
@@ -78,7 +78,7 @@ ordersRouter.post("/", async (req, res, next) => {
           subtotal: itemSubtotal,
           notes: item.notes,
           selectedOptions: {
-            create: options.map((o) => ({
+            create: options.map((o: typeof options[number]) => ({
               modifierOptionId: o.id,
               name: o.name,
               priceAdjustment: o.priceAdjustment,

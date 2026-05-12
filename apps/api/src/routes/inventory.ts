@@ -13,7 +13,7 @@ inventoryRouter.get("/", requireAuth, async (_req, res, next) => {
       include: { supplier: true },
       orderBy: { name: "asc" },
     });
-    const itemsWithFlag = items.map((i) => ({
+    const itemsWithFlag = items.map((i: typeof items[number]) => ({
       ...i,
       isLow: i.currentStock <= i.lowStockThreshold,
     }));
@@ -30,7 +30,7 @@ inventoryRouter.get("/low-stock", requireAuth, async (_req, res, next) => {
       include: { supplier: true },
       orderBy: { name: "asc" },
     });
-    const low = items.filter((i) => i.currentStock <= i.lowStockThreshold);
+    const low = items.filter((i: typeof items[number]) => i.currentStock <= i.lowStockThreshold);
     res.json({ data: low });
   } catch (e) {
     next(e);

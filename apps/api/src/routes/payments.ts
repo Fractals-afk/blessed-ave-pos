@@ -34,11 +34,11 @@ paymentsRouter.post("/cash", async (req, res, next) => {
       orderId,
       customerName: confirmed.customerName ?? undefined,
       customerEmail: (confirmed as any).customerEmail ?? undefined,
-      items: confirmed.items.map((i) => ({
+      items: confirmed.items.map((i: typeof confirmed.items[number]) => ({
         name: i.menuItemName,
         quantity: i.quantity,
         subtotal: i.subtotal,
-        options: i.selectedOptions.map((o) => o.name).join(", ") || undefined,
+        options: i.selectedOptions.map((o: typeof i.selectedOptions[number]) => o.name).join(", ") || undefined,
       })),
       total: confirmed.total,
       paymentMethod: "Cash",
@@ -82,11 +82,11 @@ paymentsRouter.post("/qr-confirm", async (req, res, next) => {
       orderId,
       customerName: confirmed.customerName ?? undefined,
       customerEmail: (confirmed as any).customerEmail ?? undefined,
-      items: confirmed.items.map((i) => ({
+      items: confirmed.items.map((i: typeof confirmed.items[number]) => ({
         name: i.menuItemName,
         quantity: i.quantity,
         subtotal: i.subtotal,
-        options: i.selectedOptions.map((o) => o.name).join(", ") || undefined,
+        options: i.selectedOptions.map((o: typeof i.selectedOptions[number]) => o.name).join(", ") || undefined,
       })),
       total: confirmed.total,
       paymentMethod: method === "GCASH" ? "GCash" : "Maya",
