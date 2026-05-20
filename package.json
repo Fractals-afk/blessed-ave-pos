@@ -2,11 +2,7 @@
   "name": "blessed-ave",
   "private": true,
   "version": "1.0.0",
-  "packageManager": "pnpm@9.0.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "packageManager": "pnpm@11.1.2",
   "scripts": {
     "dev": "pnpm --parallel --filter './apps/*' dev",
     "build": "pnpm --filter './packages/*' build && pnpm --filter './apps/*' build",
@@ -18,5 +14,14 @@
   },
   "devDependencies": {
     "typescript": "^5.4.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma",
+      "unrs-resolver"
+    ]
   }
 }
