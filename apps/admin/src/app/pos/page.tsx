@@ -271,7 +271,7 @@ export default function POSPage() {
   return (
     <AdminLayout>
       <div className="flex h-screen flex-col overflow-hidden">
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex h-1/2 overflow-hidden">
 
         {/* ── Menu panel ───────────────────────────────────────── */}
         <div className="flex flex-1 flex-col overflow-hidden bg-slate-50">
@@ -370,20 +370,24 @@ export default function POSPage() {
       </div>
 
       {/* ── Tables bar ───────────────────────────────────────── */}
-      <div className="flex gap-1.5 overflow-x-auto border-t border-slate-200 bg-white px-4 py-2.5 scrollbar-hide">
-        {sortedTables.map((table) => {
-          const order = ordersByTable.get(table.id)?.[0];
-          const count = ordersByTable.get(table.id)?.length ?? 0;
-          const badge = tableBadge(order?.status);
-          return (
-            <button key={table.id} onClick={() => openTable(table)}
-              className={`flex-shrink-0 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition hover:shadow-sm ${badge.cls}`}>
-              <span>{table.name}</span>
-              <span className="opacity-70">· {badge.label}</span>
-              {count > 1 && <span className="opacity-70">({count})</span>}
-            </button>
-          );
-        })}
+      <div className="flex h-1/2 flex-col border-t border-slate-200 bg-white overflow-hidden">
+        <div className="flex-1 overflow-y-auto p-3">
+          <div className="grid h-full grid-cols-5 grid-rows-3 gap-3">
+            {sortedTables.map((table) => {
+              const order = ordersByTable.get(table.id)?.[0];
+              const count = ordersByTable.get(table.id)?.length ?? 0;
+              const badge = tableBadge(order?.status);
+              return (
+                <button key={table.id} onClick={() => openTable(table)}
+                  className={`flex flex-col items-center justify-center gap-1 rounded-xl border-2 text-center transition hover:shadow-md ${badge.cls}`}>
+                  <span className="text-lg font-bold">{table.name}</span>
+                  <span className="text-sm opacity-70">{badge.label}</span>
+                  {count > 1 && <span className="text-xs opacity-70">({count} orders)</span>}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
       </div>
 
