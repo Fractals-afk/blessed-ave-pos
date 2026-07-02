@@ -7,6 +7,8 @@ const FALLBACK_ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL ?? "http://localhos
 function useAdminBase() {
   const [base, setBase] = useState(FALLBACK_ADMIN_URL);
   useEffect(() => {
+    const host = window.location.hostname;
+    if (host !== "localhost" && host !== "127.0.0.1") return;
     fetch("/dev-ports.json", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((ports) => {

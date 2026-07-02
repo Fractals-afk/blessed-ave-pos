@@ -81,9 +81,13 @@ POSTGRES_DB=blessed_ave
 changing these requires rebuilding, not just restarting):
 ```
 NEXT_PUBLIC_API_URL=https://api.blessedave.com
+NEXT_PUBLIC_ADMIN_URL=https://admin.blessedave.com
 NEXT_PUBLIC_GCASH_QR_URL=<real merchant QR image URL>
 NEXT_PUBLIC_MAYA_QR_URL=<real merchant QR image URL>
 ```
+`NEXT_PUBLIC_ADMIN_URL` only needs to be set for `apps/web/.env.local` — it's what
+`/store`'s POS/Kitchen/Admin links fall back to. Without it, the static export falls
+back to `http://localhost:3001`.
 
 ### 3. Build static exports
 
