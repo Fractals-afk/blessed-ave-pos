@@ -178,7 +178,7 @@ export default function OrdersPage() {
 
             {!["COLLECTED", "CANCELLED"].includes(detail.status) && (
               <div className="flex flex-wrap gap-2">
-                {STATUS_OPTIONS.filter((s) => s !== detail.status && s !== "PENDING").map((s) => (
+                {STATUS_OPTIONS.filter((s) => s !== detail.status && s !== "PENDING" && s !== "CONFIRMED").map((s) => (
                   <button key={s} onClick={() => updateStatus(detail, s)}
                     className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
                     Mark {s}

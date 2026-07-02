@@ -118,7 +118,7 @@ async function main() {
 
   // Cafe tables
   await Promise.all(
-    Array.from({ length: 8 }, (_, i) =>
+    Array.from({ length: 15 }, (_, i) =>
       prisma.cafeTable.upsert({
         where: { id: `table_${i + 1}` },
         update: {},
@@ -126,7 +126,7 @@ async function main() {
       })
     )
   );
-  console.log("✅ Cafe tables seeded (8 tables)");
+  console.log("✅ Cafe tables seeded (15 tables)");
 
   console.log("🎉 Seed complete!");
 }

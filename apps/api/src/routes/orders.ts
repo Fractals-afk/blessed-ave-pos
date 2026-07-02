@@ -4,7 +4,7 @@ import { prisma } from "@blessed-ave/db";
 import { requireAuth, requireRole } from "../middleware/auth";
 import { AppError } from "../middleware/errorHandler";
 import { io } from "../index";
-import { emitNewOrder, emitOrderStatusUpdate } from "../socket";
+import { emitOrderStatusUpdate } from "../socket";
 
 export const ordersRouter = Router();
 
@@ -107,7 +107,8 @@ ordersRouter.post("/", async (req, res, next) => {
       },
     });
 
-    emitNewOrder(io, order);
+    // Not pushed to the kitchen yet — that happens once payment is confirmed
+    // (see payments.ts), so unpaid orders never reach the kitchen display.
 
     res.status(201).json({ data: order });
   } catch (e) {
@@ -151,11 +152,11 @@ ordersRouter.get("/", requireAuth, async (req, res, next) => {
   }
 });
 
-// GET /api/orders/kitchen — live kitchen queue (pending + confirmed + preparing)
+// GET /api/orders/kitchen — live kitchen queue (paid orders only: confirmed + preparing + ready)
 ordersRouter.get("/kitchen", requireAuth, async (_req, res, next) => {
   try {
     const orders = await prisma.order.findMany({
-      where: { status: { in: ["PENDING", "CONFIRMED", "PREPARING"] } },
+      where: { status: { in: ["CONFIRMED", "PREPARING", "READY"] } },
       include: {
         items: { include: { selectedOptions: true } },
         table: true,
@@ -187,12 +188,14 @@ ordersRouter.get("/:id", async (req, res, next) => {
 });
 
 // PATCH /api/orders/:id/status — update order status
+// Note: CONFIRMED is intentionally excluded — only the payment routes
+// (payments.ts) may move an order into CONFIRMED, so it can't be pushed to
+// the kitchen without a recorded payment.
 ordersRouter.patch("/:id/status", requireAuth, async (req, res, next) => {
   try {
     const { status } = z
       .object({
         status: z.enum([
-          "CONFIRMED",
           "PREPARING",
           "READY",
           "COLLECTED",
@@ -213,11 +216,6 @@ ordersRouter.patch("/:id/status", requireAuth, async (req, res, next) => {
 
     emitOrderStatusUpdate(io, order.id, status, order);
 
-    // Auto-decrement inventory if order is CONFIRMED
-    if (status === "CONFIRMED") {
-      decrementInventory(order.id).catch(console.error);
-    }
-
     res.json({ data: order });
   } catch (e) {
     next(e);
@@ -225,7 +223,7 @@ ordersRouter.patch("/:id/status", requireAuth, async (req, res, next) => {
 });
 
 // Background: decrement inventory based on recipes
-async function decrementInventory(orderId: string) {
+export async function decrementInventory(orderId: string) {
   const order = await prisma.order.findUnique({
     where: { id: orderId },
     include: { items: true },

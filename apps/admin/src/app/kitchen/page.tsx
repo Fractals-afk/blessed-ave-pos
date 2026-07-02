@@ -9,22 +9,21 @@ import toast from "react-hot-toast";
 import clsx from "clsx";
 
 const STATUS_BORDER: Record<string, string> = {
-  PENDING:   "border-l-amber-400",
   CONFIRMED: "border-l-blue-400",
   PREPARING: "border-l-violet-400",
   READY:     "border-l-green-400",
 };
 
+// Orders only enter this board once payment is confirmed (see payments.ts),
+// so there's no manual "Confirm" step here — kitchen starts at CONFIRMED.
 const STATUS_ACTIONS: Record<string, { next: string; label: string; color: string }> = {
-  PENDING:   { next: "CONFIRMED", label: "Confirm",        color: "bg-blue-600 hover:bg-blue-500"   },
   CONFIRMED: { next: "PREPARING", label: "Start Prep",     color: "bg-violet-600 hover:bg-violet-500" },
   PREPARING: { next: "READY",     label: "Mark Ready 🔔",  color: "bg-green-600 hover:bg-green-500" },
   READY:     { next: "COLLECTED", label: "Collected ✓",    color: "bg-slate-600 hover:bg-slate-500" },
 };
 
 const COLS = [
-  { key: "PENDING",   label: "New",       dot: "bg-amber-400"  },
-  { key: "CONFIRMED", label: "Confirmed", dot: "bg-blue-400"   },
+  { key: "CONFIRMED", label: "New",       dot: "bg-blue-400"   },
   { key: "PREPARING", label: "Preparing", dot: "bg-violet-400" },
   { key: "READY",     label: "Ready",     dot: "bg-green-400"  },
 ];
@@ -94,7 +93,7 @@ export default function KitchenPage() {
           </div>
         )}
 
-        <div className="grid gap-4 lg:grid-cols-4">
+        <div className="grid gap-4 lg:grid-cols-3">
           {cols.map((col) => (
             <div key={col.key}>
               <div className="flex items-center gap-2 mb-3">

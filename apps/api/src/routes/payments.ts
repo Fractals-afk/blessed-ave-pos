@@ -3,8 +3,9 @@ import { z } from "zod";
 import { prisma } from "@blessed-ave/db";
 import { AppError } from "../middleware/errorHandler";
 import { io } from "../index";
-import { emitOrderStatusUpdate } from "../socket";
+import { emitNewOrder, emitOrderStatusUpdate } from "../socket";
 import { sendOrderReceipt } from "../mailer";
+import { decrementInventory } from "./orders";
 
 export const paymentsRouter = Router();
 
@@ -29,6 +30,8 @@ paymentsRouter.post("/cash", async (req, res, next) => {
     });
 
     emitOrderStatusUpdate(io, confirmed.id, "CONFIRMED", confirmed);
+    emitNewOrder(io, confirmed); // payment confirmed — now safe to push to kitchen
+    decrementInventory(confirmed.id).catch(console.error);
 
     sendOrderReceipt({
       orderId,
@@ -77,6 +80,8 @@ paymentsRouter.post("/qr-confirm", async (req, res, next) => {
     });
 
     emitOrderStatusUpdate(io, confirmed.id, "CONFIRMED", confirmed);
+    emitNewOrder(io, confirmed); // payment confirmed — now safe to push to kitchen
+    decrementInventory(confirmed.id).catch(console.error);
 
     sendOrderReceipt({
       orderId,
