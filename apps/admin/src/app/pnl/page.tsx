@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
+import { resolveApiBase } from "@/lib/api";
 import { format, subDays, startOfMonth } from "date-fns";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
@@ -31,7 +32,8 @@ export default function PnLPage() {
   async function load() {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/pnl?from=${from}&to=${to}`,
+      const API = await resolveApiBase();
+      const res = await fetch(`${API}/api/pnl?from=${from}&to=${to}`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` } });
       const json = await res.json(); setData(json.data);
     } finally { setLoading(false); }

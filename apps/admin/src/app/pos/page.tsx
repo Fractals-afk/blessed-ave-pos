@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
-import { adminApi } from "@/lib/api";
+import { adminApi, resolveApiBase } from "@/lib/api";
 import type { MenuCategory, MenuItem, ModifierOption } from "@blessed-ave/types";
 import toast from "react-hot-toast";
 import { QrPlaceholder } from "@/components/QrPlaceholder";
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 interface POSItem {
   menuItem: MenuItem;
@@ -75,6 +73,7 @@ export default function POSPage() {
     if (cart.length === 0) return;
     setPlacing(true);
     try {
+      const API = await resolveApiBase();
       const res = await fetch(`${API}/api/orders`, {
         method: "POST", headers: auth(),
         body: JSON.stringify({
@@ -110,6 +109,7 @@ export default function POSPage() {
     if (!qrOrderId) return;
     setConfirming(true);
     try {
+      const API = await resolveApiBase();
       await fetch(`${API}/api/payments/qr-confirm`, {
         method: "POST", headers: auth(),
         body: JSON.stringify({ orderId: qrOrderId, method: qrMethod }),

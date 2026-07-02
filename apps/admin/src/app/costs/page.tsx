@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
+import { resolveApiBase } from "@/lib/api";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
 
@@ -21,7 +22,8 @@ export default function CostsPage() {
   const [form, setForm] = useState({ name:"", category:"RENT", frequency:"MONTHLY", amount:"", date:format(new Date(),"yyyy-MM-dd"), notes:"" });
 
   async function load() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/operating-costs?from=${from}&to=${to}`,
+    const API = await resolveApiBase();
+    const res = await fetch(`${API}/api/operating-costs?from=${from}&to=${to}`,
       { headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` } });
     const json = await res.json(); setCosts(json.data ?? []);
   }
@@ -29,7 +31,8 @@ export default function CostsPage() {
 
   async function handleAdd() {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/operating-costs`, { method:"POST",
+      const API = await resolveApiBase();
+      await fetch(`${API}/api/operating-costs`, { method:"POST",
         headers: { "Content-Type":"application/json", Authorization:`Bearer ${localStorage.getItem("accessToken")}` },
         body: JSON.stringify({ ...form, amount: Math.round(Number(form.amount) * 100) }) });
       toast.success("Cost added"); setShowAdd(false);
@@ -40,7 +43,8 @@ export default function CostsPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this cost?")) return;
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/operating-costs/${id}`,
+    const API = await resolveApiBase();
+    await fetch(`${API}/api/operating-costs/${id}`,
       { method:"DELETE", headers:{ Authorization:`Bearer ${localStorage.getItem("accessToken")}` } });
     load();
   }

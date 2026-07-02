@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
+import { api, resolveApiBase } from "@/lib/api";
 import type { Order } from "@blessed-ave/types";
 import { io } from "socket.io-client";
 
@@ -40,12 +40,15 @@ function OrderStatusInner() {
       setLoading(false);
     });
 
-    const socket = io(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000");
-    socket.emit("join:order", id);
-    socket.on("order:updated", ({ order: updatedOrder }: { order: Order }) => {
-      setOrder(updatedOrder);
+    let socket: ReturnType<typeof io> | undefined;
+    resolveApiBase().then((base) => {
+      socket = io(base);
+      socket.emit("join:order", id);
+      socket.on("order:updated", ({ order: updatedOrder }: { order: Order }) => {
+        setOrder(updatedOrder);
+      });
     });
-    return () => { socket.disconnect(); };
+    return () => { socket?.disconnect(); };
   }, [id]);
 
   if (loading) {

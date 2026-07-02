@@ -20,8 +20,9 @@ export default function TablesPage() {
   useEffect(() => { load(); }, []);
   useEffect(() => {
     // Dev only: web app's port is auto-assigned per session, discover it
-    // via the shared registry (see dev-servers/register-port.js).
-    if (process.env.NEXT_PUBLIC_CLIENT_URL) return;
+    // via the shared registry (see dev-servers/register-port.js). This wins
+    // over NEXT_PUBLIC_CLIENT_URL whenever the registry is present — same
+    // reasoning as resolveApiBase in lib/api.ts.
     fetch("/dev-ports.json", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((ports) => { if (ports?.web) setClientUrl(`http://localhost:${ports.web}`); })

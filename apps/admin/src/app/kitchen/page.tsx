@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { AdminLayout } from "@/components/AdminLayout";
-import { adminApi } from "@/lib/api";
+import { adminApi, resolveApiBase } from "@/lib/api";
 import type { Order } from "@blessed-ave/types";
 import toast from "react-hot-toast";
 import clsx from "clsx";
@@ -40,21 +40,24 @@ export default function KitchenPage() {
 
   useEffect(() => {
     adminApi.orders.kitchen().then((r) => setOrders(r.data));
-    const socket = io(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000");
-    socket.emit("join:kitchen");
-    socket.on("order:new", (order: Order) => {
-      setOrders((prev) => [order, ...prev]);
-      toast("🔔 New order!", { duration: 4000 });
-      audioRef.current?.play().catch(() => {});
+    let socket: ReturnType<typeof io> | undefined;
+    resolveApiBase().then((base) => {
+      socket = io(base);
+      socket.emit("join:kitchen");
+      socket.on("order:new", (order: Order) => {
+        setOrders((prev) => [order, ...prev]);
+        toast("🔔 New order!", { duration: 4000 });
+        audioRef.current?.play().catch(() => {});
+      });
+      socket.on("order:updated", ({ order }: { order: Order }) => {
+        setOrders((prev) =>
+          ["COLLECTED", "CANCELLED"].includes(order.status)
+            ? prev.filter((o) => o.id !== order.id)
+            : prev.map((o) => (o.id === order.id ? order : o))
+        );
+      });
     });
-    socket.on("order:updated", ({ order }: { order: Order }) => {
-      setOrders((prev) =>
-        ["COLLECTED", "CANCELLED"].includes(order.status)
-          ? prev.filter((o) => o.id !== order.id)
-          : prev.map((o) => (o.id === order.id ? order : o))
-      );
-    });
-    return () => { socket.disconnect(); };
+    return () => { socket?.disconnect(); };
   }, []);
 
   async function advance(order: Order) {

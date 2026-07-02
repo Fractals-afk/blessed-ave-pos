@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
-import { adminApi } from "@/lib/api";
+import { adminApi, resolveApiBase } from "@/lib/api";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 import { format, subDays } from "date-fns";
 
@@ -13,6 +13,9 @@ export default function ReportsPage() {
   const [to,   setTo]   = useState(format(new Date(), "yyyy-MM-dd"));
   const [report,  setReport]  = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [apiBase, setApiBase] = useState("http://localhost:4000");
+
+  useEffect(() => { resolveApiBase().then(setApiBase); }, []);
 
   async function load() {
     setLoading(true);
@@ -50,7 +53,7 @@ export default function ReportsPage() {
             {loading ? "Loading…" : "Apply"}
           </button>
           {report && (
-            <a href={`${process.env.NEXT_PUBLIC_API_URL}/api/reports/sales?from=${from}&to=${to}&format=csv`}
+            <a href={`${apiBase}/api/reports/sales?from=${from}&to=${to}&format=csv`}
               className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">
               Export CSV ↓
             </a>

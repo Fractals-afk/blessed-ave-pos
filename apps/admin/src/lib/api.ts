@@ -1,16 +1,19 @@
 // In dev, sibling apps get auto-assigned ports per session (see
 // dev-servers/register-port.js), which mirrors the live registry into
 // public/dev-ports.json so we can discover the api's actual port at
-// runtime. NEXT_PUBLIC_API_URL still wins when explicitly set (prod).
+// runtime. The registry wins whenever present (any session running the
+// updated dev scripts); NEXT_PUBLIC_API_URL is the fallback — it's what
+// production (static export, no registry file ever written) actually uses,
+// and it also covers stale/pinned .env.local files from older setups.
+const FALLBACK_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 let apiBasePromise: Promise<string> | null = null;
-function resolveApiBase(): Promise<string> {
-  if (process.env.NEXT_PUBLIC_API_URL) return Promise.resolve(process.env.NEXT_PUBLIC_API_URL);
-  if (typeof window === "undefined") return Promise.resolve("http://localhost:4000");
+export function resolveApiBase(): Promise<string> {
+  if (typeof window === "undefined") return Promise.resolve(FALLBACK_API_URL);
   if (!apiBasePromise) {
     apiBasePromise = fetch("/dev-ports.json", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
-      .then((ports) => (ports?.api ? `http://localhost:${ports.api}` : "http://localhost:4000"))
-      .catch(() => "http://localhost:4000");
+      .then((ports) => (ports?.api ? `http://localhost:${ports.api}` : FALLBACK_API_URL))
+      .catch(() => FALLBACK_API_URL);
   }
   return apiBasePromise;
 }

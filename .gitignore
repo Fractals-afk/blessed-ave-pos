@@ -24,3 +24,5 @@ prisma/dev.db
 # Per-session dev server port registry (see dev-servers/register-port.js)
 dev-servers/ports.json
 apps/*/public/dev-ports.json
+
+*.tsbuildinfo
