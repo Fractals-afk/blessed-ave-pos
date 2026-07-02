@@ -1,0 +1,6955 @@
+{
+  "inventory": {
+    "Chicken Poppers": {
+      "unit": "G",
+      "costCentavos": 28,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.283
+    },
+    "Cooking Oil": {
+      "unit": "ML",
+      "costCentavos": 8,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.07529411764705882
+    },
+    "French Fries": {
+      "unit": "G",
+      "costCentavos": 11,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.109
+    },
+    "Soda": {
+      "unit": "ML",
+      "costCentavos": 4,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.04466666666666667
+    },
+    "Chicken Wings (Raw)": {
+      "unit": "G",
+      "costCentavos": 15,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.15
+    },
+    "Flour": {
+      "unit": "G",
+      "costCentavos": 6,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.06
+    },
+    "Tube Ice": {
+      "unit": "G",
+      "costCentavos": 1,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.007727272727272728
+    },
+    "Buldak": {
+      "unit": "G",
+      "costCentavos": 50,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.5
+    },
+    "Quezo Chedar Cheese": {
+      "unit": "G",
+      "costCentavos": 27,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.26666666666666666
+    },
+    "Nata": {
+      "unit": "G",
+      "costCentavos": 7,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.072
+    },
+    "Corn Starch": {
+      "unit": "G",
+      "costCentavos": 4,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.045
+    },
+    "Lettuce": {
+      "unit": "G",
+      "costCentavos": 32,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.32
+    },
+    "Buns": {
+      "unit": "PCS",
+      "costCentavos": 667,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 6.666666666666667
+    },
+    "Ground Beef": {
+      "unit": "G",
+      "costCentavos": 33,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.33
+    },
+    "Rice": {
+      "unit": "G",
+      "costCentavos": 5,
+      "source": "Ingredients",
+      "xlsxUnit": "kg",
+      "xlsxCost": 50
+    },
+    "Chicken Leg Quarter (Raw)": {
+      "unit": "G",
+      "costCentavos": 18,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.18
+    },
+    "Breve": {
+      "unit": "ML",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.10085
+    },
+    "Jersey All Purpose Full Cream": {
+      "unit": "ML",
+      "costCentavos": 19,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.188
+    },
+    "Campbells' Cream of Mushroom": {
+      "unit": "ML",
+      "costCentavos": 39,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.3873239436619718
+    },
+    "Jersey Condense Milk": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.105
+    },
+    "Frappe Base": {
+      "unit": "G",
+      "costCentavos": 32,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.32
+    },
+    "Crushed Oreo": {
+      "unit": "G",
+      "costCentavos": 42,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.4185022026431718
+    },
+    "Monin White Chocolate Sauce": {
+      "unit": "ML",
+      "costCentavos": 74,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.7407407407407407
+    },
+    "Monin Dark Chocolate Sauce": {
+      "unit": "ML",
+      "costCentavos": 73,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.7275132275132276
+    },
+    "Monin Caramel Sauce": {
+      "unit": "ML",
+      "costCentavos": 74,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.7407407407407407
+    },
+    "Milim Green Apple Syrup": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.102
+    },
+    "Milim Kiwi Syrup": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.102
+    },
+    "Milim Lemon Syrup": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.102
+    },
+    "Milim Watermelon Syrup": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.102
+    },
+    "Milim Strawberry Syrup": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.102
+    },
+    "Milim Mango Syrup": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.102
+    },
+    "Milim Honeypeach Syrup": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.102
+    },
+    "Milim Lychee Syrup": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.102
+    },
+    "Sea Salt": {
+      "unit": "G",
+      "costCentavos": 9,
+      "source": "Ingredients",
+      "xlsxUnit": "oz",
+      "xlsxCost": 2.4226804123711343
+    },
+    "Da Vinci Hazelnut Syrup": {
+      "unit": "ML",
+      "costCentavos": 64,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.64
+    },
+    "Da Vinci Caramel Syrup": {
+      "unit": "ML",
+      "costCentavos": 64,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.64
+    },
+    "Da Vinci Vanilla Syrup": {
+      "unit": "ML",
+      "costCentavos": 64,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.64
+    },
+    "Fructose": {
+      "unit": "ML",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.1
+    },
+    "Coffee Beans": {
+      "unit": "G",
+      "costCentavos": 105,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 1.05
+    },
+    "Nacho Chips": {
+      "unit": "G",
+      "costCentavos": 32,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.325
+    },
+    "Allegro Strawberry Puree": {
+      "unit": "G",
+      "costCentavos": 66,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.66
+    },
+    "Allegro Blueberry Puree": {
+      "unit": "G",
+      "costCentavos": 66,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.66
+    },
+    "Allegro Matcha Powder": {
+      "unit": "G",
+      "costCentavos": 79,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.79
+    },
+    "Nutella": {
+      "unit": "G",
+      "costCentavos": 62,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.6166666666666667
+    },
+    "Jersey Full Cream Milk": {
+      "unit": "ML",
+      "costCentavos": 7,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.0728
+    },
+    "Mosa Whip Cream Charger": {
+      "unit": "PCS",
+      "costCentavos": 1800,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 18
+    },
+    "MC Taco Mix": {
+      "unit": "G",
+      "costCentavos": 112,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 1.125
+    },
+    "Everwhip Whip Cream": {
+      "unit": "G",
+      "costCentavos": 22,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.225
+    },
+    "Chizboy Parmesan Cheese": {
+      "unit": "G",
+      "costCentavos": 60,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.5971428571428572
+    },
+    "Del Monte Pasta": {
+      "unit": "G",
+      "costCentavos": 13,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.1288888888888889
+    },
+    "Eden Cheese Slice": {
+      "unit": "PCS",
+      "costCentavos": 1200,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 12
+    },
+    "SMB Black Pepper": {
+      "unit": "G",
+      "costCentavos": 125,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 1.2533333333333334
+    },
+    "Del Monte Ketchup": {
+      "unit": "G",
+      "costCentavos": 8,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.08166666666666667
+    },
+    "Jufran Chili Sauce": {
+      "unit": "G",
+      "costCentavos": 30,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.3
+    },
+    "MC Parsley": {
+      "unit": "G",
+      "costCentavos": 239,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 2.39
+    },
+    "Spanish Sardines": {
+      "unit": "PCS",
+      "costCentavos": 3175,
+      "source": "Ingredients",
+      "xlsxUnit": "can",
+      "xlsxCost": 31.75
+    },
+    "Iodized Salt": {
+      "unit": "G",
+      "costCentavos": 4,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.03825
+    },
+    "Honey": {
+      "unit": "BOTTLE",
+      "costCentavos": 5500,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 55
+    },
+    "Sriracha (Bottle)": {
+      "unit": "BOTTLE",
+      "costCentavos": 15000,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 150
+    },
+    "Butter": {
+      "unit": "ML",
+      "costCentavos": 25,
+      "source": "Ingredients",
+      "xlsxUnit": "tbsp",
+      "xlsxCost": 3.75
+    },
+    "Buffalo Sauce": {
+      "unit": "G",
+      "costCentavos": 11,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.10909090909090909
+    },
+    "Water": {
+      "unit": "ML",
+      "costCentavos": 0,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.00125
+    },
+    "Biscoff": {
+      "unit": "G",
+      "costCentavos": 75,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.7533333333333333
+    },
+    "Whipcream": {
+      "unit": "G",
+      "costCentavos": 30,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.297
+    },
+    "Barista Supreme Java Chip Powder": {
+      "unit": "G",
+      "costCentavos": 63,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.6333333333333333
+    },
+    "Chocolate Chips": {
+      "unit": "G",
+      "costCentavos": 35,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.35
+    },
+    "Chicken Breast Fillet (Raw)": {
+      "unit": "G",
+      "costCentavos": 34,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.34116
+    },
+    "Cooked Noodles": {
+      "unit": "G",
+      "costCentavos": 6,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.0613
+    },
+    "Garlic": {
+      "unit": "G",
+      "costCentavos": 15,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.15
+    },
+    "Bacon": {
+      "unit": "G",
+      "costCentavos": 48,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.485
+    },
+    "Cheese Sauce": {
+      "unit": "G",
+      "costCentavos": 13,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.12918888888888888
+    },
+    "Vinegar": {
+      "unit": "ML",
+      "costCentavos": 4,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.041100000000000005
+    },
+    "Honey Sriracha Sauce": {
+      "unit": "G",
+      "costCentavos": 27,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.26615
+    },
+    "Mustard": {
+      "unit": "G",
+      "costCentavos": 33,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.32823529411764707
+    },
+    "Honey Mustard Sauce": {
+      "unit": "G",
+      "costCentavos": 17,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.17186666666666667
+    },
+    "Buffalo Wings Sauce": {
+      "unit": "G",
+      "costCentavos": 16,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.15721000000000002
+    },
+    "Cooked Rice": {
+      "unit": "ML",
+      "costCentavos": 2,
+      "source": "Ingredients",
+      "xlsxUnit": "cup",
+      "xlsxCost": 5.587
+    },
+    "Mayonaise": {
+      "unit": "G",
+      "costCentavos": 14,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.13714285714285715
+    },
+    "Sugar": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.099
+    },
+    "Bacon Jam Sauce": {
+      "unit": "G",
+      "costCentavos": 50,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.49832
+    },
+    "Apple Cider (Bragg)": {
+      "unit": "G",
+      "costCentavos": 6,
+      "source": "Ingredients",
+      "xlsxUnit": "oz",
+      "xlsxCost": 1.715625
+    },
+    "Onion white": {
+      "unit": "G",
+      "costCentavos": 18,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.18
+    },
+    "Rock Salt": {
+      "unit": "G",
+      "costCentavos": 2,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.02
+    },
+    "Chicken Burger Sauce": {
+      "unit": "G",
+      "costCentavos": 20,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.19685436893203884
+    },
+    "Burger Sauce": {
+      "unit": "G",
+      "costCentavos": 66,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.6576000000000001
+    },
+    "Sriracha": {
+      "unit": "G",
+      "costCentavos": 31,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.30991735537190085
+    },
+    "Chicken Breast Fillet (Prep)": {
+      "unit": "PCS",
+      "costCentavos": 4545,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 45.45
+    },
+    "Rancha BBQ Powder": {
+      "unit": "G",
+      "costCentavos": 20,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.2
+    },
+    "Rancha Cheese Powder": {
+      "unit": "G",
+      "costCentavos": 20,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.2
+    },
+    "Rancha Sour Cream Powder": {
+      "unit": "G",
+      "costCentavos": 20,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.2
+    },
+    "Chicken Leg Quarter (Fillet)": {
+      "unit": "G",
+      "costCentavos": 22,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.2243529411764706
+    },
+    "Burger Patty (Angus)": {
+      "unit": "PCS",
+      "costCentavos": 2300,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 23
+    },
+    "Burger Patty (Quarter Pounder)": {
+      "unit": "PCS",
+      "costCentavos": 4400,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 44
+    },
+    "Tomato": {
+      "unit": "PCS",
+      "costCentavos": 200,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 2
+    },
+    "Laurel": {
+      "unit": "PCS",
+      "costCentavos": 67,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 0.6666666666666666
+    },
+    "Oyster Sauce": {
+      "unit": "PACK",
+      "costCentavos": 700,
+      "source": "Ingredients",
+      "xlsxUnit": "pack",
+      "xlsxCost": 7
+    },
+    "Ground Beef (Prep)": {
+      "unit": "G",
+      "costCentavos": 43,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.4272111111111111
+    },
+    "Cabbage": {
+      "unit": "G",
+      "costCentavos": 9,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.09
+    },
+    "Canned Mushroom": {
+      "unit": "PCS",
+      "costCentavos": 9900,
+      "source": "Ingredients",
+      "xlsxUnit": "can",
+      "xlsxCost": 99
+    },
+    "Smirnoff Mule": {
+      "unit": "BOTTLE",
+      "costCentavos": 4500,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 45
+    },
+    "Budweiser": {
+      "unit": "BOTTLE",
+      "costCentavos": 7000,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 70
+    },
+    "Engkanto Honey Ale": {
+      "unit": "BOTTLE",
+      "costCentavos": 5000,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 50
+    },
+    "Engkanto Double IPA": {
+      "unit": "BOTTLE",
+      "costCentavos": 11675,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 116.75
+    },
+    "Engkanto Lager": {
+      "unit": "BOTTLE",
+      "costCentavos": 5000,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 50
+    },
+    "Engkanto Ube Lager": {
+      "unit": "BOTTLE",
+      "costCentavos": 7000,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 70
+    },
+    "Heiniken": {
+      "unit": "BOTTLE",
+      "costCentavos": 6650,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 66.5
+    },
+    "Corona Extra": {
+      "unit": "BOTTLE",
+      "costCentavos": 8500,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 85
+    },
+    "Chicken Powder": {
+      "unit": "G",
+      "costCentavos": 51,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.511
+    },
+    "Cookies": {
+      "unit": "PCS",
+      "costCentavos": 3500,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 35
+    },
+    "Egg (Raw)": {
+      "unit": "PCS",
+      "costCentavos": 783,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 7.833333333333333
+    },
+    "Engkanto Hazy IPA": {
+      "unit": "BOTTLE",
+      "costCentavos": 7000,
+      "source": "Ingredients",
+      "xlsxUnit": "bottle",
+      "xlsxCost": 70
+    },
+    "Bacon Jam": {
+      "unit": "G",
+      "costCentavos": 100,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.99664
+    },
+    "Sliced Mushroom": {
+      "unit": "G",
+      "costCentavos": 12,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.12375
+    },
+    "Knorr Seasoning": {
+      "unit": "ML",
+      "costCentavos": 56,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.5615384615384615
+    },
+    "Worchestertire Sauce": {
+      "unit": "ML",
+      "costCentavos": 97,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.9733333333333334
+    },
+    "Lemon": {
+      "unit": "PCS",
+      "costCentavos": 2000,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 20
+    },
+    "Cream Dory": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.102
+    },
+    "Oat Milk": {
+      "unit": "ML",
+      "costCentavos": 18,
+      "source": "Ingredients",
+      "xlsxUnit": "mL",
+      "xlsxCost": 0.18
+    },
+    "Spam": {
+      "unit": "PCS",
+      "costCentavos": 880,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 8.8
+    },
+    "Pickle Relish": {
+      "unit": "G",
+      "costCentavos": 100,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 1
+    },
+    "Dill": {
+      "unit": "G",
+      "costCentavos": 10,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.1
+    },
+    "Fish Sauce": {
+      "unit": "G",
+      "costCentavos": 24,
+      "source": "Ingredients",
+      "xlsxUnit": "g",
+      "xlsxCost": 0.235375
+    },
+    "Nori": {
+      "unit": "PCS",
+      "costCentavos": 1500,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 15
+    },
+    "TJ Jumbo Hotdog": {
+      "unit": "PCS",
+      "costCentavos": 900,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 9
+    },
+    "Pbest Longanissa": {
+      "unit": "PCS",
+      "costCentavos": 1800,
+      "source": "Ingredients",
+      "xlsxUnit": "piece",
+      "xlsxCost": 18
+    },
+    "Styro Small": {
+      "unit": "PCS",
+      "costCentavos": 1200,
+      "source": "Other",
+      "xlsxUnit": "unit",
+      "xlsxCost": 12
+    },
+    "Spoon & Fork Set": {
+      "unit": "PCS",
+      "costCentavos": 140,
+      "source": "Other",
+      "xlsxUnit": "unit",
+      "xlsxCost": 1.4
+    },
+    "Tissue Quarter Fold": {
+      "unit": "PCS",
+      "costCentavos": 48,
+      "source": "Other",
+      "xlsxUnit": "unit",
+      "xlsxCost": 0.475
+    },
+    "Roll Bag": {
+      "unit": "PCS",
+      "costCentavos": 18,
+      "source": "Other",
+      "xlsxUnit": "unit",
+      "xlsxCost": 0.175
+    },
+    "Dabba Cups": {
+      "unit": "PCS",
+      "costCentavos": 325,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 3.25
+    },
+    "Strawless Lid": {
+      "unit": "PCS",
+      "costCentavos": 155,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 1.55
+    },
+    "Dome Lid": {
+      "unit": "PCS",
+      "costCentavos": 135,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 1.35
+    },
+    "Thin Straw": {
+      "unit": "PCS",
+      "costCentavos": 80,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 0.8
+    },
+    "Bobba Straw": {
+      "unit": "PCS",
+      "costCentavos": 100,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 1
+    },
+    "Spill Proof": {
+      "unit": "PCS",
+      "costCentavos": 21,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 0.21
+    },
+    "Wooden Stirrer": {
+      "unit": "PCS",
+      "costCentavos": 90,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 0.9
+    },
+    "Take out Chicken": {
+      "unit": "PCS",
+      "costCentavos": 440,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 4.4
+    },
+    "Paper Cups": {
+      "unit": "PCS",
+      "costCentavos": 70,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 0.7
+    },
+    "Parchment Paper": {
+      "unit": "PCS",
+      "costCentavos": 91,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 0.91
+    },
+    "Take Out Coffee": {
+      "unit": "PCS",
+      "costCentavos": 100,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 1
+    },
+    "Paper Bag Small": {
+      "unit": "PCS",
+      "costCentavos": 100,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 1
+    },
+    "Paper Bag Big": {
+      "unit": "PCS",
+      "costCentavos": 100,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 1
+    },
+    "Gloves": {
+      "unit": "PCS",
+      "costCentavos": 30,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 0.3
+    },
+    "Take Out Pasta": {
+      "unit": "PCS",
+      "costCentavos": 200,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 2
+    },
+    "Take Out Burger": {
+      "unit": "PCS",
+      "costCentavos": 230,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 2.3
+    },
+    "Take Out Sauce": {
+      "unit": "PCS",
+      "costCentavos": 100,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 1
+    },
+    "Hot Cups": {
+      "unit": "PCS",
+      "costCentavos": 540,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 5.4
+    },
+    "Bento Box L4": {
+      "unit": "PCS",
+      "costCentavos": 1100,
+      "source": "Other",
+      "xlsxUnit": "piece",
+      "xlsxCost": 11
+    }
+  },
+  "menuItems": [
+    {
+      "sheetName": "Poppers (Plain) with fries",
+      "name": "Poppers (Plain) with fries",
+      "category": "Poppers & Fries",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Bento",
+      "name": "Bento",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 8200,
+      "recipe": [
+        {
+          "inventoryName": "TJ Jumbo Hotdog",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Bento Box L4",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Pbest Longanissa",
+          "quantity": 0.5
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (Plain) with rice",
+      "name": "Poppers (Plain) with rice",
+      "category": "Poppers & Fries",
+      "priceCentavos": 12000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 120
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (Buffalo) with Rice",
+      "name": "Poppers (Buffalo) with Rice",
+      "category": "Poppers & Fries",
+      "priceCentavos": 12000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buffalo Wings Sauce",
+          "quantity": 30
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (HM) with Rice",
+      "name": "Poppers (HM) with Rice",
+      "category": "Poppers & Fries",
+      "priceCentavos": 12000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Mustard Sauce",
+          "quantity": 30
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (HS) with Rice",
+      "name": "Poppers (HS) with Rice",
+      "category": "Poppers & Fries",
+      "priceCentavos": 12000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Sriracha Sauce",
+          "quantity": 30
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (Garlic) with Rice",
+      "name": "Poppers (Garlic) with Rice",
+      "category": "Poppers & Fries",
+      "priceCentavos": 12000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 9
+        },
+        {
+          "inventoryName": "Butter",
+          "quantity": 7.3934
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (HM) with Fries",
+      "name": "Poppers (HM) with Fries",
+      "category": "Poppers & Fries",
+      "priceCentavos": 16000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Mustard Sauce",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (HS) with Fries",
+      "name": "Poppers (HS) with Fries",
+      "category": "Poppers & Fries",
+      "priceCentavos": 16000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Sriracha Sauce",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (G) with Fries",
+      "name": "Poppers (G) with Fries",
+      "category": "Poppers & Fries",
+      "priceCentavos": 16000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 9
+        },
+        {
+          "inventoryName": "Butter",
+          "quantity": 7.3934
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (B) with fries",
+      "name": "Poppers (B) with fries",
+      "category": "Poppers & Fries",
+      "priceCentavos": 16000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buffalo Wings Sauce",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers Ala Carte",
+      "name": "Poppers Ala Carte",
+      "category": "Poppers & Fries",
+      "priceCentavos": 12000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Fries Sour Cream (S)",
+      "name": "Fries Sour Cream (S)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 8000,
+      "recipe": [
+        {
+          "inventoryName": "French Fries",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Rancha Sour Cream Powder",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Fries BBQ (S)",
+      "name": "Fries BBQ (S)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 8000,
+      "recipe": [
+        {
+          "inventoryName": "French Fries",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Rancha BBQ Powder",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Fries Cheese (S)",
+      "name": "Fries Cheese (S)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 8000,
+      "recipe": [
+        {
+          "inventoryName": "French Fries",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Rancha Cheese Powder",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Fries BBQ (L)",
+      "name": "Fries BBQ (L)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "French Fries",
+          "quantity": 400
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Rancha BBQ Powder",
+          "quantity": 80
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Fries Sour Cream (L)",
+      "name": "Fries Sour Cream (L)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "French Fries",
+          "quantity": 400
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Rancha Sour Cream Powder",
+          "quantity": 80
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Fries Cheese (L)",
+      "name": "Fries Cheese (L)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "French Fries",
+          "quantity": 400
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Rancha Cheese Powder",
+          "quantity": 80
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Dirty Fries",
+      "name": "Dirty Fries",
+      "category": "Poppers & Fries",
+      "priceCentavos": 16000,
+      "recipe": [
+        {
+          "inventoryName": "French Fries",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Ground Beef (Prep)",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Cheese Sauce",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.2
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 3
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "sheetName": "Nachos (Large)",
+      "name": "Nachos (Large)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 26000,
+      "recipe": [
+        {
+          "inventoryName": "Nacho Chips",
+          "quantity": 75
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Ground Beef (Prep)",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Cheese Sauce",
+          "quantity": 120
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tomato",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cabbage",
+          "quantity": 50
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Onion white",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "sheetName": "Nachos (Small)",
+      "name": "Nachos (Small)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 16000,
+      "recipe": [
+        {
+          "inventoryName": "Nacho Chips",
+          "quantity": 50
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Ground Beef (Prep)",
+          "quantity": 75
+        },
+        {
+          "inventoryName": "Cheese Sauce",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tomato",
+          "quantity": 0.5
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cabbage",
+          "quantity": 35
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Onion white",
+          "quantity": 15
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "sheetName": "Fish and Chips",
+      "name": "Fish and Chips",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 18000,
+      "recipe": [
+        {
+          "inventoryName": "Cream Dory",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Lemon",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Fish Sauce",
+          "quantity": 60
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 10
+        }
+      ]
+    },
+    {
+      "sheetName": "Fish and Rice",
+      "name": "Fish and Rice",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 14500,
+      "recipe": [
+        {
+          "inventoryName": "Cream Dory",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Lemon",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Mayonaise",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 10
+        }
+      ]
+    },
+    {
+      "sheetName": "Chef Pasta",
+      "name": "Chef Pasta",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Spanish Sardines",
+          "quantity": 0.5
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey All Purpose Full Cream",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 15
+        },
+        {
+          "inventoryName": "Cooked Noodles",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Carbonara",
+      "name": "Carbonara",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Campbells' Cream of Mushroom",
+          "quantity": 47
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooked Noodles",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey All Purpose Full Cream",
+          "quantity": 41.666666666666664
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 12
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Bacon",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Quezo Chedar Cheese",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.5
+        }
+      ]
+    },
+    {
+      "sheetName": "Cheezy Buldak",
+      "name": "Cheezy Buldak",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Buldak",
+          "quantity": 130
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cheese Sauce",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Chicken Alfredo",
+      "name": "Chicken Alfredo",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Breast Fillet (Raw)",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take Out Pasta",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooked Noodles",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey All Purpose Full Cream",
+          "quantity": 83.33333333333333
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 22.5
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Butter",
+          "quantity": 7.3934
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "sheetName": "Chicken AC ",
+      "name": "Chicken AC",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Leg Quarter (Fillet)",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Chicken Burger Sauce",
+          "quantity": 50
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Lettuce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Chicken Boneless (Honey Srirach",
+      "name": "Chicken Boneless (Honey Sriracha)",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 26500,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Leg Quarter (Fillet)",
+          "quantity": 400
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Honey Sriracha Sauce",
+          "quantity": 60
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Chicken AC Spicy",
+      "name": "Chicken AC Spicy",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 16000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Leg Quarter (Fillet)",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Chicken Burger Sauce",
+          "quantity": 50
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buffalo Wings Sauce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Lettuce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 40
+        }
+      ]
+    },
+    {
+      "sheetName": "Chicken FF ",
+      "name": "Chicken FF",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 19000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Leg Quarter (Fillet)",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Chicken Burger Sauce",
+          "quantity": 50
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Lettuce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Chicken FF Spicy",
+      "name": "Chicken FF Spicy",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 20000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Leg Quarter (Fillet)",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Chicken Burger Sauce",
+          "quantity": 50
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buffalo Wings Sauce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Lettuce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 40
+        }
+      ]
+    },
+    {
+      "sheetName": "Angus Burger AC",
+      "name": "Angus Burger AC",
+      "category": "Burgers",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Burger Patty (Angus)",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Burger Sauce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tomato",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Lettuce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Angus Burger FF",
+      "name": "Angus Burger FF",
+      "category": "Burgers",
+      "priceCentavos": 25000,
+      "recipe": [
+        {
+          "inventoryName": "Burger Patty (Angus)",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Burger Sauce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tomato",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Lettuce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 200
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Bacon Jam AC",
+      "name": "Bacon Jam AC",
+      "category": "Burgers",
+      "priceCentavos": 21000,
+      "recipe": [
+        {
+          "inventoryName": "Burger Patty (Quarter Pounder)",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Eden Cheese Slice",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Bacon Jam",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Bacon Jam Sauce",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Onion white",
+          "quantity": 10
+        }
+      ]
+    },
+    {
+      "sheetName": "Bacon Jam FF",
+      "name": "Bacon Jam FF",
+      "category": "Burgers",
+      "priceCentavos": 25000,
+      "recipe": [
+        {
+          "inventoryName": "Burger Patty (Quarter Pounder)",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Eden Cheese Slice",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Bacon Jam",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Bacon Jam Sauce",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Onion white",
+          "quantity": 10
+        }
+      ]
+    },
+    {
+      "sheetName": "Quarter Pounder AC",
+      "name": "Quarter Pounder AC",
+      "category": "Burgers",
+      "priceCentavos": 18000,
+      "recipe": [
+        {
+          "inventoryName": "Burger Patty (Quarter Pounder)",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Burger Sauce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tomato",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Lettuce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Onion white",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Quarter Pounder FF",
+      "name": "Quarter Pounder FF",
+      "category": "Burgers",
+      "priceCentavos": 22000,
+      "recipe": [
+        {
+          "inventoryName": "Burger Patty (Quarter Pounder)",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Burger Sauce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tomato",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Lettuce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take Out Burger",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buns",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Onion white",
+          "quantity": 10
+        }
+      ]
+    },
+    {
+      "sheetName": "Burger Steak",
+      "name": "Burger Steak",
+      "category": "Burgers",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Burger Patty (Quarter Pounder)",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Flour",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Small",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Butter",
+          "quantity": 7.3934
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Sliced Mushroom",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Jersey All Purpose Full Cream",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Worchestertire Sauce",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Knorr Seasoning",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        }
+      ]
+    },
+    {
+      "sheetName": "Chicken Chop",
+      "name": "Chicken Chop",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Leg Quarter (Fillet)",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Flour",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Corn Starch",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Chicken Burger Sauce",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "Chicken Fingers",
+      "name": "Chicken Fingers",
+      "category": "Rice Meals & Mains",
+      "priceCentavos": 12000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Breast Fillet (Prep)",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Parchment Paper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "MC Parsley",
+          "quantity": 0.1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Flour",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Corn Starch",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "3pcs Buffalo w rice",
+      "name": "3pcs Buffalo w rice",
+      "category": "Wings",
+      "priceCentavos": 10200,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 210
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buffalo Wings Sauce",
+          "quantity": 30
+        }
+      ]
+    },
+    {
+      "sheetName": "3pcs HM W rice",
+      "name": "3pcs HM W rice",
+      "category": "Wings",
+      "priceCentavos": 10200,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 210
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Mustard Sauce",
+          "quantity": 30
+        }
+      ]
+    },
+    {
+      "sheetName": "3pcs HS w rice",
+      "name": "3pcs HS w rice",
+      "category": "Wings",
+      "priceCentavos": 8500,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 210
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Sriracha Sauce",
+          "quantity": 30
+        }
+      ]
+    },
+    {
+      "sheetName": "3pcs Garlic w rice",
+      "name": "3pcs Garlic w rice",
+      "category": "Wings",
+      "priceCentavos": 10300,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 210
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Butter",
+          "quantity": 7.3934
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "3pcs Buffalo w fries",
+      "name": "3pcs Buffalo w fries",
+      "category": "Wings",
+      "priceCentavos": 10600,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 210
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buffalo Wings Sauce",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "3pcs HM w fries",
+      "name": "3pcs HM w fries",
+      "category": "Wings",
+      "priceCentavos": 10600,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 210
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Mustard Sauce",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "3pcs HS w fries",
+      "name": "3pcs HS w fries",
+      "category": "Wings",
+      "priceCentavos": 10600,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 210
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Sriracha Sauce",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "3pcs garlic w fries",
+      "name": "3pcs garlic w fries",
+      "category": "Wings",
+      "priceCentavos": 10600,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 210
+        },
+        {
+          "inventoryName": "Spoon & Fork Set",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "French Fries",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Take Out Sauce",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Butter",
+          "quantity": 7.3934
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Del Monte Ketchup",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "12pcs All Flavor (Plater)",
+      "name": "12pcs All Flavor (Plater)",
+      "category": "Wings",
+      "priceCentavos": 34400,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 840
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 4
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 4
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 4
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Butter",
+          "quantity": 29.5736
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Honey Sriracha Sauce",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Honey Mustard Sauce",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Buffalo Wings Sauce",
+          "quantity": 30
+        }
+      ]
+    },
+    {
+      "sheetName": "6pcs buffalo",
+      "name": "6pcs buffalo",
+      "category": "Wings",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 430
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Buffalo Wings Sauce",
+          "quantity": 60
+        }
+      ]
+    },
+    {
+      "sheetName": "12pcs Buffalo Wings (Plater)",
+      "name": "12pcs Buffalo Wings (Plater)",
+      "category": "Wings",
+      "priceCentavos": 30700,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 860
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.5
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Buffalo Wings Sauce",
+          "quantity": 60
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "6pcs hm",
+      "name": "6pcs hm",
+      "category": "Wings",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 430
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Mustard Sauce",
+          "quantity": 60
+        }
+      ]
+    },
+    {
+      "sheetName": "12pcs Honey Mustard Wings (Plat",
+      "name": "12pcs Honey Mustard Wings (Plater)",
+      "category": "Wings",
+      "priceCentavos": 30900,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 860
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.5
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Honey Mustard Sauce",
+          "quantity": 60
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "6pcs HS",
+      "name": "6pcs HS",
+      "category": "Wings",
+      "priceCentavos": 13200,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 430
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Honey Sriracha Sauce",
+          "quantity": 60
+        }
+      ]
+    },
+    {
+      "sheetName": "12pcs Honey Sriracha Wings (Pla",
+      "name": "12pcs Honey Sriracha Wings (Plater)",
+      "category": "Wings",
+      "priceCentavos": 32000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 860
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.5
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Honey Sriracha Sauce",
+          "quantity": 60
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "6pcs Garlic",
+      "name": "6pcs Garlic",
+      "category": "Wings",
+      "priceCentavos": 13200,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 430
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.25
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Butter",
+          "quantity": 14.7868
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "12pcs Plater (Garlic)",
+      "name": "12pcs Plater (Garlic)",
+      "category": "Wings",
+      "priceCentavos": 34800,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Wings (Raw)",
+          "quantity": 860
+        },
+        {
+          "inventoryName": "Iodized Salt",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "SMB Black Pepper",
+          "quantity": 0.5
+        },
+        {
+          "inventoryName": "Chicken Powder",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Gloves",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Take out Chicken",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Garlic",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Paper Bag Big",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Butter",
+          "quantity": 29.5736
+        },
+        {
+          "inventoryName": "Chizboy Parmesan Cheese",
+          "quantity": 40
+        }
+      ]
+    },
+    {
+      "sheetName": "Americano (Iced)",
+      "name": "Americano (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 10000,
+      "recipe": [
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Water",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Biscoffee Latte",
+      "name": "Biscoffee Latte",
+      "category": "Specialty Lattes",
+      "priceCentavos": 17000,
+      "recipe": [
+        {
+          "inventoryName": "Biscoff",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Cafe Latte (Iced)",
+      "name": "Cafe Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Caramel Macchiato (Iced)",
+      "name": "Caramel Macchiato (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin Caramel Sauce",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "Dark Mocha Latte (Iced)",
+      "name": "Dark Mocha Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Monin Dark Chocolate Sauce",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Dirty Matcha",
+      "name": "Dirty Matcha",
+      "category": "Specialty Lattes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 32
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Hazelnut Latte (Iced)",
+      "name": "Hazelnut Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Da Vinci Hazelnut Syrup",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin Caramel Sauce",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Sea Salt Latte (Iced)",
+      "name": "Sea Salt Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13800,
+      "recipe": [
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Breve",
+          "quantity": 60
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Sea Salt",
+          "quantity": 28.3495
+        },
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 32
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Signature Latte (Iced)",
+      "name": "Signature Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Breve",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Vanilla Latte (Iced)",
+      "name": "Vanilla Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Jersey Condense Milk",
+          "quantity": 25
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "White Mocha Latte (Iced)",
+      "name": "White Mocha Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Americano (Hot)",
+      "name": "Americano (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 10000,
+      "recipe": [
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Water",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Biscoff (Hot)",
+      "name": "Biscoff (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Biscoff",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Biscoffee Latte (Hot)",
+      "name": "Biscoffee Latte (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 17000,
+      "recipe": [
+        {
+          "inventoryName": "Biscoff",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Cafe Latte (Hot)",
+      "name": "Cafe Latte (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Caramel Macchiato (Hot)",
+      "name": "Caramel Macchiato (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin Caramel Sauce",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Dark Mocha (Hot)",
+      "name": "Dark Mocha (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Monin Dark Chocolate Sauce",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Hazelnut Latte (Hot)",
+      "name": "Hazelnut Latte (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Da Vinci Hazelnut Syrup",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin Caramel Sauce",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Matcha (Hot)",
+      "name": "Matcha (Hot)",
+      "category": "Specialty Lattes",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 32
+        },
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Sea Salt Latte (Hot)",
+      "name": "Sea Salt Latte (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Sea Salt",
+          "quantity": 28.3495
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin Caramel Sauce",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "Signature Latte (Hot)",
+      "name": "Signature Latte (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 5
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Spanish Latte (Hot)",
+      "name": "Spanish Latte (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 250
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Condense Milk",
+          "quantity": 25
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Vanilla Latte (Hot)",
+      "name": "Vanilla Latte (Hot)",
+      "category": "Hot Coffee",
+      "priceCentavos": 13500,
+      "recipe": [
+        {
+          "inventoryName": "Jersey Condense Milk",
+          "quantity": 25
+        },
+        {
+          "inventoryName": "Hot Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Wooden Stirrer",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 19
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Breve (Add Ons)",
+      "name": "Breve (Add Ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 4500,
+      "recipe": [
+        {
+          "inventoryName": "Breve",
+          "quantity": 160
+        }
+      ]
+    },
+    {
+      "sheetName": "Biscoff (Add Ons)",
+      "name": "Biscoff (Add Ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 2000,
+      "recipe": [
+        {
+          "inventoryName": "Biscoff",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "Caramel Sauce (Add Ons)",
+      "name": "Caramel Sauce (Add Ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Monin Caramel Sauce",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Cheese Sauce (Add ons)",
+      "name": "Cheese Sauce (Add ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Cheese Sauce",
+          "quantity": 100
+        }
+      ]
+    },
+    {
+      "sheetName": "Dark Chocolate Sauce (Add Ons)",
+      "name": "Dark Chocolate Sauce (Add Ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Monin Dark Chocolate Sauce",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Decaf",
+      "name": "Decaf",
+      "category": "Hot Coffee",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Monin Dark Chocolate Sauce",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Egg (Add Ons)",
+      "name": "Egg (Add Ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 2000,
+      "recipe": [
+        {
+          "inventoryName": "Egg (Raw)",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Espresso Shot",
+      "name": "Espresso Shot",
+      "category": "Add-Ons",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 15
+        }
+      ]
+    },
+    {
+      "sheetName": "Fries (Add Ons)",
+      "name": "Fries (Add Ons)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 6000,
+      "recipe": [
+        {
+          "inventoryName": "French Fries",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Fructose",
+      "name": "Fructose",
+      "category": "Add-Ons",
+      "priceCentavos": 1000,
+      "recipe": [
+        {
+          "inventoryName": "Fructose",
+          "quantity": 10
+        }
+      ]
+    },
+    {
+      "sheetName": "Hazelnut Syrup",
+      "name": "Hazelnut Syrup",
+      "category": "Add-Ons",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Da Vinci Hazelnut Syrup",
+          "quantity": 10
+        }
+      ]
+    },
+    {
+      "sheetName": "Matcha (Add Ons)",
+      "name": "Matcha (Add Ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 16
+        }
+      ]
+    },
+    {
+      "sheetName": "Milk (Add Ons)",
+      "name": "Milk (Add Ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        }
+      ]
+    },
+    {
+      "sheetName": "Extra Rice",
+      "name": "Extra Rice",
+      "category": "Add-Ons",
+      "priceCentavos": 4000,
+      "recipe": [
+        {
+          "inventoryName": "Cooked Rice",
+          "quantity": 236.588
+        }
+      ]
+    },
+    {
+      "sheetName": "Nori",
+      "name": "Nori (Add Ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 4000,
+      "recipe": [
+        {
+          "inventoryName": "Nori",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Nata",
+      "name": "Nata",
+      "category": "Add-Ons",
+      "priceCentavos": 1000,
+      "recipe": [
+        {
+          "inventoryName": "Nata",
+          "quantity": 24
+        }
+      ]
+    },
+    {
+      "sheetName": "Oat Milk",
+      "name": "Oat Milk",
+      "category": "Add-Ons",
+      "priceCentavos": 4500,
+      "recipe": [
+        {
+          "inventoryName": "Oat Milk",
+          "quantity": 200
+        }
+      ]
+    },
+    {
+      "sheetName": "Poppers (Add Ons)",
+      "name": "Poppers (Add Ons)",
+      "category": "Poppers & Fries",
+      "priceCentavos": 8000,
+      "recipe": [
+        {
+          "inventoryName": "Chicken Poppers",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "Spam (Add ons)",
+      "name": "Spam (Add ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 2000,
+      "recipe": [
+        {
+          "inventoryName": "Spam",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Cooking Oil",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "sheetName": "Strawberry (Add Ons)",
+      "name": "Strawberry (Add Ons)",
+      "category": "Add-Ons",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Strawberry Puree",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Vanilla Syrup",
+      "name": "Vanilla Syrup",
+      "category": "Add-Ons",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 10
+        }
+      ]
+    },
+    {
+      "sheetName": "White Chocolate Sauce",
+      "name": "White Chocolate Sauce",
+      "category": "Specialty Lattes",
+      "priceCentavos": 3000,
+      "recipe": [
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 20
+        }
+      ]
+    },
+    {
+      "sheetName": "Biscoff Latte",
+      "name": "Biscoff Latte",
+      "category": "Specialty Lattes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Biscoff",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        }
+      ]
+    },
+    {
+      "sheetName": "Blueberry Latte",
+      "name": "Blueberry Latte",
+      "category": "Specialty Lattes",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Blueberry Puree",
+          "quantity": 75
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Dark Chocolate Latte (Iced)",
+      "name": "Dark Chocolate Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin Dark Chocolate Sauce",
+          "quantity": 60
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Matcha Latte",
+      "name": "Matcha Latte",
+      "category": "Specialty Lattes",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 32
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 100
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Breve",
+          "quantity": 60
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Nutella Milk",
+      "name": "Nutella Milk",
+      "category": "Specialty Lattes",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Nutella",
+          "quantity": 50
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Hazelnut Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Nutella Matcha Latte",
+      "name": "Nutella Matcha Latte",
+      "category": "Specialty Lattes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Nutella",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 32
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Hazelnut Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Sea Salt Biscoff Latte (Iced)",
+      "name": "Sea Salt Biscoff Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Biscoff",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Condense Milk",
+          "quantity": 25
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Sea Salt",
+          "quantity": 28.3495
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Strawberry Latte",
+      "name": "Strawberry Latte",
+      "category": "Specialty Lattes",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Allegro Strawberry Puree",
+          "quantity": 75
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Strawberry Matcha Latte",
+      "name": "Strawberry Matcha Latte",
+      "category": "Specialty Lattes",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 16.5
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Allegro Strawberry Puree",
+          "quantity": 55
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "White Chocolate Latte (Iced)",
+      "name": "White Chocolate Latte (Iced)",
+      "category": "Iced Coffee",
+      "priceCentavos": 13000,
+      "recipe": [
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 60
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "White Chocolate Matcha",
+      "name": "White Chocolate Matcha",
+      "category": "Specialty Lattes",
+      "priceCentavos": 17500,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 32
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Breve",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Thin Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Spill Proof",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Biscoff Frappe",
+      "name": "Biscoff Frappe",
+      "category": "Frappes",
+      "priceCentavos": 18000,
+      "recipe": [
+        {
+          "inventoryName": "Biscoff",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Whipcream",
+          "quantity": 38.46153846153846
+        }
+      ]
+    },
+    {
+      "sheetName": "Blueberry Frappe",
+      "name": "Blueberry Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Blueberry Puree",
+          "quantity": 75
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Whipcream",
+          "quantity": 38.46153846153846
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Biscoffee Frappe",
+      "name": "Biscoffee Frappe",
+      "category": "Frappes",
+      "priceCentavos": 19000,
+      "recipe": [
+        {
+          "inventoryName": "Biscoff",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Caramel Syrup",
+          "quantity": 10
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 13
+        },
+        {
+          "inventoryName": "Whipcream",
+          "quantity": 38.46153846153846
+        }
+      ]
+    },
+    {
+      "sheetName": "Caramel Frappe",
+      "name": "Caramel Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Monin Caramel Sauce",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 90
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 13
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Whipcream",
+          "quantity": 38.46153846153846
+        }
+      ]
+    },
+    {
+      "sheetName": "Cookies and Cream Frappe",
+      "name": "Cookies and Cream Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Crushed Oreo",
+          "quantity": 25.5
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 90
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 100
+        }
+      ]
+    },
+    {
+      "sheetName": "Dark Mocha Frappe",
+      "name": "Dark Mocha Frappe",
+      "category": "Specialty Lattes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Monin Dark Chocolate Sauce",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 90
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 20.5
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 13
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 90
+        }
+      ]
+    },
+    {
+      "sheetName": "Hazelnut Frappe",
+      "name": "Hazelnut Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Da Vinci Hazelnut Syrup",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 90
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 20.5
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 13
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 90
+        }
+      ]
+    },
+    {
+      "sheetName": "Java Chip",
+      "name": "Java Chip",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Barista Supreme Java Chip Powder",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 25.5
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 45
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Chocolate Chips",
+          "quantity": 2
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 120
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 13
+        }
+      ]
+    },
+    {
+      "sheetName": "Matcha Frappe",
+      "name": "Matcha Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 48
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 140
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Whipcream",
+          "quantity": 38.46153846153846
+        }
+      ]
+    },
+    {
+      "sheetName": "Nutella Frappe",
+      "name": "Nutella Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Nutella",
+          "quantity": 50
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 20.5
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 45
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Da Vinci Hazelnut Syrup",
+          "quantity": 20
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 120
+        }
+      ]
+    },
+    {
+      "sheetName": "Oreo Frappe",
+      "name": "Oreo Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Crushed Oreo",
+          "quantity": 25.5
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 20.5
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 90
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Da Vinci Vanilla Syrup",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 120
+        }
+      ]
+    },
+    {
+      "sheetName": "Matcha Oreo Frappe",
+      "name": "Matcha Oreo Frappe",
+      "category": "Frappes",
+      "priceCentavos": 17000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 48
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 120
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Whipcream",
+          "quantity": 38.46153846153846
+        },
+        {
+          "inventoryName": "Crushed Oreo",
+          "quantity": 17
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Strawberry Frappe",
+      "name": "Strawberry Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 120
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Allegro Strawberry Puree",
+          "quantity": 75
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 90
+        }
+      ]
+    },
+    {
+      "sheetName": "Strawberry Matcha Frappe",
+      "name": "Strawberry Matcha Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Allegro Matcha Powder",
+          "quantity": 16.5
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 120
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Allegro Strawberry Puree",
+          "quantity": 55
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 90
+        }
+      ]
+    },
+    {
+      "sheetName": "Strawberry Oreo Frappe",
+      "name": "Strawberry Oreo Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Crushed Oreo",
+          "quantity": 25.5
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Allegro Strawberry Puree",
+          "quantity": 55
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 90
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 100
+        }
+      ]
+    },
+    {
+      "sheetName": "White Mocha Frappe",
+      "name": "White Mocha Frappe",
+      "category": "Specialty Lattes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Monin White Chocolate Sauce",
+          "quantity": 40
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 90
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Fructose",
+          "quantity": 20.5
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Coffee Beans",
+          "quantity": 13
+        },
+        {
+          "inventoryName": "Everwhip Whip Cream",
+          "quantity": 90
+        }
+      ]
+    },
+    {
+      "sheetName": "Seasalt Biscoff Frappe",
+      "name": "Seasalt Biscoff Frappe",
+      "category": "Frappes",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Biscoff",
+          "quantity": 30
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Jersey Condense Milk",
+          "quantity": 25
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Sea Salt",
+          "quantity": 28.3495
+        },
+        {
+          "inventoryName": "Jersey Full Cream Milk",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Frappe Base",
+          "quantity": 28.5
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Whipcream",
+          "quantity": 38.46153846153846
+        }
+      ]
+    },
+    {
+      "sheetName": "Refreshers",
+      "name": "Refreshers",
+      "category": "Refreshers & Slushy",
+      "priceCentavos": 7500,
+      "recipe": [
+        {
+          "inventoryName": "Milim Lychee Syrup",
+          "quantity": 48
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Nata",
+          "quantity": 12
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Strawless Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Soda",
+          "quantity": 160
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Take Out Coffee",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Slushy",
+      "name": "Slushy",
+      "category": "Refreshers & Slushy",
+      "priceCentavos": 9500,
+      "recipe": [
+        {
+          "inventoryName": "Milim Lychee Syrup",
+          "quantity": 96
+        },
+        {
+          "inventoryName": "Dabba Cups",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Nata",
+          "quantity": 24
+        },
+        {
+          "inventoryName": "Bobba Straw",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Tube Ice",
+          "quantity": 260
+        },
+        {
+          "inventoryName": "Dome Lid",
+          "quantity": 1
+        },
+        {
+          "inventoryName": "Soda",
+          "quantity": 150
+        },
+        {
+          "inventoryName": "Tissue Quarter Fold",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Cookies",
+      "name": "Cookies",
+      "category": "Desserts",
+      "priceCentavos": 5500,
+      "recipe": [
+        {
+          "inventoryName": "Cookies",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Budweiser",
+      "name": "Budweiser",
+      "category": "Beer",
+      "priceCentavos": 12000,
+      "recipe": [
+        {
+          "inventoryName": "Budweiser",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Corona Extra",
+      "name": "Corona Extra",
+      "category": "Beer",
+      "priceCentavos": 14000,
+      "recipe": [
+        {
+          "inventoryName": "Corona Extra",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Engkanto Double IPA",
+      "name": "Engkanto Double IPA",
+      "category": "Beer",
+      "priceCentavos": 19000,
+      "recipe": [
+        {
+          "inventoryName": "Engkanto Double IPA",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Engkanto Hazy IPA",
+      "name": "Engkanto Hazy IPA",
+      "category": "Beer",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Engkanto Double IPA",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Engkanto Lager",
+      "name": "Engkanto Lager",
+      "category": "Beer",
+      "priceCentavos": 11000,
+      "recipe": [
+        {
+          "inventoryName": "Engkanto Lager",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Engkanto Ube Lager",
+      "name": "Engkanto Ube Lager",
+      "category": "Beer",
+      "priceCentavos": 15000,
+      "recipe": [
+        {
+          "inventoryName": "Engkanto Ube Lager",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Engkanto Honey Ale",
+      "name": "Engkanto Honey Ale",
+      "category": "Beer",
+      "priceCentavos": 11000,
+      "recipe": [
+        {
+          "inventoryName": "Engkanto Honey Ale",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Heineken",
+      "name": "Heineken",
+      "category": "Beer",
+      "priceCentavos": 12000,
+      "recipe": [
+        {
+          "inventoryName": "Heiniken",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "sheetName": "Smirnoff Mule",
+      "name": "Smirnoff Mule",
+      "category": "Beer",
+      "priceCentavos": 7500,
+      "recipe": [
+        {
+          "inventoryName": "Smirnoff Mule",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "warnings": [
+    "[recipe:Poppers (Plain) with fries] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Bento] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers (Plain) with rice] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers (Buffalo) with Rice] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers (HM) with Rice] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers (HS) with Rice] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers (Garlic) with Rice] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers (HM) with Fries] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers (HS) with Fries] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers (G) with Fries] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers (B) with fries] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Poppers Ala Carte] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Fries Sour Cream (S)] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Fries BBQ (S)] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Fries Cheese (S)] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Fries BBQ (L)] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Fries Sour Cream (L)] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Fries Cheese (L)] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Fish and Chips] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Fish and Chips] other-item r10 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Fish and Rice] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Fish and Rice] other-item r10 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Chef Pasta] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Carbonara] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Cheezy Buldak] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Chicken Alfredo] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Chicken AC ] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Chicken Boneless (Honey Srirach] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Chicken AC Spicy] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Chicken FF ] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Chicken FF Spicy] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Angus Burger AC] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Angus Burger FF] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Bacon Jam AC] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Bacon Jam AC] other-item r7 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Bacon Jam FF] other-item r6 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Bacon Jam FF] other-item r7 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Quarter Pounder AC] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Quarter Pounder FF] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Chicken Chop] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Chicken Fingers] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:3pcs Buffalo w rice] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:3pcs HM W rice] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:3pcs HS w rice] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:3pcs Garlic w rice] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:3pcs Buffalo w fries] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:3pcs Buffalo w fries] other-item r10 'Electric Stove' (piece) -> 'Electric Stove' found but unusable (unit=piece)",
+    "[recipe:3pcs HM w fries] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:3pcs HM w fries] other-item r10 'Electric Stove' (piece) -> 'Electric Stove' found but unusable (unit=piece)",
+    "[recipe:3pcs HS w fries] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:3pcs HS w fries] other-item r10 'Electric Stove' (piece) -> 'Electric Stove' found but unusable (unit=piece)",
+    "[recipe:3pcs garlic w fries] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:12pcs All Flavor (Plater)] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:6pcs buffalo] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:12pcs Buffalo Wings (Plater)] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:6pcs hm] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:12pcs Honey Mustard Wings (Plat] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:6pcs HS] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:12pcs Honey Sriracha Wings (Pla] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:6pcs Garlic] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:12pcs Plater (Garlic)] other-item r6 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Egg (Add Ons)] other-item r4 'LPG Gas' (minute) -> 'LPG Gas' found but unusable (unit=minute)",
+    "[recipe:Fries (Add Ons)] other-item r4 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Extra Rice] other-item r4 'Rice Cooker' (minute) -> 'Rice Cooker' found but unusable (unit=minute)",
+    "[recipe:Poppers (Add Ons)] other-item r4 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)",
+    "[recipe:Spam (Add ons)] other-item r4 'Electric Stove' (minute) -> 'Electric Stove' found but unusable (unit=minute)"
+  ],
+  "skippedSheets": []
+}
