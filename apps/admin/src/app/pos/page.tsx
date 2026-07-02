@@ -1,11 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import { AdminLayout } from "@/components/AdminLayout";
 import { adminApi, resolveApiBase } from "@/lib/api";
-import type { MenuCategory, MenuItem, ModifierOption } from "@blessed-ave/types";
+import type { CafeTable, MenuCategory, MenuItem, ModifierOption, Order } from "@blessed-ave/types";
 import toast from "react-hot-toast";
 import { QrPlaceholder } from "@/components/QrPlaceholder";
+
+const ACTIVE_STATUSES = ["PENDING", "CONFIRMED", "PREPARING", "READY"];
+
+function tableBadge(status: string) {
+  if (status === "PENDING") return { label: "Pending Payment", cls: "border-amber-200 bg-amber-50 text-amber-700" };
+  if (status === "READY")   return { label: "Ready",           cls: "border-green-200 bg-green-50 text-green-700" };
+  return { label: "Preparing", cls: "border-violet-200 bg-violet-50 text-violet-700" };
+}
 
 interface POSItem {
   menuItem: MenuItem;
@@ -24,6 +33,10 @@ export default function POSPage() {
   const [placing,        setPlacing]        = useState(false);
   const [notes,          setNotes]          = useState("");
 
+  // Tables with an active order or a check awaiting payment
+  const [tables,       setTables]       = useState<CafeTable[]>([]);
+  const [activeOrders, setActiveOrders] = useState<Order[]>([]);
+
   // QR confirmation modal
   const [qrOrderId,  setQrOrderId]  = useState<string | null>(null);
   const [qrMethod,   setQrMethod]   = useState<"GCASH" | "MAYA">("GCASH");
@@ -36,9 +49,53 @@ export default function POSPage() {
     });
   }, []);
 
+  useEffect(() => {
+    adminApi.tables.list().then((r) => setTables(r.data));
+
+    function loadPending() {
+      // Orders awaiting payment aren't pushed over the socket (kitchen only
+      // learns of an order once it's paid), so poll for new pending checks.
+      adminApi.orders.list({ status: "PENDING" }).then((r) =>
+        setActiveOrders((prev) => [
+          ...r.data,
+          ...prev.filter((o) => o.status !== "PENDING"),
+        ])
+      );
+    }
+    loadPending();
+    adminApi.orders.kitchen().then((r) => setActiveOrders((prev) => [...prev, ...r.data]));
+    const pendingPoll = setInterval(loadPending, 10000);
+
+    let socket: ReturnType<typeof io> | undefined;
+    resolveApiBase().then((base) => {
+      socket = io(base);
+      socket.emit("join:kitchen");
+      socket.on("order:new", (order: Order) => {
+        if (ACTIVE_STATUSES.includes(order.status)) setActiveOrders((prev) => [order, ...prev]);
+      });
+      socket.on("order:updated", ({ order }: { order: Order }) => {
+        setActiveOrders((prev) =>
+          ACTIVE_STATUSES.includes(order.status)
+            ? prev.map((o) => (o.id === order.id ? order : o))
+            : prev.filter((o) => o.id !== order.id)
+        );
+      });
+    });
+    return () => { clearInterval(pendingPoll); socket?.disconnect(); };
+  }, []);
+
   const activeItems = categories.find((c) => c.id === activeCategory)?.items ?? [];
   const total       = cart.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
   const itemCount   = cart.reduce((s, i) => s + i.quantity, 0);
+
+  const occupiedTables = tables
+    .map((table) => {
+      const orders = activeOrders
+        .filter((o) => o.tableId === table.id)
+        .sort((a, b) => (a.status === "PENDING" ? -1 : b.status === "PENDING" ? 1 : 0));
+      return orders.length > 0 ? { table, order: orders[0], count: orders.length } : null;
+    })
+    .filter((t): t is { table: CafeTable; order: Order; count: number } => t !== null);
 
   function auth() {
     return { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("accessToken")}` };
@@ -134,6 +191,21 @@ export default function POSPage() {
 
         {/* ── Menu panel ───────────────────────────────────────── */}
         <div className="flex flex-1 flex-col overflow-hidden bg-slate-50">
+          {occupiedTables.length > 0 && (
+            <div className="flex gap-1.5 overflow-x-auto border-b border-slate-200 bg-white px-4 py-2.5 scrollbar-hide">
+              {occupiedTables.map(({ table, order, count }) => {
+                const badge = tableBadge(order.status);
+                return (
+                  <div key={table.id}
+                    className={`flex-shrink-0 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold ${badge.cls}`}>
+                    <span>{table.name}</span>
+                    <span className="opacity-70">· {badge.label}</span>
+                    {count > 1 && <span className="opacity-70">({count})</span>}
+                  </div>
+                );
+              })}
+            </div>
+          )}
           <div className="flex gap-1.5 overflow-x-auto border-b border-slate-200 bg-white px-4 py-3 scrollbar-hide">
             {categories.map((cat) => (
               <button key={cat.id} onClick={() => setActiveCategory(cat.id)}

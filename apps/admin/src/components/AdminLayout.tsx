@@ -34,8 +34,8 @@ const NAV_SECTIONS = [
     label: "Operations",
     items: [
       { href: "/dashboard",  label: "Dashboard",   icon: DashIcon   },
-      { href: "/kitchen",    label: "Kitchen",      icon: KitchenIcon },
       { href: "/pos",        label: "POS",          icon: PosIcon    },
+      { href: "/kitchen",    label: "Kitchen",      icon: KitchenIcon },
       { href: "/orders",     label: "Orders",       icon: OrderIcon  },
     ],
   },
