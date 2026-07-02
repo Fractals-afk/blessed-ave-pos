@@ -1,0 +1,55 @@
+services:
+  blessed-db:
+    image: postgres:16-alpine
+    container_name: blessed-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - blessed_db_data:/var/lib/postgresql/data
+
+  blessed-api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: blessed-api
+    restart: unless-stopped
+    env_file:
+      - apps/api/.env
+    depends_on:
+      - blessed-db
+    networks:
+      - default
+      - fairway-villa_default
+
+  blessed-web:
+    image: nginx:alpine
+    container_name: blessed-web
+    restart: unless-stopped
+    volumes:
+      - ./apps/web/out:/usr/share/nginx/html:ro
+      - ./deploy/nginx/static.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - fairway-villa_default
+
+  blessed-admin:
+    image: nginx:alpine
+    container_name: blessed-admin
+    restart: unless-stopped
+    volumes:
+      - ./apps/admin/out:/usr/share/nginx/html:ro
+      - ./deploy/nginx/admin.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - fairway-villa_default
+
+networks:
+  default:
+    name: blessed-ave-pos_default
+  # Shared ingress network owned by the Caddy container on the VPS (from the
+  # separate fairway-villa deployment) — required so Caddy can reverse_proxy
+  # to these containers by name. Not created by this compose file.
+  fairway-villa_default:
+    external: true
+
+volumes:
+  blessed_db_data:
