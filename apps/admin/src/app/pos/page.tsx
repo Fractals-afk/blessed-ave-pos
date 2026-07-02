@@ -62,7 +62,8 @@ export default function POSPage() {
   useEffect(() => {
     adminApi.menu.getAll().then((r) => {
       setCategories(r.data);
-      if (r.data.length > 0) setActiveCategory(r.data[0].id);
+      const firstVisible = r.data.find((c) => c.items.some((i) => i.available));
+      if (firstVisible) setActiveCategory(firstVisible.id);
     });
   }, []);
 
@@ -101,7 +102,8 @@ export default function POSPage() {
     return () => { clearInterval(pendingPoll); socket?.disconnect(); };
   }, []);
 
-  const activeItems = categories.find((c) => c.id === activeCategory)?.items ?? [];
+  const visibleCategories = categories.filter((c) => c.items.some((i) => i.available));
+  const activeItems = (categories.find((c) => c.id === activeCategory)?.items ?? []).filter((i) => i.available);
   const total       = cart.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
   const itemCount   = cart.reduce((s, i) => s + i.quantity, 0);
 
@@ -275,10 +277,10 @@ export default function POSPage() {
 
         {/* ── Menu panel ───────────────────────────────────────── */}
         <div className="flex flex-1 flex-col overflow-hidden bg-slate-50">
-          <div className="flex gap-1.5 overflow-x-auto border-b border-slate-200 bg-white px-4 py-3 scrollbar-hide">
-            {categories.map((cat) => (
+          <div className="flex gap-2 overflow-x-auto border-b border-slate-200 bg-white px-4 py-3 scrollbar-hide">
+            {visibleCategories.map((cat) => (
               <button key={cat.id} onClick={() => setActiveCategory(cat.id)}
-                className={`flex-shrink-0 rounded-lg px-4 py-1.5 text-sm font-medium transition ${
+                className={`flex-shrink-0 rounded-xl px-5 py-3 text-base font-semibold transition active:scale-[0.97] ${
                   activeCategory === cat.id ? "bg-[#0f172a] text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}>
                 {cat.name}
@@ -286,14 +288,14 @@ export default function POSPage() {
             ))}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4">
-            <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="flex-1 overflow-y-auto p-3">
+            <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4">
               {activeItems.map((item) => (
-                <button key={item.id} onClick={() => addToCart(item)} disabled={!item.available}
-                  className="rounded-xl bg-white border border-slate-200 p-4 text-left hover:border-slate-300 hover:shadow-sm transition active:scale-[0.97] disabled:opacity-40">
-                  <p className="font-semibold text-slate-800 text-sm leading-tight">{item.name}</p>
-                  {item.description && <p className="text-xs text-slate-400 mt-1 line-clamp-1">{item.description}</p>}
-                  <p className="mt-2 text-sm font-bold text-green-600">₱{(item.price / 100).toFixed(2)}</p>
+                <button key={item.id} onClick={() => addToCart(item)}
+                  className="rounded-2xl bg-white border border-slate-200 p-5 text-left hover:border-slate-300 hover:shadow-md transition active:scale-[0.97] min-h-[104px]">
+                  <p className="font-semibold text-slate-800 text-base leading-tight">{item.name}</p>
+                  {item.description && <p className="text-sm text-slate-400 mt-1 line-clamp-1">{item.description}</p>}
+                  <p className="mt-2 text-base font-bold text-green-600">₱{(item.price / 100).toFixed(2)}</p>
                 </button>
               ))}
             </div>
@@ -301,7 +303,7 @@ export default function POSPage() {
         </div>
 
         {/* ── Cart panel ───────────────────────────────────────── */}
-        <div className="flex w-72 flex-col border-l border-slate-200 bg-white">
+        <div className="flex w-80 flex-col border-l border-slate-200 bg-white">
           <div className="border-b border-slate-100 px-4 py-4 flex items-center justify-between">
             <h2 className="font-semibold text-slate-900 text-sm">Current Order</h2>
             {itemCount > 0 && <span className="text-xs text-slate-400">{itemCount} item{itemCount !== 1 ? "s" : ""}</span>}
@@ -323,16 +325,16 @@ export default function POSPage() {
                   )}
                   <p className="text-xs font-semibold text-green-600 mt-0.5">₱{((item.unitPrice * item.quantity) / 100).toFixed(2)}</p>
                 </div>
-                <div className="flex items-center gap-1.5 ml-2 flex-shrink-0">
+                <div className="flex items-center gap-2 ml-2 flex-shrink-0">
                   <button
                     onClick={() => setCart((prev) => item.quantity <= 1 ? prev.filter((_, i) => i !== idx) : prev.map((it, i) => i === idx ? { ...it, quantity: it.quantity - 1 } : it))}
-                    className="h-6 w-6 rounded bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 transition text-sm flex items-center justify-center">
+                    className="h-9 w-9 rounded-lg bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 transition text-base flex items-center justify-center active:scale-[0.95]">
                     −
                   </button>
-                  <span className="text-xs font-bold text-slate-800 w-4 text-center">{item.quantity}</span>
+                  <span className="text-sm font-bold text-slate-800 w-5 text-center">{item.quantity}</span>
                   <button
                     onClick={() => setCart((prev) => prev.map((it, i) => i === idx ? { ...it, quantity: it.quantity + 1 } : it))}
-                    className="h-6 w-6 rounded bg-slate-800 text-white font-bold hover:bg-slate-700 transition text-sm flex items-center justify-center">
+                    className="h-9 w-9 rounded-lg bg-slate-800 text-white font-bold hover:bg-slate-700 transition text-base flex items-center justify-center active:scale-[0.95]">
                     +
                   </button>
                 </div>
@@ -345,10 +347,10 @@ export default function POSPage() {
               placeholder="Order notes…" rows={2}
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" />
 
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-3 gap-2">
               {(["CASH", "GCASH", "MAYA"] as const).map((m) => (
                 <button key={m} onClick={() => setPayMethod(m)}
-                  className={`rounded-lg border py-2 text-xs font-semibold transition ${
+                  className={`rounded-xl border py-3 text-sm font-semibold transition active:scale-[0.97] ${
                     payMethod === m ? "border-slate-800 bg-slate-800 text-white" : "border-slate-200 text-slate-600 hover:border-slate-300"
                   }`}>
                   {m === "GCASH" ? "GCash" : m === "MAYA" ? "Maya" : "Cash"}
@@ -358,11 +360,11 @@ export default function POSPage() {
 
             <div className="flex justify-between items-center">
               <span className="text-sm text-slate-500">Total</span>
-              <span className="text-xl font-bold text-slate-900">₱{(total / 100).toFixed(2)}</span>
+              <span className="text-2xl font-bold text-slate-900">₱{(total / 100).toFixed(2)}</span>
             </div>
 
             <button onClick={placeOrder} disabled={cart.length === 0 || placing}
-              className="w-full rounded-lg bg-[#0f172a] py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-40 transition">
+              className="w-full rounded-xl bg-[#0f172a] py-4 text-base font-semibold text-white hover:bg-slate-800 disabled:opacity-40 transition active:scale-[0.98]">
               {placing ? "Placing…" : payMethod === "CASH" ? "Place Order (Cash)" : `Place Order → Show QR`}
             </button>
           </div>
@@ -379,9 +381,9 @@ export default function POSPage() {
               const badge = tableBadge(order?.status);
               return (
                 <button key={table.id} onClick={() => openTable(table)}
-                  className={`flex flex-col items-center justify-center gap-1 rounded-xl border-2 text-center transition hover:shadow-md ${badge.cls}`}>
-                  <span className="text-lg font-bold">{table.name}</span>
-                  <span className="text-sm opacity-70">{badge.label}</span>
+                  className={`flex flex-col items-center justify-center gap-1 rounded-xl border-2 text-center transition hover:shadow-md active:scale-[0.98] ${badge.cls}`}>
+                  <span className="text-2xl font-bold">{table.name}</span>
+                  <span className="text-base opacity-70">{badge.label}</span>
                   {count > 1 && <span className="text-xs opacity-70">({count} orders)</span>}
                 </button>
               );
