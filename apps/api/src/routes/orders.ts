@@ -206,7 +206,12 @@ ordersRouter.patch("/:id/status", requireAuth, async (req, res, next) => {
 
     const order = await prisma.order.update({
       where: { id: req.params.id },
-      data: { status },
+      data: {
+        status,
+        ...(status === "PREPARING" && { startedAt: new Date() }),
+        ...(status === "READY" && { readyAt: new Date() }),
+        ...(status === "COLLECTED" && { collectedAt: new Date() }),
+      },
       include: {
         items: { include: { selectedOptions: true } },
         table: true,

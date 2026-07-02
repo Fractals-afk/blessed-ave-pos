@@ -33,9 +33,29 @@ function elapsed(createdAt: string) {
   return mins < 1 ? "just now" : `${mins}m ago`;
 }
 
+function formatTimer(ms: number) {
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+function formatDuration(ms: number) {
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}m ${s}s`;
+}
+
 export default function KitchenPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [now, setNow] = useState(() => Date.now());
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     adminApi.orders.kitchen().then((r) => setOrders(r.data));
@@ -62,7 +82,13 @@ export default function KitchenPage() {
   async function advance(order: Order) {
     const action = STATUS_ACTIONS[order.status];
     if (!action) return;
-    try { await adminApi.orders.updateStatus(order.id, action.next); }
+    try {
+      await adminApi.orders.updateStatus(order.id, action.next);
+      if (action.next === "COLLECTED") {
+        const total = formatDuration(Date.now() - new Date(order.createdAt).getTime());
+        toast.success(`#${order.id.slice(-4).toUpperCase()} completed in ${total}`, { duration: 5000 });
+      }
+    }
     catch (err: any) { toast.error(err.message); }
   }
 
@@ -108,7 +134,8 @@ export default function KitchenPage() {
 
               <div className="space-y-2">
                 {col.orders.map((order) => {
-                  const ageMin = Math.floor((Date.now() - new Date(order.createdAt).getTime()) / 60000);
+                  const ageMs = now - new Date(order.createdAt).getTime();
+                  const ageMin = Math.floor(ageMs / 60000);
                   return (
                     <div key={order.id}
                       className={clsx(
@@ -129,9 +156,12 @@ export default function KitchenPage() {
                             {" · "}{elapsed(order.createdAt)}
                           </p>
                         </div>
-                        {ageMin >= 10 && (
-                          <span className="text-xs font-bold text-red-500">{ageMin}m ⚠️</span>
-                        )}
+                        <span className={clsx(
+                          "font-mono text-sm font-bold tabular-nums rounded px-1.5 py-0.5",
+                          ageMin >= 10 ? "text-red-600 bg-red-50" : "text-slate-500 bg-slate-100"
+                        )}>
+                          {formatTimer(ageMs)}{ageMin >= 10 ? " ⚠️" : ""}
+                        </span>
                       </div>
 
                       <ul className="space-y-1 mb-3">
@@ -150,7 +180,16 @@ export default function KitchenPage() {
                         ))}
                       </ul>
 
-                      {STATUS_ACTIONS[order.status] && (
+                      {order.status === "READY" ? (
+                        <label className="flex items-center gap-2 rounded-lg bg-green-50 border border-green-200 py-1.5 px-2 cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 accent-green-600"
+                            onChange={() => advance(order)}
+                          />
+                          <span className="text-xs font-semibold text-green-700">Order Complete</span>
+                        </label>
+                      ) : STATUS_ACTIONS[order.status] && (
                         <button onClick={() => advance(order)}
                           className={`w-full rounded-lg py-1.5 text-xs font-semibold text-white transition ${STATUS_ACTIONS[order.status].color}`}>
                           {STATUS_ACTIONS[order.status].label}

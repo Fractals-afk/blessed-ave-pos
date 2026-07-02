@@ -156,6 +156,9 @@ model Order {
   discountAmount Int        @default(0)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  startedAt     DateTime?   // when kitchen marked PREPARING — queue-time training metric
+  readyAt       DateTime?   // when kitchen marked READY — prep-time training metric
+  collectedAt   DateTime?   // when marked COLLECTED — total service-time training metric
 
   table   CafeTable?  @relation(fields: [tableId], references: [id])
   staff   User?       @relation(fields: [staffId], references: [id])

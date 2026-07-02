@@ -200,7 +200,10 @@ exports.Prisma.OrderScalarFieldEnum = {
   total: 'total',
   discountAmount: 'discountAmount',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  startedAt: 'startedAt',
+  readyAt: 'readyAt',
+  collectedAt: 'collectedAt'
 };
 
 exports.Prisma.OrderItemScalarFieldEnum = {

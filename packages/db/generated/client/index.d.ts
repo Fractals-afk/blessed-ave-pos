@@ -10074,6 +10074,9 @@ export namespace Prisma {
     discountAmount: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    startedAt: Date | null
+    readyAt: Date | null
+    collectedAt: Date | null
   }
 
   export type OrderMaxAggregateOutputType = {
@@ -10091,6 +10094,9 @@ export namespace Prisma {
     discountAmount: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    startedAt: Date | null
+    readyAt: Date | null
+    collectedAt: Date | null
   }
 
   export type OrderCountAggregateOutputType = {
@@ -10108,6 +10114,9 @@ export namespace Prisma {
     discountAmount: number
     createdAt: number
     updatedAt: number
+    startedAt: number
+    readyAt: number
+    collectedAt: number
     _all: number
   }
 
@@ -10139,6 +10148,9 @@ export namespace Prisma {
     discountAmount?: true
     createdAt?: true
     updatedAt?: true
+    startedAt?: true
+    readyAt?: true
+    collectedAt?: true
   }
 
   export type OrderMaxAggregateInputType = {
@@ -10156,6 +10168,9 @@ export namespace Prisma {
     discountAmount?: true
     createdAt?: true
     updatedAt?: true
+    startedAt?: true
+    readyAt?: true
+    collectedAt?: true
   }
 
   export type OrderCountAggregateInputType = {
@@ -10173,6 +10188,9 @@ export namespace Prisma {
     discountAmount?: true
     createdAt?: true
     updatedAt?: true
+    startedAt?: true
+    readyAt?: true
+    collectedAt?: true
     _all?: true
   }
 
@@ -10277,6 +10295,9 @@ export namespace Prisma {
     discountAmount: number
     createdAt: Date
     updatedAt: Date
+    startedAt: Date | null
+    readyAt: Date | null
+    collectedAt: Date | null
     _count: OrderCountAggregateOutputType | null
     _avg: OrderAvgAggregateOutputType | null
     _sum: OrderSumAggregateOutputType | null
@@ -10313,6 +10334,9 @@ export namespace Prisma {
     discountAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    startedAt?: boolean
+    readyAt?: boolean
+    collectedAt?: boolean
     table?: boolean | Order$tableArgs<ExtArgs>
     staff?: boolean | Order$staffArgs<ExtArgs>
     items?: boolean | Order$itemsArgs<ExtArgs>
@@ -10335,6 +10359,9 @@ export namespace Prisma {
     discountAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    startedAt?: boolean
+    readyAt?: boolean
+    collectedAt?: boolean
     table?: boolean | Order$tableArgs<ExtArgs>
     staff?: boolean | Order$staffArgs<ExtArgs>
   }, ExtArgs["result"]["order"]>
@@ -10354,6 +10381,9 @@ export namespace Prisma {
     discountAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    startedAt?: boolean
+    readyAt?: boolean
+    collectedAt?: boolean
   }
 
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10391,6 +10421,9 @@ export namespace Prisma {
       discountAmount: number
       createdAt: Date
       updatedAt: Date
+      startedAt: Date | null
+      readyAt: Date | null
+      collectedAt: Date | null
     }, ExtArgs["result"]["order"]>
     composites: {}
   }
@@ -10802,6 +10835,9 @@ export namespace Prisma {
     readonly discountAmount: FieldRef<"Order", 'Int'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
     readonly updatedAt: FieldRef<"Order", 'DateTime'>
+    readonly startedAt: FieldRef<"Order", 'DateTime'>
+    readonly readyAt: FieldRef<"Order", 'DateTime'>
+    readonly collectedAt: FieldRef<"Order", 'DateTime'>
   }
     
 
@@ -23239,7 +23275,10 @@ export namespace Prisma {
     total: 'total',
     discountAmount: 'discountAmount',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    startedAt: 'startedAt',
+    readyAt: 'readyAt',
+    collectedAt: 'collectedAt'
   };
 
   export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -24094,6 +24133,9 @@ export namespace Prisma {
     discountAmount?: IntFilter<"Order"> | number
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
+    startedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    readyAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    collectedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     table?: XOR<CafeTableNullableRelationFilter, CafeTableWhereInput> | null
     staff?: XOR<UserNullableRelationFilter, UserWhereInput> | null
     items?: OrderItemListRelationFilter
@@ -24115,6 +24157,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    readyAt?: SortOrderInput | SortOrder
+    collectedAt?: SortOrderInput | SortOrder
     table?: CafeTableOrderByWithRelationInput
     staff?: UserOrderByWithRelationInput
     items?: OrderItemOrderByRelationAggregateInput
@@ -24139,6 +24184,9 @@ export namespace Prisma {
     discountAmount?: IntFilter<"Order"> | number
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
+    startedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    readyAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    collectedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     table?: XOR<CafeTableNullableRelationFilter, CafeTableWhereInput> | null
     staff?: XOR<UserNullableRelationFilter, UserWhereInput> | null
     items?: OrderItemListRelationFilter
@@ -24160,6 +24208,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    readyAt?: SortOrderInput | SortOrder
+    collectedAt?: SortOrderInput | SortOrder
     _count?: OrderCountOrderByAggregateInput
     _avg?: OrderAvgOrderByAggregateInput
     _max?: OrderMaxOrderByAggregateInput
@@ -24185,6 +24236,9 @@ export namespace Prisma {
     discountAmount?: IntWithAggregatesFilter<"Order"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+    startedAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+    readyAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+    collectedAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
   }
 
   export type OrderItemWhereInput = {
@@ -25499,6 +25553,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     table?: CafeTableCreateNestedOneWithoutOrdersInput
     staff?: UserCreateNestedOneWithoutOrdersInput
     items?: OrderItemCreateNestedManyWithoutOrderInput
@@ -25520,6 +25577,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
     payment?: PaymentUncheckedCreateNestedOneWithoutOrderInput
   }
@@ -25537,6 +25597,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     table?: CafeTableUpdateOneWithoutOrdersNestedInput
     staff?: UserUpdateOneWithoutOrdersNestedInput
     items?: OrderItemUpdateManyWithoutOrderNestedInput
@@ -25558,6 +25621,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
     payment?: PaymentUncheckedUpdateOneWithoutOrderNestedInput
   }
@@ -25577,6 +25643,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
   }
 
   export type OrderUpdateManyMutationInput = {
@@ -25592,6 +25661,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type OrderUncheckedUpdateManyInput = {
@@ -25609,6 +25681,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type OrderItemCreateInput = {
@@ -26955,6 +27030,17 @@ export namespace Prisma {
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type CafeTableNullableRelationFilter = {
     is?: CafeTableWhereInput | null
     isNot?: CafeTableWhereInput | null
@@ -26985,6 +27071,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    startedAt?: SortOrder
+    readyAt?: SortOrder
+    collectedAt?: SortOrder
   }
 
   export type OrderAvgOrderByAggregateInput = {
@@ -27008,6 +27097,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    startedAt?: SortOrder
+    readyAt?: SortOrder
+    collectedAt?: SortOrder
   }
 
   export type OrderMinOrderByAggregateInput = {
@@ -27025,6 +27117,9 @@ export namespace Prisma {
     discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    startedAt?: SortOrder
+    readyAt?: SortOrder
+    collectedAt?: SortOrder
   }
 
   export type OrderSumOrderByAggregateInput = {
@@ -27051,6 +27146,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type OrderRelationFilter = {
@@ -27159,17 +27268,6 @@ export namespace Prisma {
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type PaymentCountOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
@@ -27238,20 +27336,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumInventoryUnitFilter<$PrismaModel = never> = {
@@ -28314,6 +28398,10 @@ export namespace Prisma {
     set?: $Enums.OrderStatus
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type CafeTableUpdateOneWithoutOrdersNestedInput = {
     create?: XOR<CafeTableCreateWithoutOrdersInput, CafeTableUncheckedCreateWithoutOrdersInput>
     connectOrCreate?: CafeTableCreateOrConnectWithoutOrdersInput
@@ -28492,10 +28580,6 @@ export namespace Prisma {
 
   export type EnumPaymentStatusFieldUpdateOperationsInput = {
     set?: $Enums.PaymentStatus
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type OrderUpdateOneRequiredWithoutPaymentNestedInput = {
@@ -29090,6 +29174,17 @@ export namespace Prisma {
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedEnumOrderSourceWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.OrderSource | EnumOrderSourceFieldRefInput<$PrismaModel>
     in?: $Enums.OrderSource[] | ListEnumOrderSourceFieldRefInput<$PrismaModel>
@@ -29110,6 +29205,20 @@ export namespace Prisma {
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
@@ -29122,17 +29231,6 @@ export namespace Prisma {
     in?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
@@ -29153,20 +29251,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumInventoryUnitFilter<$PrismaModel = never> = {
@@ -29266,6 +29350,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     table?: CafeTableCreateNestedOneWithoutOrdersInput
     items?: OrderItemCreateNestedManyWithoutOrderInput
     payment?: PaymentCreateNestedOneWithoutOrderInput
@@ -29285,6 +29372,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
     payment?: PaymentUncheckedCreateNestedOneWithoutOrderInput
   }
@@ -29407,6 +29497,9 @@ export namespace Prisma {
     discountAmount?: IntFilter<"Order"> | number
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
+    startedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    readyAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    collectedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
   }
 
   export type ShiftUpsertWithWhereUniqueWithoutUserInput = {
@@ -30092,6 +30185,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     staff?: UserCreateNestedOneWithoutOrdersInput
     items?: OrderItemCreateNestedManyWithoutOrderInput
     payment?: PaymentCreateNestedOneWithoutOrderInput
@@ -30111,6 +30207,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
     payment?: PaymentUncheckedCreateNestedOneWithoutOrderInput
   }
@@ -30386,6 +30485,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     table?: CafeTableCreateNestedOneWithoutOrdersInput
     staff?: UserCreateNestedOneWithoutOrdersInput
     payment?: PaymentCreateNestedOneWithoutOrderInput
@@ -30406,6 +30508,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     payment?: PaymentUncheckedCreateNestedOneWithoutOrderInput
   }
 
@@ -30495,6 +30600,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     table?: CafeTableUpdateOneWithoutOrdersNestedInput
     staff?: UserUpdateOneWithoutOrdersNestedInput
     payment?: PaymentUpdateOneWithoutOrderNestedInput
@@ -30515,6 +30623,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     payment?: PaymentUncheckedUpdateOneWithoutOrderNestedInput
   }
 
@@ -30690,6 +30801,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     table?: CafeTableCreateNestedOneWithoutOrdersInput
     staff?: UserCreateNestedOneWithoutOrdersInput
     items?: OrderItemCreateNestedManyWithoutOrderInput
@@ -30710,6 +30824,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -30742,6 +30859,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     table?: CafeTableUpdateOneWithoutOrdersNestedInput
     staff?: UserUpdateOneWithoutOrdersNestedInput
     items?: OrderItemUpdateManyWithoutOrderNestedInput
@@ -30762,6 +30882,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -31694,6 +31817,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
   }
 
   export type ShiftCreateManyUserInput = {
@@ -31731,6 +31857,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     table?: CafeTableUpdateOneWithoutOrdersNestedInput
     items?: OrderItemUpdateManyWithoutOrderNestedInput
     payment?: PaymentUpdateOneWithoutOrderNestedInput
@@ -31750,6 +31879,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
     payment?: PaymentUncheckedUpdateOneWithoutOrderNestedInput
   }
@@ -31768,6 +31900,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ShiftUpdateWithoutUserInput = {
@@ -32054,6 +32189,9 @@ export namespace Prisma {
     discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    startedAt?: Date | string | null
+    readyAt?: Date | string | null
+    collectedAt?: Date | string | null
   }
 
   export type OrderUpdateWithoutTableInput = {
@@ -32069,6 +32207,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     staff?: UserUpdateOneWithoutOrdersNestedInput
     items?: OrderItemUpdateManyWithoutOrderNestedInput
     payment?: PaymentUpdateOneWithoutOrderNestedInput
@@ -32088,6 +32229,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
     payment?: PaymentUncheckedUpdateOneWithoutOrderNestedInput
   }
@@ -32106,6 +32250,9 @@ export namespace Prisma {
     discountAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    readyAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    collectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type OrderItemCreateManyOrderInput = {

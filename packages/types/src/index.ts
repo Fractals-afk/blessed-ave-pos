@@ -81,6 +81,9 @@ export interface Order {
   payment?: Payment;
   createdAt: string;
   updatedAt: string;
+  startedAt?: string;
+  readyAt?: string;
+  collectedAt?: string;
 }
 
 export interface OrderItem {
