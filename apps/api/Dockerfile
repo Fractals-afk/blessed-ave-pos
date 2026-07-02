@@ -1,4 +1,5 @@
-FROM node:20-alpine AS base
+FROM node:20-slim AS base
+RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 RUN npm install -g pnpm@9
 
 # Install dependencies
@@ -23,7 +24,8 @@ RUN pnpm --filter @blessed-ave/db generate
 RUN pnpm --filter @blessed-ave/api build
 
 # Production image
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
+RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 RUN npm install -g pnpm@9
 WORKDIR /app
 ENV NODE_ENV=production
