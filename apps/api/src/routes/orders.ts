@@ -222,6 +222,29 @@ ordersRouter.patch("/:id/status", requireAuth, async (req, res, next) => {
   }
 });
 
+// PATCH /api/orders/:id/notes — staff adds/edits special instructions
+ordersRouter.patch("/:id/notes", requireAuth, async (req, res, next) => {
+  try {
+    const { notes } = z.object({ notes: z.string() }).parse(req.body);
+
+    const order = await prisma.order.update({
+      where: { id: req.params.id },
+      data: { notes },
+      include: {
+        items: { include: { selectedOptions: true } },
+        table: true,
+        payment: true,
+      },
+    });
+
+    emitOrderStatusUpdate(io, order.id, order.status, order);
+
+    res.json({ data: order });
+  } catch (e) {
+    next(e);
+  }
+});
+
 // Background: decrement inventory based on recipes
 export async function decrementInventory(orderId: string) {
   const order = await prisma.order.findUnique({

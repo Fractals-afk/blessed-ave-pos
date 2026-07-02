@@ -85,6 +85,11 @@ export const adminApi = {
         method: "PATCH",
         body: JSON.stringify({ status }),
       }),
+    updateNotes: (id: string, notes: string) =>
+      apiFetch<{ data: import("@blessed-ave/types").Order }>(`/api/orders/${id}/notes`, {
+        method: "PATCH",
+        body: JSON.stringify({ notes }),
+      }),
   },
   menu: {
     getAll: () =>

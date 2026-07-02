@@ -6,6 +6,7 @@ import { io } from "../index";
 import { emitNewOrder, emitOrderStatusUpdate } from "../socket";
 import { sendOrderReceipt } from "../mailer";
 import { decrementInventory } from "./orders";
+import { requireAuth } from "../middleware/auth";
 
 export const paymentsRouter = Router();
 
@@ -49,6 +50,34 @@ paymentsRouter.post("/cash", async (req, res, next) => {
     }).catch(console.error);
 
     res.json({ data: payment });
+  } catch (e) {
+    next(e);
+  }
+});
+
+// POST /api/payments/refund — staff refunds a paid order and cancels it
+paymentsRouter.post("/refund", requireAuth, async (req, res, next) => {
+  try {
+    const { orderId } = z.object({ orderId: z.string() }).parse(req.body);
+
+    const payment = await prisma.payment.findUnique({ where: { orderId } });
+    if (!payment) throw new AppError("No payment found for this order", 404);
+    if (payment.status !== "PAID") throw new AppError("Only paid orders can be refunded", 400);
+
+    const refunded = await prisma.payment.update({
+      where: { orderId },
+      data: { status: "REFUNDED" },
+    });
+
+    const order = await prisma.order.update({
+      where: { id: orderId },
+      data: { status: "CANCELLED" },
+      include: { items: { include: { selectedOptions: true } }, table: true, payment: true },
+    });
+
+    emitOrderStatusUpdate(io, order.id, "CANCELLED", order);
+
+    res.json({ data: { payment: refunded, order } });
   } catch (e) {
     next(e);
   }

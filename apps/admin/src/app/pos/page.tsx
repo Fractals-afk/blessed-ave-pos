@@ -10,10 +10,19 @@ import { QrPlaceholder } from "@/components/QrPlaceholder";
 
 const ACTIVE_STATUSES = ["PENDING", "CONFIRMED", "PREPARING", "READY"];
 
-function tableBadge(status: string) {
+function tableBadge(status?: string) {
   if (status === "PENDING") return { label: "Pending Payment", cls: "border-amber-200 bg-amber-50 text-amber-700" };
   if (status === "READY")   return { label: "Ready",           cls: "border-green-200 bg-green-50 text-green-700" };
-  return { label: "Preparing", cls: "border-violet-200 bg-violet-50 text-violet-700" };
+  if (status === "CONFIRMED" || status === "PREPARING")
+    return { label: "Preparing", cls: "border-violet-200 bg-violet-50 text-violet-700" };
+  return { label: "Free", cls: "border-slate-200 bg-white text-slate-400" };
+}
+
+function tableSort(a: CafeTable, b: CafeTable) {
+  const na = parseInt(a.name.replace(/\D/g, ""), 10);
+  const nb = parseInt(b.name.replace(/\D/g, ""), 10);
+  if (!isNaN(na) && !isNaN(nb) && na !== nb) return na - nb;
+  return a.name.localeCompare(b.name);
 }
 
 interface POSItem {
@@ -40,7 +49,15 @@ export default function POSPage() {
   // QR confirmation modal
   const [qrOrderId,  setQrOrderId]  = useState<string | null>(null);
   const [qrMethod,   setQrMethod]   = useState<"GCASH" | "MAYA">("GCASH");
+  const [qrAmount,   setQrAmount]   = useState(0);
   const [confirming, setConfirming] = useState(false);
+
+  // Table detail modal (request payment / refund / special instructions)
+  const [selectedTable, setSelectedTable] = useState<CafeTable | null>(null);
+  const [notesDraft,    setNotesDraft]    = useState("");
+  const [savingNotes,   setSavingNotes]   = useState(false);
+  const [payingCash,    setPayingCash]    = useState(false);
+  const [refunding,     setRefunding]     = useState(false);
 
   useEffect(() => {
     adminApi.menu.getAll().then((r) => {
@@ -88,14 +105,19 @@ export default function POSPage() {
   const total       = cart.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
   const itemCount   = cart.reduce((s, i) => s + i.quantity, 0);
 
-  const occupiedTables = tables
-    .map((table) => {
-      const orders = activeOrders
-        .filter((o) => o.tableId === table.id)
-        .sort((a, b) => (a.status === "PENDING" ? -1 : b.status === "PENDING" ? 1 : 0));
-      return orders.length > 0 ? { table, order: orders[0], count: orders.length } : null;
-    })
-    .filter((t): t is { table: CafeTable; order: Order; count: number } => t !== null);
+  const ordersByTable = new Map<string, Order[]>();
+  for (const order of activeOrders) {
+    if (!order.tableId) continue;
+    const list = ordersByTable.get(order.tableId) ?? [];
+    list.push(order);
+    ordersByTable.set(order.tableId, list);
+  }
+  for (const list of ordersByTable.values()) {
+    list.sort((a, b) => (a.status === "PENDING" ? -1 : b.status === "PENDING" ? 1 : 0));
+  }
+
+  const sortedTables = [...tables].sort(tableSort);
+  const selectedOrder = selectedTable ? ordersByTable.get(selectedTable.id)?.[0] : undefined;
 
   function auth() {
     return { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("accessToken")}` };
@@ -153,6 +175,7 @@ export default function POSPage() {
       } else {
         // Show QR modal for cashier
         setQrMethod(payMethod);
+        setQrAmount(total);
         setQrOrderId(order.id);
       }
     } catch (err: any) {
@@ -174,10 +197,70 @@ export default function POSPage() {
       toast.success(`Order #${qrOrderId.slice(-4).toUpperCase()} — ${qrMethod} paid ✓`);
       setQrOrderId(null);
       setCart([]); setNotes("");
+      setSelectedTable(null);
     } catch (err: any) {
       toast.error(err.message ?? "Failed to confirm");
     } finally {
       setConfirming(false);
+    }
+  }
+
+  function openTable(table: CafeTable) {
+    setSelectedTable(table);
+    setNotesDraft(ordersByTable.get(table.id)?.[0]?.notes ?? "");
+  }
+
+  function requestPayment(order: Order, method: "GCASH" | "MAYA") {
+    setQrMethod(method);
+    setQrAmount(order.total);
+    setQrOrderId(order.id);
+  }
+
+  async function requestCashPayment(order: Order) {
+    setPayingCash(true);
+    try {
+      const API = await resolveApiBase();
+      await fetch(`${API}/api/payments/cash`, {
+        method: "POST", headers: auth(),
+        body: JSON.stringify({ orderId: order.id }),
+      });
+      toast.success(`Order #${order.id.slice(-4).toUpperCase()} — Cash paid ✓`);
+      setSelectedTable(null);
+    } catch (err: any) {
+      toast.error(err.message ?? "Failed");
+    } finally {
+      setPayingCash(false);
+    }
+  }
+
+  async function refundOrder(order: Order) {
+    if (!confirm(`Refund ₱${(order.total / 100).toFixed(2)} for this order? This will cancel it.`)) return;
+    setRefunding(true);
+    try {
+      const API = await resolveApiBase();
+      const res = await fetch(`${API}/api/payments/refund`, {
+        method: "POST", headers: auth(),
+        body: JSON.stringify({ orderId: order.id }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error ?? "Refund failed");
+      toast.success(`Order #${order.id.slice(-4).toUpperCase()} — Refunded`);
+      setSelectedTable(null);
+    } catch (err: any) {
+      toast.error(err.message ?? "Failed to refund");
+    } finally {
+      setRefunding(false);
+    }
+  }
+
+  async function saveNotes(order: Order) {
+    setSavingNotes(true);
+    try {
+      await adminApi.orders.updateNotes(order.id, notesDraft);
+      toast.success("Instructions saved");
+    } catch (err: any) {
+      toast.error(err.message ?? "Failed to save");
+    } finally {
+      setSavingNotes(false);
     }
   }
 
@@ -187,25 +270,11 @@ export default function POSPage() {
 
   return (
     <AdminLayout>
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex h-screen flex-col overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
 
         {/* ── Menu panel ───────────────────────────────────────── */}
         <div className="flex flex-1 flex-col overflow-hidden bg-slate-50">
-          {occupiedTables.length > 0 && (
-            <div className="flex gap-1.5 overflow-x-auto border-b border-slate-200 bg-white px-4 py-2.5 scrollbar-hide">
-              {occupiedTables.map(({ table, order, count }) => {
-                const badge = tableBadge(order.status);
-                return (
-                  <div key={table.id}
-                    className={`flex-shrink-0 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold ${badge.cls}`}>
-                    <span>{table.name}</span>
-                    <span className="opacity-70">· {badge.label}</span>
-                    {count > 1 && <span className="opacity-70">({count})</span>}
-                  </div>
-                );
-              })}
-            </div>
-          )}
           <div className="flex gap-1.5 overflow-x-auto border-b border-slate-200 bg-white px-4 py-3 scrollbar-hide">
             {categories.map((cat) => (
               <button key={cat.id} onClick={() => setActiveCategory(cat.id)}
@@ -300,6 +369,107 @@ export default function POSPage() {
         </div>
       </div>
 
+      {/* ── Tables bar ───────────────────────────────────────── */}
+      <div className="flex gap-1.5 overflow-x-auto border-t border-slate-200 bg-white px-4 py-2.5 scrollbar-hide">
+        {sortedTables.map((table) => {
+          const order = ordersByTable.get(table.id)?.[0];
+          const count = ordersByTable.get(table.id)?.length ?? 0;
+          const badge = tableBadge(order?.status);
+          return (
+            <button key={table.id} onClick={() => openTable(table)}
+              className={`flex-shrink-0 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition hover:shadow-sm ${badge.cls}`}>
+              <span>{table.name}</span>
+              <span className="opacity-70">· {badge.label}</span>
+              {count > 1 && <span className="opacity-70">({count})</span>}
+            </button>
+          );
+        })}
+      </div>
+      </div>
+
+      {/* ── Table detail modal ──────────────────────────────────── */}
+      {selectedTable && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setSelectedTable(null)}>
+          <div className="w-full max-w-sm rounded-2xl bg-white shadow-xl border border-slate-200 mx-4 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+              <div>
+                <h3 className="font-bold text-slate-900">{selectedTable.name}</h3>
+                {selectedOrder && (
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Order #{selectedOrder.id.slice(-4).toUpperCase()} · {tableBadge(selectedOrder.status).label}
+                  </p>
+                )}
+              </div>
+              <button onClick={() => setSelectedTable(null)}
+                className="h-7 w-7 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 text-lg leading-none">
+                ×
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
+              {!selectedOrder && (
+                <p className="text-sm text-slate-400 text-center py-6">No active order for this table.</p>
+              )}
+
+              {selectedOrder && (
+                <>
+                  <ul className="space-y-1">
+                    {selectedOrder.items.map((item) => (
+                      <li key={item.id} className="text-sm flex justify-between">
+                        <span className="text-slate-700">{item.quantity}× {item.menuItemName}</span>
+                        <span className="text-slate-500">₱{(item.subtotal / 100).toFixed(2)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex justify-between items-center border-t border-slate-100 pt-3">
+                    <span className="text-sm text-slate-500">Total</span>
+                    <span className="text-lg font-bold text-slate-900">₱{(selectedOrder.total / 100).toFixed(2)}</span>
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Special Instructions</p>
+                    <textarea value={notesDraft} onChange={(e) => setNotesDraft(e.target.value)}
+                      placeholder="e.g. no sugar, allergy…" rows={2}
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" />
+                    <button onClick={() => saveNotes(selectedOrder)} disabled={savingNotes}
+                      className="mt-1.5 w-full rounded-lg border border-slate-200 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition disabled:opacity-50">
+                      {savingNotes ? "Saving…" : "Save Instructions"}
+                    </button>
+                  </div>
+
+                  {selectedOrder.status === "PENDING" && (
+                    <div>
+                      <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Request Payment</p>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        <button onClick={() => requestCashPayment(selectedOrder)} disabled={payingCash}
+                          className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition disabled:opacity-50">
+                          {payingCash ? "…" : "Cash"}
+                        </button>
+                        <button onClick={() => requestPayment(selectedOrder, "GCASH")}
+                          className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition">
+                          GCash
+                        </button>
+                        <button onClick={() => requestPayment(selectedOrder, "MAYA")}
+                          className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition">
+                          Maya
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedOrder.payment?.status === "PAID" && (
+                    <button onClick={() => refundOrder(selectedOrder)} disabled={refunding}
+                      className="w-full rounded-lg border border-red-200 bg-red-50 py-2 text-xs font-semibold text-red-600 hover:bg-red-100 transition disabled:opacity-50">
+                      {refunding ? "Refunding…" : "Refund & Cancel Order"}
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Modifier modal ───────────────────────────────────────── */}
       {selectedItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
@@ -368,7 +538,7 @@ export default function POSPage() {
             <div className={`px-6 py-4 text-white ${qrMethod === "GCASH" ? "bg-blue-600" : "bg-green-600"}`}>
               <p className="font-bold text-lg">{qrMethod === "GCASH" ? "GCash" : "Maya"} Payment</p>
               <p className="text-sm opacity-80 mt-0.5">
-                Order #{qrOrderId.slice(-6).toUpperCase()} · ₱{(total / 100).toFixed(2)}
+                Order #{qrOrderId.slice(-6).toUpperCase()} · ₱{(qrAmount / 100).toFixed(2)}
               </p>
             </div>
 
@@ -383,7 +553,7 @@ export default function POSPage() {
                 }
               </div>
               <p className="text-xs text-slate-400 mt-3">
-                Amount: <strong className="text-slate-700">₱{(total / 100).toFixed(2)}</strong>
+                Amount: <strong className="text-slate-700">₱{(qrAmount / 100).toFixed(2)}</strong>
               </p>
 
               <div className="mt-6 space-y-2">
