@@ -10,6 +10,16 @@ import { QrPlaceholder } from "@/components/QrPlaceholder";
 
 const ACTIVE_STATUSES = ["PENDING", "CONFIRMED", "PREPARING", "READY"];
 
+const MENU_GROUPS: Record<string, string[]> = {
+  Drink: ["Beer", "Frappes", "Hot Coffee", "Iced Coffee", "Refreshers & Slushy", "Specialty Lattes"],
+  Food: ["Burgers", "Desserts", "Poppers & Fries", "Rice Meals & Mains", "Wings"],
+  "Add-ons": ["Add-Ons"],
+};
+function groupForCategory(name: string): string {
+  for (const [group, names] of Object.entries(MENU_GROUPS)) if (names.includes(name)) return group;
+  return "Food";
+}
+
 function tableBadge(status?: string) {
   if (status === "PENDING") return { label: "Pending Payment", cls: "border-amber-200 bg-amber-50 text-amber-700" };
   if (status === "READY")   return { label: "Ready",           cls: "border-green-200 bg-green-50 text-green-700" };
@@ -34,6 +44,7 @@ interface POSItem {
 
 export default function POSPage() {
   const [categories,     setCategories]     = useState<MenuCategory[]>([]);
+  const [activeGroup,    setActiveGroup]    = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [cart,           setCart]           = useState<POSItem[]>([]);
   const [selectedItem,   setSelectedItem]   = useState<MenuItem | null>(null);
@@ -63,7 +74,10 @@ export default function POSPage() {
     adminApi.menu.getAll().then((r) => {
       setCategories(r.data);
       const firstVisible = r.data.find((c) => c.items.some((i) => i.available));
-      if (firstVisible) setActiveCategory(firstVisible.id);
+      if (firstVisible) {
+        setActiveGroup(groupForCategory(firstVisible.name));
+        setActiveCategory(firstVisible.id);
+      }
     });
   }, []);
 
@@ -103,7 +117,15 @@ export default function POSPage() {
   }, []);
 
   const visibleCategories = categories.filter((c) => c.items.some((i) => i.available));
+  const visibleGroups = Object.keys(MENU_GROUPS).filter((g) => visibleCategories.some((c) => groupForCategory(c.name) === g));
+  const groupCategories = visibleCategories.filter((c) => groupForCategory(c.name) === activeGroup);
   const activeItems = (categories.find((c) => c.id === activeCategory)?.items ?? []).filter((i) => i.available);
+
+  function selectGroup(group: string) {
+    setActiveGroup(group);
+    const first = visibleCategories.find((c) => groupForCategory(c.name) === group);
+    if (first) setActiveCategory(first.id);
+  }
   const total       = cart.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
   const itemCount   = cart.reduce((s, i) => s + i.quantity, 0);
 
@@ -277,8 +299,18 @@ export default function POSPage() {
 
         {/* ── Menu panel ───────────────────────────────────────── */}
         <div className="flex flex-1 flex-col overflow-hidden bg-slate-50">
+          <div className="flex gap-2 overflow-x-auto border-b border-slate-200 bg-white px-4 pt-3 scrollbar-hide">
+            {visibleGroups.map((group) => (
+              <button key={group} onClick={() => selectGroup(group)}
+                className={`flex-shrink-0 rounded-t-xl px-5 py-2.5 text-base font-bold transition active:scale-[0.97] ${
+                  activeGroup === group ? "bg-[#0f172a] text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                }`}>
+                {group}
+              </button>
+            ))}
+          </div>
           <div className="flex gap-2 overflow-x-auto border-b border-slate-200 bg-white px-4 py-3 scrollbar-hide">
-            {visibleCategories.map((cat) => (
+            {groupCategories.map((cat) => (
               <button key={cat.id} onClick={() => setActiveCategory(cat.id)}
                 className={`flex-shrink-0 rounded-xl px-5 py-3 text-base font-semibold transition active:scale-[0.97] ${
                   activeCategory === cat.id ? "bg-[#0f172a] text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
