@@ -65,10 +65,17 @@ const NAV_SECTIONS = [
   },
 ];
 
+const STAFF_ROUTES = ["/pos", "/kitchen"];
+
 export function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router   = useRouter();
   const { user, logout } = useAuth();
+
+  const isStaffView = STAFF_ROUTES.some((r) => pathname.startsWith(r));
+  const navSections = isStaffView
+    ? [{ label: "Operations", items: NAV_SECTIONS[0].items.filter((i) => STAFF_ROUTES.includes(i.href)) }]
+    : NAV_SECTIONS;
 
   function handleLogout() {
     logout();
@@ -94,7 +101,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-4 scrollbar-hide">
-          {NAV_SECTIONS.map((section) => (
+          {navSections.map((section) => (
             <div key={section.label} className="mb-5">
               <p className="px-4 mb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-600">
                 {section.label}
