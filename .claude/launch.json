@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "api",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["pnpm", "--filter", "@blessed-ave/api", "dev"],
+      "port": 4000,
+      "autoPort": true
+    },
+    {
+      "name": "web",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["pnpm", "--filter", "@blessed-ave/web", "dev"],
+      "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "admin",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["pnpm", "--filter", "@blessed-ave/admin", "dev"],
+      "port": 3001,
+      "autoPort": true
+    }
+  ]
+}

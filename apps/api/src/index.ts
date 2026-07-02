@@ -24,29 +24,29 @@ import { registerSocketHandlers } from "./socket";
 const app = express();
 const server = http.createServer(app);
 
+// Dev servers get auto-assigned ports per session (see dev-servers/register-port.js),
+// so the allowlist can't be a fixed pair — allow any localhost origin outside prod.
+const allowedOrigins = [process.env.CLIENT_URL, process.env.ADMIN_URL].filter(
+  (v): v is string => Boolean(v)
+);
+function corsOrigin(origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+  if (!origin) return callback(null, true);
+  if (process.env.NODE_ENV !== "production" && /^https?:\/\/localhost:\d+$/.test(origin)) {
+    return callback(null, true);
+  }
+  if (allowedOrigins.includes(origin)) return callback(null, true);
+  callback(new Error("Not allowed by CORS"));
+}
+
 // ─── Socket.io ────────────────────────────────────────────────────────────────
 export const io = new SocketIOServer(server, {
-  cors: {
-    origin: [
-      process.env.CLIENT_URL ?? "http://localhost:3000",
-      process.env.ADMIN_URL ?? "http://localhost:3001",
-    ],
-    credentials: true,
-  },
+  cors: { origin: corsOrigin, credentials: true },
 });
 registerSocketHandlers(io);
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(helmet());
-app.use(
-  cors({
-    origin: [
-      process.env.CLIENT_URL ?? "http://localhost:3000",
-      process.env.ADMIN_URL ?? "http://localhost:3001",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors({ origin: corsOrigin, credentials: true }));
 app.use(morgan("dev"));
 
 // Raw body for PayMongo webhook signature verification

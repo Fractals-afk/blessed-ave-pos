@@ -13,10 +13,20 @@ export default function TablesPage() {
   const [newName, setNewName] = useState("");
   const [qrModal, setQrModal] = useState<CafeTable | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const CLIENT_URL = process.env.NEXT_PUBLIC_CLIENT_URL ?? "http://localhost:3000";
+  const [clientUrl, setClientUrl] = useState(process.env.NEXT_PUBLIC_CLIENT_URL ?? "http://localhost:3000");
+  const CLIENT_URL = clientUrl;
 
   async function load() { const res = await adminApi.tables.list(); setTables(res.data); }
   useEffect(() => { load(); }, []);
+  useEffect(() => {
+    // Dev only: web app's port is auto-assigned per session, discover it
+    // via the shared registry (see dev-servers/register-port.js).
+    if (process.env.NEXT_PUBLIC_CLIENT_URL) return;
+    fetch("/dev-ports.json", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((ports) => { if (ports?.web) setClientUrl(`http://localhost:${ports.web}`); })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (qrModal && canvasRef.current) {
