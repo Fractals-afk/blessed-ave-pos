@@ -122,7 +122,7 @@ reportsRouter.get(
       const weekStart = new Date(today);
       weekStart.setDate(weekStart.getDate() - weekStart.getDay());
 
-      const [todayOrders, weekOrders, pendingOrders, lowStockCount] = await Promise.all([
+      const [todayOrders, weekOrders, pendingOrders] = await Promise.all([
         prisma.order.count({
           where: { createdAt: { gte: today }, status: { notIn: ["CANCELLED"] } },
         }),
@@ -132,9 +132,6 @@ reportsRouter.get(
         }),
         prisma.order.count({
           where: { status: { in: ["PENDING", "CONFIRMED", "PREPARING"] } },
-        }),
-        prisma.inventoryItem.count({
-          // Prisma doesn't support column comparison directly, handled in JS
         }),
       ]);
 

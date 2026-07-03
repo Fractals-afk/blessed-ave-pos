@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "@blessed-ave/db";
-import { requireAuth, requireRole } from "../middleware/auth";
+import { requireAuth, requireRole, tryAuth } from "../middleware/auth";
 import { AppError } from "../middleware/errorHandler";
 import { io } from "../index";
 import { emitOrderStatusUpdate } from "../socket";
@@ -30,9 +30,21 @@ const createOrderSchema = z.object({
 });
 
 // POST /api/orders — create a new order (public for ONLINE & QR, auth for POS)
-ordersRouter.post("/", async (req, res, next) => {
+ordersRouter.post("/", tryAuth, async (req, res, next) => {
   try {
     const body = createOrderSchema.parse(req.body);
+
+    if (body.source === "POS" && !req.user) {
+      throw new AppError("Authentication required for POS orders", 401);
+    }
+
+    if (body.source === "QR_TABLE" && !body.tableId) {
+      throw new AppError("Table is required for QR orders");
+    }
+    if (body.tableId) {
+      const table = await prisma.cafeTable.findUnique({ where: { id: body.tableId } });
+      if (!table || !table.active) throw new AppError("Table not found");
+    }
 
     // Fetch menu items + modifiers to compute prices
     const menuItemIds = body.items.map((i) => i.menuItemId);
@@ -48,50 +60,62 @@ ordersRouter.post("/", async (req, res, next) => {
     const menuMap = new Map(menuItems.map((m) => [m.id, m]));
 
     let subtotal = 0;
-    const orderItemsData = await Promise.all(
-      body.items.map(async (item) => {
-        const menuItem = menuMap.get(item.menuItemId)!;
-        let unitPrice = menuItem.price;
+    const orderItemsData = body.items.map((item) => {
+      const menuItem = menuMap.get(item.menuItemId)!;
 
-        // Fetch selected modifier options for snapshot + price
-        const optionIds = item.selectedOptions.map((o) => o.modifierOptionId);
-        const options = optionIds.length
-          ? await prisma.modifierOption.findMany({
-              where: { id: { in: optionIds } },
-            })
-          : [];
+      // Selected options must come from this item's own modifier groups —
+      // prices are resolved server-side, never trusted from the client.
+      const validOptions = new Map(
+        menuItem.modifierGroups.flatMap((g) => g.options.map((o) => [o.id, { option: o, group: g }] as const))
+      );
+      const selectedIds = [...new Set(item.selectedOptions.map((o) => o.modifierOptionId))];
+      const selectedByGroup = new Map<string, number>();
+      const options = selectedIds.map((id) => {
+        const match = validOptions.get(id);
+        if (!match) {
+          throw new AppError(`Invalid option for ${menuItem.name}`);
+        }
+        const count = (selectedByGroup.get(match.group.id) ?? 0) + 1;
+        if (count > 1 && !match.group.multiSelect) {
+          throw new AppError(`Only one ${match.group.name} option allowed for ${menuItem.name}`);
+        }
+        selectedByGroup.set(match.group.id, count);
+        return match.option;
+      });
 
-        const optionAdjustments = options.reduce(
-          (sum, o) => sum + o.priceAdjustment,
-          0
-        );
-        unitPrice += optionAdjustments;
+      for (const group of menuItem.modifierGroups) {
+        if (group.required && !selectedByGroup.has(group.id)) {
+          throw new AppError(`${group.name} is required for ${menuItem.name}`);
+        }
+      }
 
-        const itemSubtotal = unitPrice * item.quantity;
-        subtotal += itemSubtotal;
+      const unitPrice =
+        menuItem.price + options.reduce((sum, o) => sum + o.priceAdjustment, 0);
+      const itemSubtotal = unitPrice * item.quantity;
+      subtotal += itemSubtotal;
 
-        return {
-          menuItemId: menuItem.id,
-          menuItemName: menuItem.name,
-          quantity: item.quantity,
-          unitPrice,
-          subtotal: itemSubtotal,
-          notes: item.notes,
-          selectedOptions: {
-            create: options.map((o) => ({
-              modifierOptionId: o.id,
-              name: o.name,
-              priceAdjustment: o.priceAdjustment,
-            })),
-          },
-        };
-      })
-    );
+      return {
+        menuItemId: menuItem.id,
+        menuItemName: menuItem.name,
+        quantity: item.quantity,
+        unitPrice,
+        subtotal: itemSubtotal,
+        notes: item.notes,
+        selectedOptions: {
+          create: options.map((o) => ({
+            modifierOptionId: o.id,
+            name: o.name,
+            priceAdjustment: o.priceAdjustment,
+          })),
+        },
+      };
+    });
 
     const order = await (prisma.order.create as any)({
       data: {
         source: body.source,
         tableId: body.tableId,
+        staffId: body.source === "POS" ? req.user!.userId : undefined,
         customerName: body.customerName,
         customerPhone: body.customerPhone,
         customerEmail: body.customerEmail,
@@ -252,31 +276,54 @@ ordersRouter.patch("/:id/notes", requireAuth, async (req, res, next) => {
 
 // Background: decrement inventory based on recipes
 export async function decrementInventory(orderId: string) {
+  await adjustInventoryForOrder(orderId, -1, "SALE", `Order ${orderId}`);
+}
+
+// Reverse of decrementInventory — puts stock back when a paid order is refunded.
+export async function restoreInventory(orderId: string) {
+  await adjustInventoryForOrder(orderId, 1, "ADJUSTMENT", `Refund order ${orderId}`);
+}
+
+async function adjustInventoryForOrder(
+  orderId: string,
+  sign: 1 | -1,
+  reason: "SALE" | "ADJUSTMENT",
+  notes: string
+) {
   const order = await prisma.order.findUnique({
     where: { id: orderId },
     include: { items: true },
   });
   if (!order) return;
 
-  for (const item of order.items) {
-    const recipes = await prisma.recipeItem.findMany({
-      where: { menuItemId: item.menuItemId },
-    });
-    for (const recipe of recipes) {
-      const qty = recipe.quantity * item.quantity;
-      const inv = await prisma.inventoryItem.update({
-        where: { id: recipe.inventoryItemId },
-        data: { currentStock: { decrement: qty } },
-      });
-      await prisma.inventoryLog.create({
-        data: {
-          inventoryItemId: inv.id,
-          reason: "SALE",
-          quantityChange: -qty,
-          stockAfter: inv.currentStock,
-          notes: `Order ${orderId}`,
-        },
-      });
-    }
+  const recipes = await prisma.recipeItem.findMany({
+    where: { menuItemId: { in: order.items.map((i) => i.menuItemId) } },
+  });
+  const recipesByMenuItem = new Map<string, typeof recipes>();
+  for (const r of recipes) {
+    const list = recipesByMenuItem.get(r.menuItemId) ?? [];
+    list.push(r);
+    recipesByMenuItem.set(r.menuItemId, list);
   }
+
+  await prisma.$transaction(async (tx) => {
+    for (const item of order.items) {
+      for (const recipe of recipesByMenuItem.get(item.menuItemId) ?? []) {
+        const qty = recipe.quantity * item.quantity * sign;
+        const inv = await tx.inventoryItem.update({
+          where: { id: recipe.inventoryItemId },
+          data: { currentStock: { increment: qty } },
+        });
+        await tx.inventoryLog.create({
+          data: {
+            inventoryItemId: inv.id,
+            reason,
+            quantityChange: qty,
+            stockAfter: inv.currentStock,
+            notes,
+          },
+        });
+      }
+    }
+  });
 }

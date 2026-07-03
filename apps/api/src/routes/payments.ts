@@ -5,13 +5,13 @@ import { AppError } from "../middleware/errorHandler";
 import { io } from "../index";
 import { emitNewOrder, emitOrderStatusUpdate } from "../socket";
 import { sendOrderReceipt } from "../mailer";
-import { decrementInventory } from "./orders";
+import { decrementInventory, restoreInventory } from "./orders";
 import { requireAuth } from "../middleware/auth";
 
 export const paymentsRouter = Router();
 
 // POST /api/payments/cash — mark a POS cash order as paid
-paymentsRouter.post("/cash", async (req, res, next) => {
+paymentsRouter.post("/cash", requireAuth, async (req, res, next) => {
   try {
     const { orderId } = z.object({ orderId: z.string() }).parse(req.body);
 
@@ -21,7 +21,7 @@ paymentsRouter.post("/cash", async (req, res, next) => {
     const payment = await prisma.payment.upsert({
       where: { orderId },
       create: { orderId, method: "CASH", status: "PAID", amount: order.total, paidAt: new Date() },
-      update: { method: "CASH", status: "PAID", paidAt: new Date() },
+      update: { method: "CASH", status: "PAID", amount: order.total, paidAt: new Date() },
     });
 
     const confirmed = await prisma.order.update({
@@ -76,6 +76,8 @@ paymentsRouter.post("/refund", requireAuth, async (req, res, next) => {
     });
 
     emitOrderStatusUpdate(io, order.id, "CANCELLED", order);
+    // Stock was decremented when payment confirmed — put it back.
+    restoreInventory(order.id).catch(console.error);
 
     res.json({ data: { payment: refunded, order } });
   } catch (e) {
@@ -84,7 +86,7 @@ paymentsRouter.post("/refund", requireAuth, async (req, res, next) => {
 });
 
 // POST /api/payments/qr-confirm — cashier confirms a GCash or Maya QR payment
-paymentsRouter.post("/qr-confirm", async (req, res, next) => {
+paymentsRouter.post("/qr-confirm", requireAuth, async (req, res, next) => {
   try {
     const { orderId, method } = z
       .object({
@@ -99,7 +101,7 @@ paymentsRouter.post("/qr-confirm", async (req, res, next) => {
     const payment = await prisma.payment.upsert({
       where: { orderId },
       create: { orderId, method, status: "PAID", amount: order.total, paidAt: new Date() },
-      update: { method, status: "PAID", paidAt: new Date() },
+      update: { method, status: "PAID", amount: order.total, paidAt: new Date() },
     });
 
     const confirmed = await prisma.order.update({

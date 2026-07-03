@@ -80,7 +80,7 @@ export default function OrdersScreen() {
                 <Text style={styles.orderId}>#{order.id.slice(-4).toUpperCase()}</Text>
                 <Text style={styles.meta}>
                   {order.source === "QR_TABLE"
-                    ? order.tableName ?? "Table"
+                    ? order.table?.name ?? "Table"
                     : order.source === "POS"
                     ? "POS"
                     : "Online"}{" "}

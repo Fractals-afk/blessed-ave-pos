@@ -22,7 +22,7 @@ const SOURCE_OPTIONS = ["ONLINE", "QR_TABLE", "POS"];
 const php = (c: number) => `₱${(c / 100).toFixed(2)}`;
 
 function sourceLabel(order: Order) {
-  if (order.source === "QR_TABLE") return `📍 ${order.tableName ?? "Table"}`;
+  if (order.source === "QR_TABLE") return `📍 ${order.table?.name ?? "Table"}`;
   if (order.source === "POS") return "🖥️ POS";
   return "🌐 Online";
 }

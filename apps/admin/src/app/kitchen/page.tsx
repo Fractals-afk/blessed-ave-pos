@@ -150,7 +150,7 @@ export default function KitchenPage() {
                             #{order.id.slice(-4).toUpperCase()}
                           </p>
                           <p className="text-xs text-slate-400 mt-0.5">
-                            {order.source === "QR_TABLE" ? `📍 ${order.tableName ?? "Table"}`
+                            {order.source === "QR_TABLE" ? `📍 ${order.table?.name ?? "Table"}`
                               : order.source === "POS" ? "🖥️ POS"
                               : "🌐 Online"}
                             {" · "}{elapsed(order.createdAt)}

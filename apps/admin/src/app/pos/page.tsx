@@ -167,6 +167,12 @@ export default function POSPage() {
 
   function confirmModifiers() {
     if (!selectedItem) return;
+    for (const group of selectedItem.modifierGroups ?? []) {
+      if (group.required && !(itemOptions[group.id]?.length)) {
+        toast.error(`Please choose a ${group.name}`);
+        return;
+      }
+    }
     const allOptions = Object.values(itemOptions).flat();
     const unitPrice  = selectedItem.price + allOptions.reduce((s, o) => s + o.priceAdjustment, 0);
     pushItem(selectedItem, allOptions, unitPrice);
@@ -187,13 +193,16 @@ export default function POSPage() {
           })),
         }),
       });
-      const { data: order } = await res.json();
+      const orderBody = await res.json();
+      if (!res.ok) throw new Error(orderBody.error ?? "Failed to place order");
+      const order = orderBody.data;
 
       if (payMethod === "CASH") {
-        await fetch(`${API}/api/payments/cash`, {
+        const payRes = await fetch(`${API}/api/payments/cash`, {
           method: "POST", headers: auth(),
           body: JSON.stringify({ orderId: order.id }),
         });
+        if (!payRes.ok) throw new Error((await payRes.json()).error ?? "Cash payment failed");
         toast.success(`Order #${order.id.slice(-4).toUpperCase()} — Cash paid ✓`);
         setCart([]); setNotes("");
       } else {
@@ -214,10 +223,11 @@ export default function POSPage() {
     setConfirming(true);
     try {
       const API = await resolveApiBase();
-      await fetch(`${API}/api/payments/qr-confirm`, {
+      const res = await fetch(`${API}/api/payments/qr-confirm`, {
         method: "POST", headers: auth(),
         body: JSON.stringify({ orderId: qrOrderId, method: qrMethod }),
       });
+      if (!res.ok) throw new Error((await res.json()).error ?? "Failed to confirm");
       toast.success(`Order #${qrOrderId.slice(-4).toUpperCase()} — ${qrMethod} paid ✓`);
       setQrOrderId(null);
       setCart([]); setNotes("");
@@ -244,10 +254,11 @@ export default function POSPage() {
     setPayingCash(true);
     try {
       const API = await resolveApiBase();
-      await fetch(`${API}/api/payments/cash`, {
+      const res = await fetch(`${API}/api/payments/cash`, {
         method: "POST", headers: auth(),
         body: JSON.stringify({ orderId: order.id }),
       });
+      if (!res.ok) throw new Error((await res.json()).error ?? "Cash payment failed");
       toast.success(`Order #${order.id.slice(-4).toUpperCase()} — Cash paid ✓`);
       setSelectedTable(null);
     } catch (err: any) {
@@ -544,7 +555,7 @@ export default function POSPage() {
                         <span>{opt.name}</span>
                         {opt.priceAdjustment !== 0 && (
                           <span className={sel ? "text-slate-300" : "text-slate-400"}>
-                            +₱{(opt.priceAdjustment / 100).toFixed(2)}
+                            {opt.priceAdjustment > 0 ? "+" : "−"}₱{(Math.abs(opt.priceAdjustment) / 100).toFixed(2)}
                           </span>
                         )}
                       </button>

@@ -34,6 +34,20 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+// Sets req.user when a valid Bearer token is present, but never rejects —
+// for public routes that behave differently for authenticated staff.
+export function tryAuth(req: Request, _res: Response, next: NextFunction) {
+  const header = req.headers.authorization;
+  if (header?.startsWith("Bearer ")) {
+    try {
+      req.user = jwt.verify(header.slice(7), process.env.JWT_SECRET!) as AuthPayload;
+    } catch {
+      // anonymous
+    }
+  }
+  next();
+}
+
 export function requireRole(...roles: UserRole[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) return res.status(401).json({ error: "Unauthorised" });

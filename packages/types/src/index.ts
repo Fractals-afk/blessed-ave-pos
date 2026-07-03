@@ -70,7 +70,7 @@ export interface Order {
   source: OrderSource;
   status: OrderStatus;
   tableId?: string;
-  tableName?: string;
+  table?: CafeTable;
   customerName?: string;
   customerPhone?: string;
   customerEmail?: string;
