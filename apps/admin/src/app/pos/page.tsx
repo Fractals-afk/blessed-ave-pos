@@ -295,7 +295,7 @@ export default function POSPage() {
   return (
     <AdminLayout>
       <div className="flex h-screen flex-col overflow-hidden">
-      <div className="flex h-1/2 overflow-hidden">
+      <div className="flex h-[68%] overflow-hidden">
 
         {/* ── Menu panel ───────────────────────────────────────── */}
         <div className="flex flex-1 flex-col overflow-hidden bg-slate-50">
@@ -404,19 +404,19 @@ export default function POSPage() {
       </div>
 
       {/* ── Tables bar ───────────────────────────────────────── */}
-      <div className="flex h-1/2 flex-col border-t border-slate-200 bg-white overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-3">
-          <div className="grid h-full grid-cols-5 grid-rows-3 gap-3">
+      <div className="flex h-[32%] flex-col border-t border-slate-200 bg-white overflow-hidden">
+        <div className="flex-1 overflow-y-auto p-2">
+          <div className="grid h-full grid-cols-5 grid-rows-3 gap-2">
             {sortedTables.map((table) => {
               const order = ordersByTable.get(table.id)?.[0];
               const count = ordersByTable.get(table.id)?.length ?? 0;
               const badge = tableBadge(order?.status);
               return (
                 <button key={table.id} onClick={() => openTable(table)}
-                  className={`flex flex-col items-center justify-center gap-1 rounded-xl border-2 text-center transition hover:shadow-md active:scale-[0.98] ${badge.cls}`}>
-                  <span className="text-2xl font-bold">{table.name}</span>
-                  <span className="text-base opacity-70">{badge.label}</span>
-                  {count > 1 && <span className="text-xs opacity-70">({count} orders)</span>}
+                  className={`flex flex-col items-center justify-center gap-0.5 rounded-lg border-2 text-center transition hover:shadow-md active:scale-[0.98] ${badge.cls}`}>
+                  <span className="text-base font-bold">{table.name}</span>
+                  <span className="text-xs opacity-70">{badge.label}</span>
+                  {count > 1 && <span className="text-[10px] opacity-70">({count} orders)</span>}
                 </button>
               );
             })}
