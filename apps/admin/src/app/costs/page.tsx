@@ -12,14 +12,24 @@ const ICONS: Record<string, string> = { RENT:"🏠",UTILITIES:"💡",WAGES:"👥
 const iCls = "w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition";
 const lCls = "block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1.5";
 
-interface Cost { id: string; name: string; category: string; frequency: string; amount: number; date: string; notes?: string }
+interface Cost { id: string; name: string; category: string; frequency: string; amount: number; date: string; vendor?: string; notes?: string }
 
+// Additional/arbitrary operating expenses: any number of line items can be
+// added via "+ Add Cost" below, tagged OTHER if they don't fit the fixed
+// categories — there's no cap on entries per period.
+//
+// TODO(ai-receipt-reader): no AI/OCR receipt scanner exists in this repo
+// yet. When one is built, non-inventory receipts (utility bills, repair
+// invoices, etc.) should POST straight to /api/operating-costs using this
+// same shape (name/category/frequency/amount/date/vendor/notes +
+// receiptRef pointing at the uploaded receipt image) instead of creating
+// inventory/food-costing line items.
 export default function CostsPage() {
   const [costs,   setCosts]   = useState<Cost[]>([]);
   const [showAdd, setShowAdd] = useState(false);
   const [from, setFrom] = useState(format(new Date(new Date().getFullYear(), new Date().getMonth(), 1), "yyyy-MM-dd"));
   const [to,   setTo]   = useState(format(new Date(), "yyyy-MM-dd"));
-  const [form, setForm] = useState({ name:"", category:"RENT", frequency:"MONTHLY", amount:"", date:format(new Date(),"yyyy-MM-dd"), notes:"" });
+  const [form, setForm] = useState({ name:"", category:"RENT", frequency:"MONTHLY", amount:"", date:format(new Date(),"yyyy-MM-dd"), vendor:"", notes:"" });
 
   async function load() {
     const API = await resolveApiBase();
@@ -36,7 +46,7 @@ export default function CostsPage() {
         headers: { "Content-Type":"application/json", Authorization:`Bearer ${localStorage.getItem("accessToken")}` },
         body: JSON.stringify({ ...form, amount: Math.round(Number(form.amount) * 100) }) });
       toast.success("Cost added"); setShowAdd(false);
-      setForm({ name:"", category:"RENT", frequency:"MONTHLY", amount:"", date:format(new Date(),"yyyy-MM-dd"), notes:"" });
+      setForm({ name:"", category:"RENT", frequency:"MONTHLY", amount:"", date:format(new Date(),"yyyy-MM-dd"), vendor:"", notes:"" });
       load();
     } catch (err: any) { toast.error(err.message); }
   }
@@ -91,15 +101,16 @@ export default function CostsPage() {
         <div className="rounded-xl bg-white border border-slate-200 overflow-hidden">
           <table className="w-full text-sm">
             <thead className="border-b border-slate-100 bg-slate-50">
-              <tr>{["Name","Category","Frequency","Date","Amount",""].map((h,i) => (
-                <th key={h} className={`px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider ${i===4?"text-right":"text-left"}`}>{h}</th>
+              <tr>{["Name","Vendor","Category","Frequency","Date","Amount",""].map((h,i) => (
+                <th key={h} className={`px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider ${i===5?"text-right":"text-left"}`}>{h}</th>
               ))}</tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {costs.length === 0 && <tr><td colSpan={6} className="px-4 py-10 text-center text-slate-400 text-sm">No costs recorded for this period</td></tr>}
+              {costs.length === 0 && <tr><td colSpan={7} className="px-4 py-10 text-center text-slate-400 text-sm">No costs recorded for this period</td></tr>}
               {costs.map((cost) => (
                 <tr key={cost.id} className="hover:bg-slate-50 transition">
                   <td className="px-4 py-3 font-medium text-slate-900">{cost.name}</td>
+                  <td className="px-4 py-3 text-slate-500">{cost.vendor || "—"}</td>
                   <td className="px-4 py-3 text-slate-500">{ICONS[cost.category]} {cost.category}</td>
                   <td className="px-4 py-3 text-slate-500 capitalize">{cost.frequency.toLowerCase().replace("_"," ")}</td>
                   <td className="px-4 py-3 text-slate-500">{format(new Date(cost.date),"MMM d, yyyy")}</td>
@@ -126,6 +137,7 @@ export default function CostsPage() {
                 <div><label className={lCls}>Amount (₱)</label><input type="number" value={form.amount} onChange={(e) => setForm((p) => ({...p,amount:e.target.value}))} placeholder="0.00" className={iCls} /></div>
                 <div><label className={lCls}>Date</label><input type="date" value={form.date} onChange={(e) => setForm((p) => ({...p,date:e.target.value}))} className={iCls} /></div>
               </div>
+              <div><label className={lCls}>Vendor / Payee <span className="normal-case font-normal text-slate-400">(optional)</span></label><input type="text" value={form.vendor} onChange={(e) => setForm((p) => ({...p,vendor:e.target.value}))} placeholder="e.g. Meralco, ABC Repairs Co." className={iCls} /></div>
               <div><label className={lCls}>Notes <span className="normal-case font-normal text-slate-400">(optional)</span></label><input type="text" value={form.notes} onChange={(e) => setForm((p) => ({...p,notes:e.target.value}))} className={iCls} /></div>
             </div>
             <div className="mt-5 flex gap-3">

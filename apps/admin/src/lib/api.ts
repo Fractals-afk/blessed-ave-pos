@@ -118,6 +118,8 @@ export const adminApi = {
       apiFetch<{ data: import("@blessed-ave/types").InventoryItem[] }>("/api/inventory/low-stock"),
     create: (body: unknown) =>
       apiFetch("/api/inventory", { method: "POST", body: JSON.stringify(body) }),
+    update: (id: string, body: unknown) =>
+      apiFetch(`/api/inventory/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
     adjust: (id: string, body: unknown) =>
       apiFetch(`/api/inventory/${id}/adjust`, { method: "POST", body: JSON.stringify(body) }),
     getLogs: (id: string) =>

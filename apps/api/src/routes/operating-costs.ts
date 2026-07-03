@@ -11,7 +11,12 @@ const costSchema = z.object({
   frequency: z.enum(["ONE_TIME", "DAILY", "WEEKLY", "MONTHLY", "YEARLY"]),
   amount: z.number().int().positive(), // centavos
   date: z.string(), // ISO date string
+  vendor: z.string().optional(),
   notes: z.string().optional(),
+  // Set when this expense was created from a scanned receipt rather than
+  // manual entry (see TODO(ai-receipt-reader) in the Prisma schema — no
+  // scanning flow exists yet, but this field is ready to receive it).
+  receiptRef: z.string().optional(),
 });
 
 // GET /api/operating-costs?from=&to=

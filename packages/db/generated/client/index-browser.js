@@ -319,7 +319,9 @@ exports.Prisma.OperatingCostScalarFieldEnum = {
   frequency: 'frequency',
   amount: 'amount',
   date: 'date',
+  vendor: 'vendor',
   notes: 'notes',
+  receiptRef: 'receiptRef',
   createdAt: 'createdAt'
 };
 

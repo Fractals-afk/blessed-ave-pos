@@ -14,8 +14,10 @@ export default function InventoryPage() {
   const [loading,      setLoading]      = useState(true);
   const [showAdd,      setShowAdd]      = useState(false);
   const [adjustTarget, setAdjustTarget] = useState<InventoryItem | null>(null);
+  const [editTarget,   setEditTarget]   = useState<InventoryItem | null>(null);
   const [search,       setSearch]       = useState("");
   const [form, setForm] = useState({ name: "", unit: "PCS", currentStock: 0, lowStockThreshold: 0, cost: 0 });
+  const [editForm, setEditForm] = useState({ name: "", unit: "PCS", lowStockThreshold: 0, cost: 0 });
   const [adjustQty,    setAdjustQty]    = useState(0);
   const [adjustReason, setAdjustReason] = useState<"PURCHASE" | "WASTE" | "ADJUSTMENT">("PURCHASE");
   const [adjustNotes,  setAdjustNotes]  = useState("");
@@ -38,6 +40,19 @@ export default function InventoryPage() {
     try {
       await adminApi.inventory.adjust(adjustTarget.id, { quantity: adjustQty, reason: adjustReason, notes: adjustNotes });
       toast.success("Stock updated"); setAdjustTarget(null); load();
+    } catch (err: any) { toast.error(err.message); }
+  }
+
+  function openEdit(item: InventoryItem) {
+    setEditTarget(item);
+    setEditForm({ name: item.name, unit: item.unit, lowStockThreshold: item.lowStockThreshold, cost: item.cost / 100 });
+  }
+
+  async function handleEdit() {
+    if (!editTarget) return;
+    try {
+      await adminApi.inventory.update(editTarget.id, { ...editForm, cost: Math.round(editForm.cost * 100) });
+      toast.success("Item updated"); setEditTarget(null); load();
     } catch (err: any) { toast.error(err.message); }
   }
 
@@ -70,7 +85,7 @@ export default function InventoryPage() {
           <div className="rounded-xl bg-white border border-slate-200 overflow-hidden">
             <table className="w-full text-sm">
               <thead className="border-b border-slate-100 bg-slate-50">
-                <tr>{["Item", "Stock", "Unit", "Threshold", "Cost/unit", "Status", ""].map((h) => (
+                <tr>{["Item", "Stock", "Unit", "Restock Min.", "Cost/unit", "Status", ""].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
                 ))}</tr>
               </thead>
@@ -87,7 +102,9 @@ export default function InventoryPage() {
                         ? <span className="rounded-md bg-red-50 border border-red-200 px-2 py-0.5 text-xs font-semibold text-red-600">Low</span>
                         : <span className="rounded-md bg-green-50 border border-green-200 px-2 py-0.5 text-xs font-semibold text-green-700">OK</span>}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right space-x-3 whitespace-nowrap">
+                      <button onClick={() => openEdit(item)}
+                        className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition">Edit</button>
                       <button onClick={() => { setAdjustTarget(item); setAdjustQty(0); setAdjustNotes(""); }}
                         className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition">Adjust</button>
                     </td>
@@ -105,7 +122,7 @@ export default function InventoryPage() {
           <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl border border-slate-200 mx-4">
             <h3 className="font-bold text-slate-900 mb-5">Add Inventory Item</h3>
             <div className="space-y-3">
-              {[{ label: "Name", key: "name", type: "text" }, { label: "Current Stock", key: "currentStock", type: "number" }, { label: "Low Stock Threshold", key: "lowStockThreshold", type: "number" }, { label: "Cost per unit (₱)", key: "cost", type: "number" }].map((f) => (
+              {[{ label: "Name", key: "name", type: "text" }, { label: "Current Stock", key: "currentStock", type: "number" }, { label: "Restock Minimum Level", key: "lowStockThreshold", type: "number" }, { label: "Cost per unit (₱)", key: "cost", type: "number" }].map((f) => (
                 <div key={f.key}>
                   <label className={lCls}>{f.label}</label>
                   <input type={f.type} value={(form as any)[f.key]}
@@ -123,6 +140,43 @@ export default function InventoryPage() {
             <div className="mt-5 flex gap-3">
               <button onClick={() => setShowAdd(false)} className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">Cancel</button>
               <button onClick={handleAdd} className="flex-1 rounded-lg bg-[#0f172a] py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition">Add</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit modal */}
+      {editTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl border border-slate-200 mx-4">
+            <h3 className="font-bold text-slate-900 mb-5">Edit: {editTarget.name}</h3>
+            <div className="space-y-3">
+              <div>
+                <label className={lCls}>Name</label>
+                <input type="text" value={editForm.name}
+                  onChange={(e) => setEditForm((p) => ({ ...p, name: e.target.value }))} className={iCls} />
+              </div>
+              <div>
+                <label className={lCls}>Unit</label>
+                <select value={editForm.unit} onChange={(e) => setEditForm((p) => ({ ...p, unit: e.target.value }))} className={iCls}>
+                  {["KG","G","L","ML","PCS","PACK","BOTTLE"].map((u) => <option key={u}>{u}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className={lCls}>Restock Minimum Level (Low Stock Threshold)</label>
+                <input type="number" value={editForm.lowStockThreshold}
+                  onChange={(e) => setEditForm((p) => ({ ...p, lowStockThreshold: Number(e.target.value) }))} className={iCls} />
+                <p className="mt-1 text-[11px] text-slate-400">Staff will get an alert email when stock falls to or below this level.</p>
+              </div>
+              <div>
+                <label className={lCls}>Cost per unit (₱)</label>
+                <input type="number" value={editForm.cost}
+                  onChange={(e) => setEditForm((p) => ({ ...p, cost: Number(e.target.value) }))} className={iCls} />
+              </div>
+            </div>
+            <div className="mt-5 flex gap-3">
+              <button onClick={() => setEditTarget(null)} className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">Cancel</button>
+              <button onClick={handleEdit} className="flex-1 rounded-lg bg-[#0f172a] py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition">Save</button>
             </div>
           </div>
         </div>

@@ -121,3 +121,81 @@ export async function sendOrderReceipt(data: OrderReceiptData) {
     html,
   });
 }
+
+export interface LowStockItemData {
+  id: string;
+  name: string;
+  unit: string;
+  currentStock: number;
+  lowStockThreshold: number;
+}
+
+export async function sendLowStockAlert(items: LowStockItemData[]) {
+  const to = process.env.OWNER_EMAIL;
+  if (!items.length) return;
+  if (!transport || !to) {
+    // No SMTP configured (or no recipient) — log so the alert is still visible locally/in CI.
+    console.log(
+      `[low-stock-alert] ${items.length} item(s) below restock minimum:`,
+      items.map((i) => `${i.name} (${i.currentStock}/${i.lowStockThreshold} ${i.unit})`).join(", ")
+    );
+    return;
+  }
+
+  const rows = items
+    .map(
+      (i) =>
+        `<tr>
+          <td style="padding:8px 0;border-bottom:1px solid #f0ebe3;font-weight:600;">${i.name}</td>
+          <td style="padding:8px 0;border-bottom:1px solid #f0ebe3;text-align:right;color:#c0392b;font-weight:700;">
+            ${i.currentStock} ${i.unit}
+          </td>
+          <td style="padding:8px 0;border-bottom:1px solid #f0ebe3;text-align:right;color:#9c8a72;">
+            min ${i.lowStockThreshold} ${i.unit}
+          </td>
+        </tr>`
+    )
+    .join("");
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"/></head>
+<body style="margin:0;padding:0;background:#faf7f2;font-family:'Georgia',serif;">
+  <div style="max-width:540px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
+    <div style="background:#2c1810;padding:32px 40px;text-align:center;">
+      <div style="width:48px;height:48px;background:#c9a96e;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;">
+        <span style="color:#fff;font-size:22px;font-weight:900;line-height:1;">B</span>
+      </div>
+      <h1 style="margin:0;color:#faf7f2;font-size:22px;letter-spacing:1px;">Blessed Ave Cafe</h1>
+      <p style="margin:4px 0 0;color:#c9a96e;font-size:13px;">Daily Low Stock Alert ⚠️</p>
+    </div>
+    <div style="padding:32px 40px;">
+      <p style="color:#6b5745;font-size:14px;margin:0 0 24px;">
+        ${items.length} item${items.length === 1 ? "" : "s"} ${items.length === 1 ? "is" : "are"} at or below its restock minimum level. Please arrange a restock.
+      </p>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding-bottom:8px;color:#9c8a72;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Item</th>
+            <th style="text-align:right;padding-bottom:8px;color:#9c8a72;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Current</th>
+            <th style="text-align:right;padding-bottom:8px;color:#9c8a72;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Threshold</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div style="background:#faf7f2;padding:16px 40px;text-align:center;border-top:1px solid #f0ebe3;">
+      <p style="margin:0;color:#c9a96e;font-size:12px;">Blessed Ave Cafe · Manila, Philippines</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  await transport.sendMail({
+    from: FROM,
+    to,
+    subject: `⚠️ Low Stock Alert — ${items.length} item${items.length === 1 ? "" : "s"} need restocking`,
+    html,
+  });
+}
