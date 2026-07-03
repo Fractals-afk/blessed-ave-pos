@@ -398,7 +398,16 @@ model OperatingCost {
   frequency   CostFrequency
   amount      Int           // centavos
   date        DateTime      @db.Date // the date this cost was incurred
+  vendor      String?       // supplier/payee name, e.g. "Meralco", "ABC Repairs Co."
   notes       String?
+  // Populated when this expense originated from a scanned receipt rather than
+  // manual entry. NULL for manually-entered costs.
+  // TODO(ai-receipt-reader): once an AI/OCR receipt-scanning flow exists,
+  // it should be able to POST here (via /api/operating-costs) for any
+  // scanned receipt that isn't a food/inventory purchase — e.g. utility
+  // bills, repair invoices — using this field to store the source receipt's
+  // image URL/id for audit purposes. No such scanner exists yet in this repo.
+  receiptRef  String?
   createdAt   DateTime      @default(now())
 
   @@map("operating_costs")

@@ -22241,7 +22241,9 @@ export namespace Prisma {
     frequency: $Enums.CostFrequency | null
     amount: number | null
     date: Date | null
+    vendor: string | null
     notes: string | null
+    receiptRef: string | null
     createdAt: Date | null
   }
 
@@ -22252,7 +22254,9 @@ export namespace Prisma {
     frequency: $Enums.CostFrequency | null
     amount: number | null
     date: Date | null
+    vendor: string | null
     notes: string | null
+    receiptRef: string | null
     createdAt: Date | null
   }
 
@@ -22263,7 +22267,9 @@ export namespace Prisma {
     frequency: number
     amount: number
     date: number
+    vendor: number
     notes: number
+    receiptRef: number
     createdAt: number
     _all: number
   }
@@ -22284,7 +22290,9 @@ export namespace Prisma {
     frequency?: true
     amount?: true
     date?: true
+    vendor?: true
     notes?: true
+    receiptRef?: true
     createdAt?: true
   }
 
@@ -22295,7 +22303,9 @@ export namespace Prisma {
     frequency?: true
     amount?: true
     date?: true
+    vendor?: true
     notes?: true
+    receiptRef?: true
     createdAt?: true
   }
 
@@ -22306,7 +22316,9 @@ export namespace Prisma {
     frequency?: true
     amount?: true
     date?: true
+    vendor?: true
     notes?: true
+    receiptRef?: true
     createdAt?: true
     _all?: true
   }
@@ -22404,7 +22416,9 @@ export namespace Prisma {
     frequency: $Enums.CostFrequency
     amount: number
     date: Date
+    vendor: string | null
     notes: string | null
+    receiptRef: string | null
     createdAt: Date
     _count: OperatingCostCountAggregateOutputType | null
     _avg: OperatingCostAvgAggregateOutputType | null
@@ -22434,7 +22448,9 @@ export namespace Prisma {
     frequency?: boolean
     amount?: boolean
     date?: boolean
+    vendor?: boolean
     notes?: boolean
+    receiptRef?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["operatingCost"]>
 
@@ -22445,7 +22461,9 @@ export namespace Prisma {
     frequency?: boolean
     amount?: boolean
     date?: boolean
+    vendor?: boolean
     notes?: boolean
+    receiptRef?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["operatingCost"]>
 
@@ -22456,7 +22474,9 @@ export namespace Prisma {
     frequency?: boolean
     amount?: boolean
     date?: boolean
+    vendor?: boolean
     notes?: boolean
+    receiptRef?: boolean
     createdAt?: boolean
   }
 
@@ -22471,7 +22491,9 @@ export namespace Prisma {
       frequency: $Enums.CostFrequency
       amount: number
       date: Date
+      vendor: string | null
       notes: string | null
+      receiptRef: string | null
       createdAt: Date
     }, ExtArgs["result"]["operatingCost"]>
     composites: {}
@@ -22872,7 +22894,9 @@ export namespace Prisma {
     readonly frequency: FieldRef<"OperatingCost", 'CostFrequency'>
     readonly amount: FieldRef<"OperatingCost", 'Int'>
     readonly date: FieldRef<"OperatingCost", 'DateTime'>
+    readonly vendor: FieldRef<"OperatingCost", 'String'>
     readonly notes: FieldRef<"OperatingCost", 'String'>
+    readonly receiptRef: FieldRef<"OperatingCost", 'String'>
     readonly createdAt: FieldRef<"OperatingCost", 'DateTime'>
   }
     
@@ -23430,7 +23454,9 @@ export namespace Prisma {
     frequency: 'frequency',
     amount: 'amount',
     date: 'date',
+    vendor: 'vendor',
     notes: 'notes',
+    receiptRef: 'receiptRef',
     createdAt: 'createdAt'
   };
 
@@ -24993,7 +25019,9 @@ export namespace Prisma {
     frequency?: EnumCostFrequencyFilter<"OperatingCost"> | $Enums.CostFrequency
     amount?: IntFilter<"OperatingCost"> | number
     date?: DateTimeFilter<"OperatingCost"> | Date | string
+    vendor?: StringNullableFilter<"OperatingCost"> | string | null
     notes?: StringNullableFilter<"OperatingCost"> | string | null
+    receiptRef?: StringNullableFilter<"OperatingCost"> | string | null
     createdAt?: DateTimeFilter<"OperatingCost"> | Date | string
   }
 
@@ -25004,7 +25032,9 @@ export namespace Prisma {
     frequency?: SortOrder
     amount?: SortOrder
     date?: SortOrder
+    vendor?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    receiptRef?: SortOrderInput | SortOrder
     createdAt?: SortOrder
   }
 
@@ -25018,7 +25048,9 @@ export namespace Prisma {
     frequency?: EnumCostFrequencyFilter<"OperatingCost"> | $Enums.CostFrequency
     amount?: IntFilter<"OperatingCost"> | number
     date?: DateTimeFilter<"OperatingCost"> | Date | string
+    vendor?: StringNullableFilter<"OperatingCost"> | string | null
     notes?: StringNullableFilter<"OperatingCost"> | string | null
+    receiptRef?: StringNullableFilter<"OperatingCost"> | string | null
     createdAt?: DateTimeFilter<"OperatingCost"> | Date | string
   }, "id">
 
@@ -25029,7 +25061,9 @@ export namespace Prisma {
     frequency?: SortOrder
     amount?: SortOrder
     date?: SortOrder
+    vendor?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
+    receiptRef?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: OperatingCostCountOrderByAggregateInput
     _avg?: OperatingCostAvgOrderByAggregateInput
@@ -25048,7 +25082,9 @@ export namespace Prisma {
     frequency?: EnumCostFrequencyWithAggregatesFilter<"OperatingCost"> | $Enums.CostFrequency
     amount?: IntWithAggregatesFilter<"OperatingCost"> | number
     date?: DateTimeWithAggregatesFilter<"OperatingCost"> | Date | string
+    vendor?: StringNullableWithAggregatesFilter<"OperatingCost"> | string | null
     notes?: StringNullableWithAggregatesFilter<"OperatingCost"> | string | null
+    receiptRef?: StringNullableWithAggregatesFilter<"OperatingCost"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"OperatingCost"> | Date | string
   }
 
@@ -26449,7 +26485,9 @@ export namespace Prisma {
     frequency: $Enums.CostFrequency
     amount: number
     date: Date | string
+    vendor?: string | null
     notes?: string | null
+    receiptRef?: string | null
     createdAt?: Date | string
   }
 
@@ -26460,7 +26498,9 @@ export namespace Prisma {
     frequency: $Enums.CostFrequency
     amount: number
     date: Date | string
+    vendor?: string | null
     notes?: string | null
+    receiptRef?: string | null
     createdAt?: Date | string
   }
 
@@ -26471,7 +26511,9 @@ export namespace Prisma {
     frequency?: EnumCostFrequencyFieldUpdateOperationsInput | $Enums.CostFrequency
     amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendor?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptRef?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26482,7 +26524,9 @@ export namespace Prisma {
     frequency?: EnumCostFrequencyFieldUpdateOperationsInput | $Enums.CostFrequency
     amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendor?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptRef?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26493,7 +26537,9 @@ export namespace Prisma {
     frequency: $Enums.CostFrequency
     amount: number
     date: Date | string
+    vendor?: string | null
     notes?: string | null
+    receiptRef?: string | null
     createdAt?: Date | string
   }
 
@@ -26504,7 +26550,9 @@ export namespace Prisma {
     frequency?: EnumCostFrequencyFieldUpdateOperationsInput | $Enums.CostFrequency
     amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendor?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptRef?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26515,7 +26563,9 @@ export namespace Prisma {
     frequency?: EnumCostFrequencyFieldUpdateOperationsInput | $Enums.CostFrequency
     amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendor?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptRef?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -27752,7 +27802,9 @@ export namespace Prisma {
     frequency?: SortOrder
     amount?: SortOrder
     date?: SortOrder
+    vendor?: SortOrder
     notes?: SortOrder
+    receiptRef?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -27767,7 +27819,9 @@ export namespace Prisma {
     frequency?: SortOrder
     amount?: SortOrder
     date?: SortOrder
+    vendor?: SortOrder
     notes?: SortOrder
+    receiptRef?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -27778,7 +27832,9 @@ export namespace Prisma {
     frequency?: SortOrder
     amount?: SortOrder
     date?: SortOrder
+    vendor?: SortOrder
     notes?: SortOrder
+    receiptRef?: SortOrder
     createdAt?: SortOrder
   }
 
