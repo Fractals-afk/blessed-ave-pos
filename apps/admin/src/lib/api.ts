@@ -90,6 +90,27 @@ export const adminApi = {
         method: "PATCH",
         body: JSON.stringify({ notes }),
       }),
+    setDiscount: (id: string, body: unknown) =>
+      apiFetch<{ data: import("@blessed-ave/types").Order }>(`/api/orders/${id}/discount`, {
+        method: "PATCH",
+        body: JSON.stringify(body),
+      }),
+  },
+  till: {
+    current: () =>
+      apiFetch<{ data: import("@blessed-ave/types").TillSession | null }>("/api/till/current"),
+    open: (openingFloat: number) =>
+      apiFetch<{ data: import("@blessed-ave/types").TillSession }>("/api/till/open", {
+        method: "POST",
+        body: JSON.stringify({ openingFloat }),
+      }),
+    close: (actualCash: number, notes?: string) =>
+      apiFetch<{ data: import("@blessed-ave/types").TillSession }>("/api/till/close", {
+        method: "POST",
+        body: JSON.stringify({ actualCash, notes }),
+      }),
+    history: () =>
+      apiFetch<{ data: import("@blessed-ave/types").TillSession[] }>("/api/till/history"),
   },
   menu: {
     getAll: () =>

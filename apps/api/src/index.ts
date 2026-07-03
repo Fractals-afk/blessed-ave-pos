@@ -18,6 +18,7 @@ import { reportsRouter } from "./routes/reports";
 import { uploadRouter } from "./routes/upload";
 import { operatingCostsRouter } from "./routes/operating-costs";
 import { pnlRouter } from "./routes/pnl";
+import { tillRouter } from "./routes/till";
 import { errorHandler } from "./middleware/errorHandler";
 import { registerSocketHandlers } from "./socket";
 import { scheduleLowStockAlertJob } from "./jobs/lowStockAlert";
@@ -68,6 +69,7 @@ app.use("/api/reports", reportsRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/operating-costs", operatingCostsRouter);
 app.use("/api/pnl", pnlRouter);
+app.use("/api/till", tillRouter);
 
 app.get("/health", (_req, res) => res.json({ status: "ok", ts: new Date() }));
 

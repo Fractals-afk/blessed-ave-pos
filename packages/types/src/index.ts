@@ -57,6 +57,7 @@ export interface ModifierOption {
 // ─── Orders ──────────────────────────────────────────────────────────────────
 
 export type OrderSource = "ONLINE" | "QR_TABLE" | "POS";
+export type DiscountType = "NONE" | "SENIOR_PWD" | "CUSTOM";
 export type OrderStatus =
   | "PENDING"
   | "CONFIRMED"
@@ -78,6 +79,10 @@ export interface Order {
   items: OrderItem[];
   subtotal: number;
   total: number;
+  discountType: DiscountType;
+  discountAmount: number;
+  discountIdNumber?: string;
+  vatAmount: number;
   payment?: Payment;
   createdAt: string;
   updatedAt: string;
@@ -214,6 +219,26 @@ export interface ClockEvent {
   userId: string;
   type: "CLOCK_IN" | "CLOCK_OUT";
   timestamp: string;
+}
+
+// ─── Till / Cash Drawer ──────────────────────────────────────────────────────
+
+export interface TillSession {
+  id: string;
+  status: "OPEN" | "CLOSED";
+  openedById: string;
+  openedBy?: { id: string; name: string };
+  openedAt: string;
+  openingFloat: number;
+  closedById?: string;
+  closedBy?: { id: string; name: string };
+  closedAt?: string;
+  expectedCash?: number;
+  actualCash?: number;
+  variance?: number;
+  notes?: string;
+  cashIn?: number;
+  cashOut?: number;
 }
 
 // ─── API Response wrappers ───────────────────────────────────────────────────

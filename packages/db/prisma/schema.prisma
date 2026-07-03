@@ -34,6 +34,8 @@ model User {
   shifts       Shift[]
   clockEvents  ClockEvent[]
   refreshTokens RefreshToken[]
+  tillSessionsOpened TillSession[] @relation("TillOpenedBy")
+  tillSessionsClosed TillSession[] @relation("TillClosedBy")
 
   @@map("users")
 }
@@ -141,6 +143,12 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum DiscountType {
+  NONE
+  SENIOR_PWD // RA 9994 / RA 10754 — 20% discount + VAT exemption
+  CUSTOM     // manager-applied manual discount
+}
+
 model Order {
   id            String      @id @default(cuid())
   source        OrderSource
@@ -151,9 +159,12 @@ model Order {
   customerPhone String?
   customerEmail String?
   notes         String?
-  subtotal      Int         // centavos
-  total         Int         // centavos (subtotal after any discounts)
-  discountAmount Int        @default(0)
+  subtotal      Int         // centavos, before discount
+  total         Int         // centavos (subtotal after any discounts) — the amount actually charged
+  discountType   DiscountType @default(NONE)
+  discountAmount Int          @default(0) // centavos
+  discountIdNumber String?    // OSCA / PWD ID number when discountType = SENIOR_PWD
+  vatAmount     Int         @default(0) // centavos, VAT portion of total (0 when VAT-exempt via SENIOR_PWD)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   startedAt     DateTime?   // when kitchen marked PREPARING — queue-time training metric
@@ -368,6 +379,32 @@ model ClockEvent {
   user User @relation(fields: [userId], references: [id])
 
   @@map("clock_events")
+}
+
+// ─── Till / Cash Drawer ───────────────────────────────────────────────────────
+
+enum TillSessionStatus {
+  OPEN
+  CLOSED
+}
+
+model TillSession {
+  id            String            @id @default(cuid())
+  status        TillSessionStatus @default(OPEN)
+  openedById    String
+  openedAt      DateTime          @default(now())
+  openingFloat  Int               // centavos — starting cash in drawer
+  closedById    String?
+  closedAt      DateTime?
+  expectedCash  Int?              // centavos — openingFloat + cash sales - cash refunds, computed at close
+  actualCash    Int?              // centavos — physically counted at close
+  variance      Int?              // centavos — actualCash - expectedCash
+  notes         String?
+
+  openedBy User  @relation("TillOpenedBy", fields: [openedById], references: [id])
+  closedBy User? @relation("TillClosedBy", fields: [closedById], references: [id])
+
+  @@map("till_sessions")
 }
 
 // ─── Operating Costs ──────────────────────────────────────────────────────────

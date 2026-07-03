@@ -27,6 +27,7 @@ const PnlIcon   = ({ active }: { active: boolean }) => <NavIcon active={active} 
 const CostIcon  = ({ active }: { active: boolean }) => <NavIcon active={active} d="M10 2a8 8 0 100 16A8 8 0 0010 2zm1 11H9v-2h2v2zm0-4H9V7h2v2z" />;
 const StaffIcon = ({ active }: { active: boolean }) => <NavIcon active={active} d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />;
 const TableIcon  = ({ active }: { active: boolean }) => <NavIcon active={active} d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />;
+const TillIcon   = ({ active }: { active: boolean }) => <NavIcon active={active} d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm4 3a1 1 0 100 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h3a1 1 0 100-2H7z" />;
 const RecipeIcon = ({ active }: { active: boolean }) => <NavIcon active={active} d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" />;
 
 const NAV_SECTIONS = [
@@ -37,6 +38,7 @@ const NAV_SECTIONS = [
       { href: "/pos",        label: "POS",          icon: PosIcon    },
       { href: "/kitchen",    label: "Kitchen",      icon: KitchenIcon },
       { href: "/orders",     label: "Orders",       icon: OrderIcon  },
+      { href: "/till",       label: "Till",         icon: TillIcon   },
     ],
   },
   {
@@ -65,7 +67,7 @@ const NAV_SECTIONS = [
   },
 ];
 
-const STAFF_ROUTES = ["/pos", "/kitchen"];
+const STAFF_ROUTES = ["/pos", "/kitchen", "/till"];
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

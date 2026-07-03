@@ -109,6 +109,11 @@ export type Shift = $Result.DefaultSelection<Prisma.$ShiftPayload>
  */
 export type ClockEvent = $Result.DefaultSelection<Prisma.$ClockEventPayload>
 /**
+ * Model TillSession
+ * 
+ */
+export type TillSession = $Result.DefaultSelection<Prisma.$TillSessionPayload>
+/**
  * Model OperatingCost
  * 
  */
@@ -146,6 +151,15 @@ export const OrderStatus: {
 };
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const DiscountType: {
+  NONE: 'NONE',
+  SENIOR_PWD: 'SENIOR_PWD',
+  CUSTOM: 'CUSTOM'
+};
+
+export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType]
 
 
 export const PaymentMethod: {
@@ -192,6 +206,14 @@ export const InventoryLogReason: {
 export type InventoryLogReason = (typeof InventoryLogReason)[keyof typeof InventoryLogReason]
 
 
+export const TillSessionStatus: {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED'
+};
+
+export type TillSessionStatus = (typeof TillSessionStatus)[keyof typeof TillSessionStatus]
+
+
 export const CostCategory: {
   RENT: 'RENT',
   UTILITIES: 'UTILITIES',
@@ -230,6 +252,10 @@ export type OrderStatus = $Enums.OrderStatus
 
 export const OrderStatus: typeof $Enums.OrderStatus
 
+export type DiscountType = $Enums.DiscountType
+
+export const DiscountType: typeof $Enums.DiscountType
+
 export type PaymentMethod = $Enums.PaymentMethod
 
 export const PaymentMethod: typeof $Enums.PaymentMethod
@@ -245,6 +271,10 @@ export const InventoryUnit: typeof $Enums.InventoryUnit
 export type InventoryLogReason = $Enums.InventoryLogReason
 
 export const InventoryLogReason: typeof $Enums.InventoryLogReason
+
+export type TillSessionStatus = $Enums.TillSessionStatus
+
+export const TillSessionStatus: typeof $Enums.TillSessionStatus
 
 export type CostCategory = $Enums.CostCategory
 
@@ -566,6 +596,16 @@ export class PrismaClient<
     * ```
     */
   get clockEvent(): Prisma.ClockEventDelegate<ExtArgs>;
+
+  /**
+   * `prisma.tillSession`: Exposes CRUD operations for the **TillSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TillSessions
+    * const tillSessions = await prisma.tillSession.findMany()
+    * ```
+    */
+  get tillSession(): Prisma.TillSessionDelegate<ExtArgs>;
 
   /**
    * `prisma.operatingCost`: Exposes CRUD operations for the **OperatingCost** model.
@@ -1036,6 +1076,7 @@ export namespace Prisma {
     PurchaseOrderItem: 'PurchaseOrderItem',
     Shift: 'Shift',
     ClockEvent: 'ClockEvent',
+    TillSession: 'TillSession',
     OperatingCost: 'OperatingCost'
   };
 
@@ -1052,7 +1093,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "refreshToken" | "menuCategory" | "menuItem" | "modifierGroup" | "modifierOption" | "cafeTable" | "order" | "orderItem" | "selectedOption" | "payment" | "inventoryItem" | "inventoryLog" | "recipeItem" | "supplier" | "purchaseOrder" | "purchaseOrderItem" | "shift" | "clockEvent" | "operatingCost"
+      modelProps: "user" | "refreshToken" | "menuCategory" | "menuItem" | "modifierGroup" | "modifierOption" | "cafeTable" | "order" | "orderItem" | "selectedOption" | "payment" | "inventoryItem" | "inventoryLog" | "recipeItem" | "supplier" | "purchaseOrder" | "purchaseOrderItem" | "shift" | "clockEvent" | "tillSession" | "operatingCost"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2386,6 +2427,76 @@ export namespace Prisma {
           }
         }
       }
+      TillSession: {
+        payload: Prisma.$TillSessionPayload<ExtArgs>
+        fields: Prisma.TillSessionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TillSessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TillSessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload>
+          }
+          findFirst: {
+            args: Prisma.TillSessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TillSessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload>
+          }
+          findMany: {
+            args: Prisma.TillSessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload>[]
+          }
+          create: {
+            args: Prisma.TillSessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload>
+          }
+          createMany: {
+            args: Prisma.TillSessionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TillSessionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload>[]
+          }
+          delete: {
+            args: Prisma.TillSessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload>
+          }
+          update: {
+            args: Prisma.TillSessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload>
+          }
+          deleteMany: {
+            args: Prisma.TillSessionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TillSessionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.TillSessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TillSessionPayload>
+          }
+          aggregate: {
+            args: Prisma.TillSessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTillSession>
+          }
+          groupBy: {
+            args: Prisma.TillSessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TillSessionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TillSessionCountArgs<ExtArgs>
+            result: $Utils.Optional<TillSessionCountAggregateOutputType> | number
+          }
+        }
+      }
       OperatingCost: {
         payload: Prisma.$OperatingCostPayload<ExtArgs>
         fields: Prisma.OperatingCostFieldRefs
@@ -2621,6 +2732,8 @@ export namespace Prisma {
     shifts: number
     clockEvents: number
     refreshTokens: number
+    tillSessionsOpened: number
+    tillSessionsClosed: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2628,6 +2741,8 @@ export namespace Prisma {
     shifts?: boolean | UserCountOutputTypeCountShiftsArgs
     clockEvents?: boolean | UserCountOutputTypeCountClockEventsArgs
     refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
+    tillSessionsOpened?: boolean | UserCountOutputTypeCountTillSessionsOpenedArgs
+    tillSessionsClosed?: boolean | UserCountOutputTypeCountTillSessionsClosedArgs
   }
 
   // Custom InputTypes
@@ -2667,6 +2782,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RefreshTokenWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTillSessionsOpenedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TillSessionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTillSessionsClosedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TillSessionWhereInput
   }
 
 
@@ -3221,6 +3350,8 @@ export namespace Prisma {
     shifts?: boolean | User$shiftsArgs<ExtArgs>
     clockEvents?: boolean | User$clockEventsArgs<ExtArgs>
     refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
+    tillSessionsOpened?: boolean | User$tillSessionsOpenedArgs<ExtArgs>
+    tillSessionsClosed?: boolean | User$tillSessionsClosedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3251,6 +3382,8 @@ export namespace Prisma {
     shifts?: boolean | User$shiftsArgs<ExtArgs>
     clockEvents?: boolean | User$clockEventsArgs<ExtArgs>
     refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
+    tillSessionsOpened?: boolean | User$tillSessionsOpenedArgs<ExtArgs>
+    tillSessionsClosed?: boolean | User$tillSessionsClosedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3262,6 +3395,8 @@ export namespace Prisma {
       shifts: Prisma.$ShiftPayload<ExtArgs>[]
       clockEvents: Prisma.$ClockEventPayload<ExtArgs>[]
       refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
+      tillSessionsOpened: Prisma.$TillSessionPayload<ExtArgs>[]
+      tillSessionsClosed: Prisma.$TillSessionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3640,6 +3775,8 @@ export namespace Prisma {
     shifts<T extends User$shiftsArgs<ExtArgs> = {}>(args?: Subset<T, User$shiftsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findMany"> | Null>
     clockEvents<T extends User$clockEventsArgs<ExtArgs> = {}>(args?: Subset<T, User$clockEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClockEventPayload<ExtArgs>, T, "findMany"> | Null>
     refreshTokens<T extends User$refreshTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany"> | Null>
+    tillSessionsOpened<T extends User$tillSessionsOpenedArgs<ExtArgs> = {}>(args?: Subset<T, User$tillSessionsOpenedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "findMany"> | Null>
+    tillSessionsClosed<T extends User$tillSessionsClosedArgs<ExtArgs> = {}>(args?: Subset<T, User$tillSessionsClosedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4068,6 +4205,46 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RefreshTokenScalarFieldEnum | RefreshTokenScalarFieldEnum[]
+  }
+
+  /**
+   * User.tillSessionsOpened
+   */
+  export type User$tillSessionsOpenedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    where?: TillSessionWhereInput
+    orderBy?: TillSessionOrderByWithRelationInput | TillSessionOrderByWithRelationInput[]
+    cursor?: TillSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TillSessionScalarFieldEnum | TillSessionScalarFieldEnum[]
+  }
+
+  /**
+   * User.tillSessionsClosed
+   */
+  export type User$tillSessionsClosedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    where?: TillSessionWhereInput
+    orderBy?: TillSessionOrderByWithRelationInput | TillSessionOrderByWithRelationInput[]
+    cursor?: TillSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TillSessionScalarFieldEnum | TillSessionScalarFieldEnum[]
   }
 
   /**
@@ -10051,12 +10228,14 @@ export namespace Prisma {
     subtotal: number | null
     total: number | null
     discountAmount: number | null
+    vatAmount: number | null
   }
 
   export type OrderSumAggregateOutputType = {
     subtotal: number | null
     total: number | null
     discountAmount: number | null
+    vatAmount: number | null
   }
 
   export type OrderMinAggregateOutputType = {
@@ -10071,7 +10250,10 @@ export namespace Prisma {
     notes: string | null
     subtotal: number | null
     total: number | null
+    discountType: $Enums.DiscountType | null
     discountAmount: number | null
+    discountIdNumber: string | null
+    vatAmount: number | null
     createdAt: Date | null
     updatedAt: Date | null
     startedAt: Date | null
@@ -10091,7 +10273,10 @@ export namespace Prisma {
     notes: string | null
     subtotal: number | null
     total: number | null
+    discountType: $Enums.DiscountType | null
     discountAmount: number | null
+    discountIdNumber: string | null
+    vatAmount: number | null
     createdAt: Date | null
     updatedAt: Date | null
     startedAt: Date | null
@@ -10111,7 +10296,10 @@ export namespace Prisma {
     notes: number
     subtotal: number
     total: number
+    discountType: number
     discountAmount: number
+    discountIdNumber: number
+    vatAmount: number
     createdAt: number
     updatedAt: number
     startedAt: number
@@ -10125,12 +10313,14 @@ export namespace Prisma {
     subtotal?: true
     total?: true
     discountAmount?: true
+    vatAmount?: true
   }
 
   export type OrderSumAggregateInputType = {
     subtotal?: true
     total?: true
     discountAmount?: true
+    vatAmount?: true
   }
 
   export type OrderMinAggregateInputType = {
@@ -10145,7 +10335,10 @@ export namespace Prisma {
     notes?: true
     subtotal?: true
     total?: true
+    discountType?: true
     discountAmount?: true
+    discountIdNumber?: true
+    vatAmount?: true
     createdAt?: true
     updatedAt?: true
     startedAt?: true
@@ -10165,7 +10358,10 @@ export namespace Prisma {
     notes?: true
     subtotal?: true
     total?: true
+    discountType?: true
     discountAmount?: true
+    discountIdNumber?: true
+    vatAmount?: true
     createdAt?: true
     updatedAt?: true
     startedAt?: true
@@ -10185,7 +10381,10 @@ export namespace Prisma {
     notes?: true
     subtotal?: true
     total?: true
+    discountType?: true
     discountAmount?: true
+    discountIdNumber?: true
+    vatAmount?: true
     createdAt?: true
     updatedAt?: true
     startedAt?: true
@@ -10292,7 +10491,10 @@ export namespace Prisma {
     notes: string | null
     subtotal: number
     total: number
+    discountType: $Enums.DiscountType
     discountAmount: number
+    discountIdNumber: string | null
+    vatAmount: number
     createdAt: Date
     updatedAt: Date
     startedAt: Date | null
@@ -10331,7 +10533,10 @@ export namespace Prisma {
     notes?: boolean
     subtotal?: boolean
     total?: boolean
+    discountType?: boolean
     discountAmount?: boolean
+    discountIdNumber?: boolean
+    vatAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
@@ -10356,7 +10561,10 @@ export namespace Prisma {
     notes?: boolean
     subtotal?: boolean
     total?: boolean
+    discountType?: boolean
     discountAmount?: boolean
+    discountIdNumber?: boolean
+    vatAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
@@ -10378,7 +10586,10 @@ export namespace Prisma {
     notes?: boolean
     subtotal?: boolean
     total?: boolean
+    discountType?: boolean
     discountAmount?: boolean
+    discountIdNumber?: boolean
+    vatAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     startedAt?: boolean
@@ -10418,7 +10629,10 @@ export namespace Prisma {
       notes: string | null
       subtotal: number
       total: number
+      discountType: $Enums.DiscountType
       discountAmount: number
+      discountIdNumber: string | null
+      vatAmount: number
       createdAt: Date
       updatedAt: Date
       startedAt: Date | null
@@ -10832,7 +11046,10 @@ export namespace Prisma {
     readonly notes: FieldRef<"Order", 'String'>
     readonly subtotal: FieldRef<"Order", 'Int'>
     readonly total: FieldRef<"Order", 'Int'>
+    readonly discountType: FieldRef<"Order", 'DiscountType'>
     readonly discountAmount: FieldRef<"Order", 'Int'>
+    readonly discountIdNumber: FieldRef<"Order", 'String'>
+    readonly vatAmount: FieldRef<"Order", 'Int'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
     readonly updatedAt: FieldRef<"Order", 'DateTime'>
     readonly startedAt: FieldRef<"Order", 'DateTime'>
@@ -22215,6 +22432,1078 @@ export namespace Prisma {
 
 
   /**
+   * Model TillSession
+   */
+
+  export type AggregateTillSession = {
+    _count: TillSessionCountAggregateOutputType | null
+    _avg: TillSessionAvgAggregateOutputType | null
+    _sum: TillSessionSumAggregateOutputType | null
+    _min: TillSessionMinAggregateOutputType | null
+    _max: TillSessionMaxAggregateOutputType | null
+  }
+
+  export type TillSessionAvgAggregateOutputType = {
+    openingFloat: number | null
+    expectedCash: number | null
+    actualCash: number | null
+    variance: number | null
+  }
+
+  export type TillSessionSumAggregateOutputType = {
+    openingFloat: number | null
+    expectedCash: number | null
+    actualCash: number | null
+    variance: number | null
+  }
+
+  export type TillSessionMinAggregateOutputType = {
+    id: string | null
+    status: $Enums.TillSessionStatus | null
+    openedById: string | null
+    openedAt: Date | null
+    openingFloat: number | null
+    closedById: string | null
+    closedAt: Date | null
+    expectedCash: number | null
+    actualCash: number | null
+    variance: number | null
+    notes: string | null
+  }
+
+  export type TillSessionMaxAggregateOutputType = {
+    id: string | null
+    status: $Enums.TillSessionStatus | null
+    openedById: string | null
+    openedAt: Date | null
+    openingFloat: number | null
+    closedById: string | null
+    closedAt: Date | null
+    expectedCash: number | null
+    actualCash: number | null
+    variance: number | null
+    notes: string | null
+  }
+
+  export type TillSessionCountAggregateOutputType = {
+    id: number
+    status: number
+    openedById: number
+    openedAt: number
+    openingFloat: number
+    closedById: number
+    closedAt: number
+    expectedCash: number
+    actualCash: number
+    variance: number
+    notes: number
+    _all: number
+  }
+
+
+  export type TillSessionAvgAggregateInputType = {
+    openingFloat?: true
+    expectedCash?: true
+    actualCash?: true
+    variance?: true
+  }
+
+  export type TillSessionSumAggregateInputType = {
+    openingFloat?: true
+    expectedCash?: true
+    actualCash?: true
+    variance?: true
+  }
+
+  export type TillSessionMinAggregateInputType = {
+    id?: true
+    status?: true
+    openedById?: true
+    openedAt?: true
+    openingFloat?: true
+    closedById?: true
+    closedAt?: true
+    expectedCash?: true
+    actualCash?: true
+    variance?: true
+    notes?: true
+  }
+
+  export type TillSessionMaxAggregateInputType = {
+    id?: true
+    status?: true
+    openedById?: true
+    openedAt?: true
+    openingFloat?: true
+    closedById?: true
+    closedAt?: true
+    expectedCash?: true
+    actualCash?: true
+    variance?: true
+    notes?: true
+  }
+
+  export type TillSessionCountAggregateInputType = {
+    id?: true
+    status?: true
+    openedById?: true
+    openedAt?: true
+    openingFloat?: true
+    closedById?: true
+    closedAt?: true
+    expectedCash?: true
+    actualCash?: true
+    variance?: true
+    notes?: true
+    _all?: true
+  }
+
+  export type TillSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TillSession to aggregate.
+     */
+    where?: TillSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TillSessions to fetch.
+     */
+    orderBy?: TillSessionOrderByWithRelationInput | TillSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TillSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TillSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TillSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TillSessions
+    **/
+    _count?: true | TillSessionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TillSessionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TillSessionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TillSessionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TillSessionMaxAggregateInputType
+  }
+
+  export type GetTillSessionAggregateType<T extends TillSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateTillSession]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTillSession[P]>
+      : GetScalarType<T[P], AggregateTillSession[P]>
+  }
+
+
+
+
+  export type TillSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TillSessionWhereInput
+    orderBy?: TillSessionOrderByWithAggregationInput | TillSessionOrderByWithAggregationInput[]
+    by: TillSessionScalarFieldEnum[] | TillSessionScalarFieldEnum
+    having?: TillSessionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TillSessionCountAggregateInputType | true
+    _avg?: TillSessionAvgAggregateInputType
+    _sum?: TillSessionSumAggregateInputType
+    _min?: TillSessionMinAggregateInputType
+    _max?: TillSessionMaxAggregateInputType
+  }
+
+  export type TillSessionGroupByOutputType = {
+    id: string
+    status: $Enums.TillSessionStatus
+    openedById: string
+    openedAt: Date
+    openingFloat: number
+    closedById: string | null
+    closedAt: Date | null
+    expectedCash: number | null
+    actualCash: number | null
+    variance: number | null
+    notes: string | null
+    _count: TillSessionCountAggregateOutputType | null
+    _avg: TillSessionAvgAggregateOutputType | null
+    _sum: TillSessionSumAggregateOutputType | null
+    _min: TillSessionMinAggregateOutputType | null
+    _max: TillSessionMaxAggregateOutputType | null
+  }
+
+  type GetTillSessionGroupByPayload<T extends TillSessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TillSessionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TillSessionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TillSessionGroupByOutputType[P]>
+            : GetScalarType<T[P], TillSessionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TillSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    status?: boolean
+    openedById?: boolean
+    openedAt?: boolean
+    openingFloat?: boolean
+    closedById?: boolean
+    closedAt?: boolean
+    expectedCash?: boolean
+    actualCash?: boolean
+    variance?: boolean
+    notes?: boolean
+    openedBy?: boolean | UserDefaultArgs<ExtArgs>
+    closedBy?: boolean | TillSession$closedByArgs<ExtArgs>
+  }, ExtArgs["result"]["tillSession"]>
+
+  export type TillSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    status?: boolean
+    openedById?: boolean
+    openedAt?: boolean
+    openingFloat?: boolean
+    closedById?: boolean
+    closedAt?: boolean
+    expectedCash?: boolean
+    actualCash?: boolean
+    variance?: boolean
+    notes?: boolean
+    openedBy?: boolean | UserDefaultArgs<ExtArgs>
+    closedBy?: boolean | TillSession$closedByArgs<ExtArgs>
+  }, ExtArgs["result"]["tillSession"]>
+
+  export type TillSessionSelectScalar = {
+    id?: boolean
+    status?: boolean
+    openedById?: boolean
+    openedAt?: boolean
+    openingFloat?: boolean
+    closedById?: boolean
+    closedAt?: boolean
+    expectedCash?: boolean
+    actualCash?: boolean
+    variance?: boolean
+    notes?: boolean
+  }
+
+  export type TillSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    openedBy?: boolean | UserDefaultArgs<ExtArgs>
+    closedBy?: boolean | TillSession$closedByArgs<ExtArgs>
+  }
+  export type TillSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    openedBy?: boolean | UserDefaultArgs<ExtArgs>
+    closedBy?: boolean | TillSession$closedByArgs<ExtArgs>
+  }
+
+  export type $TillSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TillSession"
+    objects: {
+      openedBy: Prisma.$UserPayload<ExtArgs>
+      closedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      status: $Enums.TillSessionStatus
+      openedById: string
+      openedAt: Date
+      openingFloat: number
+      closedById: string | null
+      closedAt: Date | null
+      expectedCash: number | null
+      actualCash: number | null
+      variance: number | null
+      notes: string | null
+    }, ExtArgs["result"]["tillSession"]>
+    composites: {}
+  }
+
+  type TillSessionGetPayload<S extends boolean | null | undefined | TillSessionDefaultArgs> = $Result.GetResult<Prisma.$TillSessionPayload, S>
+
+  type TillSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TillSessionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TillSessionCountAggregateInputType | true
+    }
+
+  export interface TillSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TillSession'], meta: { name: 'TillSession' } }
+    /**
+     * Find zero or one TillSession that matches the filter.
+     * @param {TillSessionFindUniqueArgs} args - Arguments to find a TillSession
+     * @example
+     * // Get one TillSession
+     * const tillSession = await prisma.tillSession.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TillSessionFindUniqueArgs>(args: SelectSubset<T, TillSessionFindUniqueArgs<ExtArgs>>): Prisma__TillSessionClient<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one TillSession that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {TillSessionFindUniqueOrThrowArgs} args - Arguments to find a TillSession
+     * @example
+     * // Get one TillSession
+     * const tillSession = await prisma.tillSession.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TillSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, TillSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TillSessionClient<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first TillSession that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TillSessionFindFirstArgs} args - Arguments to find a TillSession
+     * @example
+     * // Get one TillSession
+     * const tillSession = await prisma.tillSession.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TillSessionFindFirstArgs>(args?: SelectSubset<T, TillSessionFindFirstArgs<ExtArgs>>): Prisma__TillSessionClient<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first TillSession that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TillSessionFindFirstOrThrowArgs} args - Arguments to find a TillSession
+     * @example
+     * // Get one TillSession
+     * const tillSession = await prisma.tillSession.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TillSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, TillSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__TillSessionClient<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more TillSessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TillSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TillSessions
+     * const tillSessions = await prisma.tillSession.findMany()
+     * 
+     * // Get first 10 TillSessions
+     * const tillSessions = await prisma.tillSession.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tillSessionWithIdOnly = await prisma.tillSession.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TillSessionFindManyArgs>(args?: SelectSubset<T, TillSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a TillSession.
+     * @param {TillSessionCreateArgs} args - Arguments to create a TillSession.
+     * @example
+     * // Create one TillSession
+     * const TillSession = await prisma.tillSession.create({
+     *   data: {
+     *     // ... data to create a TillSession
+     *   }
+     * })
+     * 
+     */
+    create<T extends TillSessionCreateArgs>(args: SelectSubset<T, TillSessionCreateArgs<ExtArgs>>): Prisma__TillSessionClient<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many TillSessions.
+     * @param {TillSessionCreateManyArgs} args - Arguments to create many TillSessions.
+     * @example
+     * // Create many TillSessions
+     * const tillSession = await prisma.tillSession.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TillSessionCreateManyArgs>(args?: SelectSubset<T, TillSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TillSessions and returns the data saved in the database.
+     * @param {TillSessionCreateManyAndReturnArgs} args - Arguments to create many TillSessions.
+     * @example
+     * // Create many TillSessions
+     * const tillSession = await prisma.tillSession.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TillSessions and only return the `id`
+     * const tillSessionWithIdOnly = await prisma.tillSession.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TillSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, TillSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a TillSession.
+     * @param {TillSessionDeleteArgs} args - Arguments to delete one TillSession.
+     * @example
+     * // Delete one TillSession
+     * const TillSession = await prisma.tillSession.delete({
+     *   where: {
+     *     // ... filter to delete one TillSession
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TillSessionDeleteArgs>(args: SelectSubset<T, TillSessionDeleteArgs<ExtArgs>>): Prisma__TillSessionClient<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one TillSession.
+     * @param {TillSessionUpdateArgs} args - Arguments to update one TillSession.
+     * @example
+     * // Update one TillSession
+     * const tillSession = await prisma.tillSession.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TillSessionUpdateArgs>(args: SelectSubset<T, TillSessionUpdateArgs<ExtArgs>>): Prisma__TillSessionClient<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more TillSessions.
+     * @param {TillSessionDeleteManyArgs} args - Arguments to filter TillSessions to delete.
+     * @example
+     * // Delete a few TillSessions
+     * const { count } = await prisma.tillSession.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TillSessionDeleteManyArgs>(args?: SelectSubset<T, TillSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TillSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TillSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TillSessions
+     * const tillSession = await prisma.tillSession.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TillSessionUpdateManyArgs>(args: SelectSubset<T, TillSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TillSession.
+     * @param {TillSessionUpsertArgs} args - Arguments to update or create a TillSession.
+     * @example
+     * // Update or create a TillSession
+     * const tillSession = await prisma.tillSession.upsert({
+     *   create: {
+     *     // ... data to create a TillSession
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TillSession we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TillSessionUpsertArgs>(args: SelectSubset<T, TillSessionUpsertArgs<ExtArgs>>): Prisma__TillSessionClient<$Result.GetResult<Prisma.$TillSessionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of TillSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TillSessionCountArgs} args - Arguments to filter TillSessions to count.
+     * @example
+     * // Count the number of TillSessions
+     * const count = await prisma.tillSession.count({
+     *   where: {
+     *     // ... the filter for the TillSessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends TillSessionCountArgs>(
+      args?: Subset<T, TillSessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TillSessionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TillSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TillSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TillSessionAggregateArgs>(args: Subset<T, TillSessionAggregateArgs>): Prisma.PrismaPromise<GetTillSessionAggregateType<T>>
+
+    /**
+     * Group by TillSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TillSessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TillSessionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TillSessionGroupByArgs['orderBy'] }
+        : { orderBy?: TillSessionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TillSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTillSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TillSession model
+   */
+  readonly fields: TillSessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TillSession.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TillSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    openedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    closedBy<T extends TillSession$closedByArgs<ExtArgs> = {}>(args?: Subset<T, TillSession$closedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TillSession model
+   */ 
+  interface TillSessionFieldRefs {
+    readonly id: FieldRef<"TillSession", 'String'>
+    readonly status: FieldRef<"TillSession", 'TillSessionStatus'>
+    readonly openedById: FieldRef<"TillSession", 'String'>
+    readonly openedAt: FieldRef<"TillSession", 'DateTime'>
+    readonly openingFloat: FieldRef<"TillSession", 'Int'>
+    readonly closedById: FieldRef<"TillSession", 'String'>
+    readonly closedAt: FieldRef<"TillSession", 'DateTime'>
+    readonly expectedCash: FieldRef<"TillSession", 'Int'>
+    readonly actualCash: FieldRef<"TillSession", 'Int'>
+    readonly variance: FieldRef<"TillSession", 'Int'>
+    readonly notes: FieldRef<"TillSession", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TillSession findUnique
+   */
+  export type TillSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which TillSession to fetch.
+     */
+    where: TillSessionWhereUniqueInput
+  }
+
+  /**
+   * TillSession findUniqueOrThrow
+   */
+  export type TillSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which TillSession to fetch.
+     */
+    where: TillSessionWhereUniqueInput
+  }
+
+  /**
+   * TillSession findFirst
+   */
+  export type TillSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which TillSession to fetch.
+     */
+    where?: TillSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TillSessions to fetch.
+     */
+    orderBy?: TillSessionOrderByWithRelationInput | TillSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TillSessions.
+     */
+    cursor?: TillSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TillSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TillSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TillSessions.
+     */
+    distinct?: TillSessionScalarFieldEnum | TillSessionScalarFieldEnum[]
+  }
+
+  /**
+   * TillSession findFirstOrThrow
+   */
+  export type TillSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which TillSession to fetch.
+     */
+    where?: TillSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TillSessions to fetch.
+     */
+    orderBy?: TillSessionOrderByWithRelationInput | TillSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TillSessions.
+     */
+    cursor?: TillSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TillSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TillSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TillSessions.
+     */
+    distinct?: TillSessionScalarFieldEnum | TillSessionScalarFieldEnum[]
+  }
+
+  /**
+   * TillSession findMany
+   */
+  export type TillSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which TillSessions to fetch.
+     */
+    where?: TillSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TillSessions to fetch.
+     */
+    orderBy?: TillSessionOrderByWithRelationInput | TillSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TillSessions.
+     */
+    cursor?: TillSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TillSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TillSessions.
+     */
+    skip?: number
+    distinct?: TillSessionScalarFieldEnum | TillSessionScalarFieldEnum[]
+  }
+
+  /**
+   * TillSession create
+   */
+  export type TillSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TillSession.
+     */
+    data: XOR<TillSessionCreateInput, TillSessionUncheckedCreateInput>
+  }
+
+  /**
+   * TillSession createMany
+   */
+  export type TillSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TillSessions.
+     */
+    data: TillSessionCreateManyInput | TillSessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TillSession createManyAndReturn
+   */
+  export type TillSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many TillSessions.
+     */
+    data: TillSessionCreateManyInput | TillSessionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TillSession update
+   */
+  export type TillSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TillSession.
+     */
+    data: XOR<TillSessionUpdateInput, TillSessionUncheckedUpdateInput>
+    /**
+     * Choose, which TillSession to update.
+     */
+    where: TillSessionWhereUniqueInput
+  }
+
+  /**
+   * TillSession updateMany
+   */
+  export type TillSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TillSessions.
+     */
+    data: XOR<TillSessionUpdateManyMutationInput, TillSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which TillSessions to update
+     */
+    where?: TillSessionWhereInput
+  }
+
+  /**
+   * TillSession upsert
+   */
+  export type TillSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TillSession to update in case it exists.
+     */
+    where: TillSessionWhereUniqueInput
+    /**
+     * In case the TillSession found by the `where` argument doesn't exist, create a new TillSession with this data.
+     */
+    create: XOR<TillSessionCreateInput, TillSessionUncheckedCreateInput>
+    /**
+     * In case the TillSession was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TillSessionUpdateInput, TillSessionUncheckedUpdateInput>
+  }
+
+  /**
+   * TillSession delete
+   */
+  export type TillSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+    /**
+     * Filter which TillSession to delete.
+     */
+    where: TillSessionWhereUniqueInput
+  }
+
+  /**
+   * TillSession deleteMany
+   */
+  export type TillSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TillSessions to delete
+     */
+    where?: TillSessionWhereInput
+  }
+
+  /**
+   * TillSession.closedBy
+   */
+  export type TillSession$closedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * TillSession without action
+   */
+  export type TillSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TillSession
+     */
+    select?: TillSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TillSessionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model OperatingCost
    */
 
@@ -23297,7 +24586,10 @@ export namespace Prisma {
     notes: 'notes',
     subtotal: 'subtotal',
     total: 'total',
+    discountType: 'discountType',
     discountAmount: 'discountAmount',
+    discountIdNumber: 'discountIdNumber',
+    vatAmount: 'vatAmount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     startedAt: 'startedAt',
@@ -23447,6 +24739,23 @@ export namespace Prisma {
   export type ClockEventScalarFieldEnum = (typeof ClockEventScalarFieldEnum)[keyof typeof ClockEventScalarFieldEnum]
 
 
+  export const TillSessionScalarFieldEnum: {
+    id: 'id',
+    status: 'status',
+    openedById: 'openedById',
+    openedAt: 'openedAt',
+    openingFloat: 'openingFloat',
+    closedById: 'closedById',
+    closedAt: 'closedAt',
+    expectedCash: 'expectedCash',
+    actualCash: 'actualCash',
+    variance: 'variance',
+    notes: 'notes'
+  };
+
+  export type TillSessionScalarFieldEnum = (typeof TillSessionScalarFieldEnum)[keyof typeof TillSessionScalarFieldEnum]
+
+
   export const OperatingCostScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -23584,6 +24893,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DiscountType'
+   */
+  export type EnumDiscountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiscountType'>
+    
+
+
+  /**
+   * Reference to a field of type 'DiscountType[]'
+   */
+  export type ListEnumDiscountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiscountType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'PaymentMethod'
    */
   export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod'>
@@ -23654,6 +24977,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TillSessionStatus'
+   */
+  export type EnumTillSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TillSessionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TillSessionStatus[]'
+   */
+  export type ListEnumTillSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TillSessionStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'CostCategory'
    */
   export type EnumCostCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CostCategory'>
@@ -23700,6 +25037,8 @@ export namespace Prisma {
     shifts?: ShiftListRelationFilter
     clockEvents?: ClockEventListRelationFilter
     refreshTokens?: RefreshTokenListRelationFilter
+    tillSessionsOpened?: TillSessionListRelationFilter
+    tillSessionsClosed?: TillSessionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -23715,6 +25054,8 @@ export namespace Prisma {
     shifts?: ShiftOrderByRelationAggregateInput
     clockEvents?: ClockEventOrderByRelationAggregateInput
     refreshTokens?: RefreshTokenOrderByRelationAggregateInput
+    tillSessionsOpened?: TillSessionOrderByRelationAggregateInput
+    tillSessionsClosed?: TillSessionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -23733,6 +25074,8 @@ export namespace Prisma {
     shifts?: ShiftListRelationFilter
     clockEvents?: ClockEventListRelationFilter
     refreshTokens?: RefreshTokenListRelationFilter
+    tillSessionsOpened?: TillSessionListRelationFilter
+    tillSessionsClosed?: TillSessionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -24156,7 +25499,10 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Order"> | string | null
     subtotal?: IntFilter<"Order"> | number
     total?: IntFilter<"Order"> | number
+    discountType?: EnumDiscountTypeFilter<"Order"> | $Enums.DiscountType
     discountAmount?: IntFilter<"Order"> | number
+    discountIdNumber?: StringNullableFilter<"Order"> | string | null
+    vatAmount?: IntFilter<"Order"> | number
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     startedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
@@ -24180,7 +25526,10 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     subtotal?: SortOrder
     total?: SortOrder
+    discountType?: SortOrder
     discountAmount?: SortOrder
+    discountIdNumber?: SortOrderInput | SortOrder
+    vatAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrderInput | SortOrder
@@ -24207,7 +25556,10 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Order"> | string | null
     subtotal?: IntFilter<"Order"> | number
     total?: IntFilter<"Order"> | number
+    discountType?: EnumDiscountTypeFilter<"Order"> | $Enums.DiscountType
     discountAmount?: IntFilter<"Order"> | number
+    discountIdNumber?: StringNullableFilter<"Order"> | string | null
+    vatAmount?: IntFilter<"Order"> | number
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     startedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
@@ -24231,7 +25583,10 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     subtotal?: SortOrder
     total?: SortOrder
+    discountType?: SortOrder
     discountAmount?: SortOrder
+    discountIdNumber?: SortOrderInput | SortOrder
+    vatAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrderInput | SortOrder
@@ -24259,7 +25614,10 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"Order"> | string | null
     subtotal?: IntWithAggregatesFilter<"Order"> | number
     total?: IntWithAggregatesFilter<"Order"> | number
+    discountType?: EnumDiscountTypeWithAggregatesFilter<"Order"> | $Enums.DiscountType
     discountAmount?: IntWithAggregatesFilter<"Order"> | number
+    discountIdNumber?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    vatAmount?: IntWithAggregatesFilter<"Order"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     startedAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
@@ -25009,6 +26367,96 @@ export namespace Prisma {
     timestamp?: DateTimeWithAggregatesFilter<"ClockEvent"> | Date | string
   }
 
+  export type TillSessionWhereInput = {
+    AND?: TillSessionWhereInput | TillSessionWhereInput[]
+    OR?: TillSessionWhereInput[]
+    NOT?: TillSessionWhereInput | TillSessionWhereInput[]
+    id?: StringFilter<"TillSession"> | string
+    status?: EnumTillSessionStatusFilter<"TillSession"> | $Enums.TillSessionStatus
+    openedById?: StringFilter<"TillSession"> | string
+    openedAt?: DateTimeFilter<"TillSession"> | Date | string
+    openingFloat?: IntFilter<"TillSession"> | number
+    closedById?: StringNullableFilter<"TillSession"> | string | null
+    closedAt?: DateTimeNullableFilter<"TillSession"> | Date | string | null
+    expectedCash?: IntNullableFilter<"TillSession"> | number | null
+    actualCash?: IntNullableFilter<"TillSession"> | number | null
+    variance?: IntNullableFilter<"TillSession"> | number | null
+    notes?: StringNullableFilter<"TillSession"> | string | null
+    openedBy?: XOR<UserRelationFilter, UserWhereInput>
+    closedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type TillSessionOrderByWithRelationInput = {
+    id?: SortOrder
+    status?: SortOrder
+    openedById?: SortOrder
+    openedAt?: SortOrder
+    openingFloat?: SortOrder
+    closedById?: SortOrderInput | SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    expectedCash?: SortOrderInput | SortOrder
+    actualCash?: SortOrderInput | SortOrder
+    variance?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    openedBy?: UserOrderByWithRelationInput
+    closedBy?: UserOrderByWithRelationInput
+  }
+
+  export type TillSessionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TillSessionWhereInput | TillSessionWhereInput[]
+    OR?: TillSessionWhereInput[]
+    NOT?: TillSessionWhereInput | TillSessionWhereInput[]
+    status?: EnumTillSessionStatusFilter<"TillSession"> | $Enums.TillSessionStatus
+    openedById?: StringFilter<"TillSession"> | string
+    openedAt?: DateTimeFilter<"TillSession"> | Date | string
+    openingFloat?: IntFilter<"TillSession"> | number
+    closedById?: StringNullableFilter<"TillSession"> | string | null
+    closedAt?: DateTimeNullableFilter<"TillSession"> | Date | string | null
+    expectedCash?: IntNullableFilter<"TillSession"> | number | null
+    actualCash?: IntNullableFilter<"TillSession"> | number | null
+    variance?: IntNullableFilter<"TillSession"> | number | null
+    notes?: StringNullableFilter<"TillSession"> | string | null
+    openedBy?: XOR<UserRelationFilter, UserWhereInput>
+    closedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type TillSessionOrderByWithAggregationInput = {
+    id?: SortOrder
+    status?: SortOrder
+    openedById?: SortOrder
+    openedAt?: SortOrder
+    openingFloat?: SortOrder
+    closedById?: SortOrderInput | SortOrder
+    closedAt?: SortOrderInput | SortOrder
+    expectedCash?: SortOrderInput | SortOrder
+    actualCash?: SortOrderInput | SortOrder
+    variance?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    _count?: TillSessionCountOrderByAggregateInput
+    _avg?: TillSessionAvgOrderByAggregateInput
+    _max?: TillSessionMaxOrderByAggregateInput
+    _min?: TillSessionMinOrderByAggregateInput
+    _sum?: TillSessionSumOrderByAggregateInput
+  }
+
+  export type TillSessionScalarWhereWithAggregatesInput = {
+    AND?: TillSessionScalarWhereWithAggregatesInput | TillSessionScalarWhereWithAggregatesInput[]
+    OR?: TillSessionScalarWhereWithAggregatesInput[]
+    NOT?: TillSessionScalarWhereWithAggregatesInput | TillSessionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TillSession"> | string
+    status?: EnumTillSessionStatusWithAggregatesFilter<"TillSession"> | $Enums.TillSessionStatus
+    openedById?: StringWithAggregatesFilter<"TillSession"> | string
+    openedAt?: DateTimeWithAggregatesFilter<"TillSession"> | Date | string
+    openingFloat?: IntWithAggregatesFilter<"TillSession"> | number
+    closedById?: StringNullableWithAggregatesFilter<"TillSession"> | string | null
+    closedAt?: DateTimeNullableWithAggregatesFilter<"TillSession"> | Date | string | null
+    expectedCash?: IntNullableWithAggregatesFilter<"TillSession"> | number | null
+    actualCash?: IntNullableWithAggregatesFilter<"TillSession"> | number | null
+    variance?: IntNullableWithAggregatesFilter<"TillSession"> | number | null
+    notes?: StringNullableWithAggregatesFilter<"TillSession"> | string | null
+  }
+
   export type OperatingCostWhereInput = {
     AND?: OperatingCostWhereInput | OperatingCostWhereInput[]
     OR?: OperatingCostWhereInput[]
@@ -25101,6 +26549,8 @@ export namespace Prisma {
     shifts?: ShiftCreateNestedManyWithoutUserInput
     clockEvents?: ClockEventCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionCreateNestedManyWithoutClosedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -25116,6 +26566,8 @@ export namespace Prisma {
     shifts?: ShiftUncheckedCreateNestedManyWithoutUserInput
     clockEvents?: ClockEventUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionUncheckedCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionUncheckedCreateNestedManyWithoutClosedByInput
   }
 
   export type UserUpdateInput = {
@@ -25131,6 +26583,8 @@ export namespace Prisma {
     shifts?: ShiftUpdateManyWithoutUserNestedInput
     clockEvents?: ClockEventUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUpdateManyWithoutClosedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -25146,6 +26600,8 @@ export namespace Prisma {
     shifts?: ShiftUncheckedUpdateManyWithoutUserNestedInput
     clockEvents?: ClockEventUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUncheckedUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUncheckedUpdateManyWithoutClosedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -25586,7 +27042,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -25610,7 +27069,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -25630,7 +27092,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25654,7 +27119,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25676,7 +27144,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -25694,7 +27165,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25714,7 +27188,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -26478,6 +27955,102 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TillSessionCreateInput = {
+    id?: string
+    status?: $Enums.TillSessionStatus
+    openedAt?: Date | string
+    openingFloat: number
+    closedAt?: Date | string | null
+    expectedCash?: number | null
+    actualCash?: number | null
+    variance?: number | null
+    notes?: string | null
+    openedBy: UserCreateNestedOneWithoutTillSessionsOpenedInput
+    closedBy?: UserCreateNestedOneWithoutTillSessionsClosedInput
+  }
+
+  export type TillSessionUncheckedCreateInput = {
+    id?: string
+    status?: $Enums.TillSessionStatus
+    openedById: string
+    openedAt?: Date | string
+    openingFloat: number
+    closedById?: string | null
+    closedAt?: Date | string | null
+    expectedCash?: number | null
+    actualCash?: number | null
+    variance?: number | null
+    notes?: string | null
+  }
+
+  export type TillSessionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    openedBy?: UserUpdateOneRequiredWithoutTillSessionsOpenedNestedInput
+    closedBy?: UserUpdateOneWithoutTillSessionsClosedNestedInput
+  }
+
+  export type TillSessionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedById?: StringFieldUpdateOperationsInput | string
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TillSessionCreateManyInput = {
+    id?: string
+    status?: $Enums.TillSessionStatus
+    openedById: string
+    openedAt?: Date | string
+    openingFloat: number
+    closedById?: string | null
+    closedAt?: Date | string | null
+    expectedCash?: number | null
+    actualCash?: number | null
+    variance?: number | null
+    notes?: string | null
+  }
+
+  export type TillSessionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TillSessionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedById?: StringFieldUpdateOperationsInput | string
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type OperatingCostCreateInput = {
     id?: string
     name: string
@@ -26631,6 +28204,12 @@ export namespace Prisma {
     none?: RefreshTokenWhereInput
   }
 
+  export type TillSessionListRelationFilter = {
+    every?: TillSessionWhereInput
+    some?: TillSessionWhereInput
+    none?: TillSessionWhereInput
+  }
+
   export type OrderOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -26644,6 +28223,10 @@ export namespace Prisma {
   }
 
   export type RefreshTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TillSessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27080,6 +28663,13 @@ export namespace Prisma {
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
+  export type EnumDiscountTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.DiscountType | EnumDiscountTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.DiscountType[] | ListEnumDiscountTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiscountType[] | ListEnumDiscountTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDiscountTypeFilter<$PrismaModel> | $Enums.DiscountType
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -27118,7 +28708,10 @@ export namespace Prisma {
     notes?: SortOrder
     subtotal?: SortOrder
     total?: SortOrder
+    discountType?: SortOrder
     discountAmount?: SortOrder
+    discountIdNumber?: SortOrder
+    vatAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrder
@@ -27130,6 +28723,7 @@ export namespace Prisma {
     subtotal?: SortOrder
     total?: SortOrder
     discountAmount?: SortOrder
+    vatAmount?: SortOrder
   }
 
   export type OrderMaxOrderByAggregateInput = {
@@ -27144,7 +28738,10 @@ export namespace Prisma {
     notes?: SortOrder
     subtotal?: SortOrder
     total?: SortOrder
+    discountType?: SortOrder
     discountAmount?: SortOrder
+    discountIdNumber?: SortOrder
+    vatAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrder
@@ -27164,7 +28761,10 @@ export namespace Prisma {
     notes?: SortOrder
     subtotal?: SortOrder
     total?: SortOrder
+    discountType?: SortOrder
     discountAmount?: SortOrder
+    discountIdNumber?: SortOrder
+    vatAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     startedAt?: SortOrder
@@ -27176,6 +28776,7 @@ export namespace Prisma {
     subtotal?: SortOrder
     total?: SortOrder
     discountAmount?: SortOrder
+    vatAmount?: SortOrder
   }
 
   export type EnumOrderSourceWithAggregatesFilter<$PrismaModel = never> = {
@@ -27196,6 +28797,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type EnumDiscountTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DiscountType | EnumDiscountTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.DiscountType[] | ListEnumDiscountTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiscountType[] | ListEnumDiscountTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDiscountTypeWithAggregatesFilter<$PrismaModel> | $Enums.DiscountType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDiscountTypeFilter<$PrismaModel>
+    _max?: NestedEnumDiscountTypeFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -27781,6 +29392,106 @@ export namespace Prisma {
     timestamp?: SortOrder
   }
 
+  export type EnumTillSessionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TillSessionStatus | EnumTillSessionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TillSessionStatus[] | ListEnumTillSessionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TillSessionStatus[] | ListEnumTillSessionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTillSessionStatusFilter<$PrismaModel> | $Enums.TillSessionStatus
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type TillSessionCountOrderByAggregateInput = {
+    id?: SortOrder
+    status?: SortOrder
+    openedById?: SortOrder
+    openedAt?: SortOrder
+    openingFloat?: SortOrder
+    closedById?: SortOrder
+    closedAt?: SortOrder
+    expectedCash?: SortOrder
+    actualCash?: SortOrder
+    variance?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type TillSessionAvgOrderByAggregateInput = {
+    openingFloat?: SortOrder
+    expectedCash?: SortOrder
+    actualCash?: SortOrder
+    variance?: SortOrder
+  }
+
+  export type TillSessionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    status?: SortOrder
+    openedById?: SortOrder
+    openedAt?: SortOrder
+    openingFloat?: SortOrder
+    closedById?: SortOrder
+    closedAt?: SortOrder
+    expectedCash?: SortOrder
+    actualCash?: SortOrder
+    variance?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type TillSessionMinOrderByAggregateInput = {
+    id?: SortOrder
+    status?: SortOrder
+    openedById?: SortOrder
+    openedAt?: SortOrder
+    openingFloat?: SortOrder
+    closedById?: SortOrder
+    closedAt?: SortOrder
+    expectedCash?: SortOrder
+    actualCash?: SortOrder
+    variance?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type TillSessionSumOrderByAggregateInput = {
+    openingFloat?: SortOrder
+    expectedCash?: SortOrder
+    actualCash?: SortOrder
+    variance?: SortOrder
+  }
+
+  export type EnumTillSessionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TillSessionStatus | EnumTillSessionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TillSessionStatus[] | ListEnumTillSessionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TillSessionStatus[] | ListEnumTillSessionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTillSessionStatusWithAggregatesFilter<$PrismaModel> | $Enums.TillSessionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTillSessionStatusFilter<$PrismaModel>
+    _max?: NestedEnumTillSessionStatusFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type EnumCostCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.CostCategory | EnumCostCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.CostCategory[] | ListEnumCostCategoryFieldRefInput<$PrismaModel>
@@ -27890,6 +29601,20 @@ export namespace Prisma {
     connect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
   }
 
+  export type TillSessionCreateNestedManyWithoutOpenedByInput = {
+    create?: XOR<TillSessionCreateWithoutOpenedByInput, TillSessionUncheckedCreateWithoutOpenedByInput> | TillSessionCreateWithoutOpenedByInput[] | TillSessionUncheckedCreateWithoutOpenedByInput[]
+    connectOrCreate?: TillSessionCreateOrConnectWithoutOpenedByInput | TillSessionCreateOrConnectWithoutOpenedByInput[]
+    createMany?: TillSessionCreateManyOpenedByInputEnvelope
+    connect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+  }
+
+  export type TillSessionCreateNestedManyWithoutClosedByInput = {
+    create?: XOR<TillSessionCreateWithoutClosedByInput, TillSessionUncheckedCreateWithoutClosedByInput> | TillSessionCreateWithoutClosedByInput[] | TillSessionUncheckedCreateWithoutClosedByInput[]
+    connectOrCreate?: TillSessionCreateOrConnectWithoutClosedByInput | TillSessionCreateOrConnectWithoutClosedByInput[]
+    createMany?: TillSessionCreateManyClosedByInputEnvelope
+    connect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+  }
+
   export type OrderUncheckedCreateNestedManyWithoutStaffInput = {
     create?: XOR<OrderCreateWithoutStaffInput, OrderUncheckedCreateWithoutStaffInput> | OrderCreateWithoutStaffInput[] | OrderUncheckedCreateWithoutStaffInput[]
     connectOrCreate?: OrderCreateOrConnectWithoutStaffInput | OrderCreateOrConnectWithoutStaffInput[]
@@ -27916,6 +29641,20 @@ export namespace Prisma {
     connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
     createMany?: RefreshTokenCreateManyUserInputEnvelope
     connect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
+  }
+
+  export type TillSessionUncheckedCreateNestedManyWithoutOpenedByInput = {
+    create?: XOR<TillSessionCreateWithoutOpenedByInput, TillSessionUncheckedCreateWithoutOpenedByInput> | TillSessionCreateWithoutOpenedByInput[] | TillSessionUncheckedCreateWithoutOpenedByInput[]
+    connectOrCreate?: TillSessionCreateOrConnectWithoutOpenedByInput | TillSessionCreateOrConnectWithoutOpenedByInput[]
+    createMany?: TillSessionCreateManyOpenedByInputEnvelope
+    connect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+  }
+
+  export type TillSessionUncheckedCreateNestedManyWithoutClosedByInput = {
+    create?: XOR<TillSessionCreateWithoutClosedByInput, TillSessionUncheckedCreateWithoutClosedByInput> | TillSessionCreateWithoutClosedByInput[] | TillSessionUncheckedCreateWithoutClosedByInput[]
+    connectOrCreate?: TillSessionCreateOrConnectWithoutClosedByInput | TillSessionCreateOrConnectWithoutClosedByInput[]
+    createMany?: TillSessionCreateManyClosedByInputEnvelope
+    connect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -27990,6 +29729,34 @@ export namespace Prisma {
     deleteMany?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
   }
 
+  export type TillSessionUpdateManyWithoutOpenedByNestedInput = {
+    create?: XOR<TillSessionCreateWithoutOpenedByInput, TillSessionUncheckedCreateWithoutOpenedByInput> | TillSessionCreateWithoutOpenedByInput[] | TillSessionUncheckedCreateWithoutOpenedByInput[]
+    connectOrCreate?: TillSessionCreateOrConnectWithoutOpenedByInput | TillSessionCreateOrConnectWithoutOpenedByInput[]
+    upsert?: TillSessionUpsertWithWhereUniqueWithoutOpenedByInput | TillSessionUpsertWithWhereUniqueWithoutOpenedByInput[]
+    createMany?: TillSessionCreateManyOpenedByInputEnvelope
+    set?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    disconnect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    delete?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    connect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    update?: TillSessionUpdateWithWhereUniqueWithoutOpenedByInput | TillSessionUpdateWithWhereUniqueWithoutOpenedByInput[]
+    updateMany?: TillSessionUpdateManyWithWhereWithoutOpenedByInput | TillSessionUpdateManyWithWhereWithoutOpenedByInput[]
+    deleteMany?: TillSessionScalarWhereInput | TillSessionScalarWhereInput[]
+  }
+
+  export type TillSessionUpdateManyWithoutClosedByNestedInput = {
+    create?: XOR<TillSessionCreateWithoutClosedByInput, TillSessionUncheckedCreateWithoutClosedByInput> | TillSessionCreateWithoutClosedByInput[] | TillSessionUncheckedCreateWithoutClosedByInput[]
+    connectOrCreate?: TillSessionCreateOrConnectWithoutClosedByInput | TillSessionCreateOrConnectWithoutClosedByInput[]
+    upsert?: TillSessionUpsertWithWhereUniqueWithoutClosedByInput | TillSessionUpsertWithWhereUniqueWithoutClosedByInput[]
+    createMany?: TillSessionCreateManyClosedByInputEnvelope
+    set?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    disconnect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    delete?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    connect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    update?: TillSessionUpdateWithWhereUniqueWithoutClosedByInput | TillSessionUpdateWithWhereUniqueWithoutClosedByInput[]
+    updateMany?: TillSessionUpdateManyWithWhereWithoutClosedByInput | TillSessionUpdateManyWithWhereWithoutClosedByInput[]
+    deleteMany?: TillSessionScalarWhereInput | TillSessionScalarWhereInput[]
+  }
+
   export type OrderUncheckedUpdateManyWithoutStaffNestedInput = {
     create?: XOR<OrderCreateWithoutStaffInput, OrderUncheckedCreateWithoutStaffInput> | OrderCreateWithoutStaffInput[] | OrderUncheckedCreateWithoutStaffInput[]
     connectOrCreate?: OrderCreateOrConnectWithoutStaffInput | OrderCreateOrConnectWithoutStaffInput[]
@@ -28044,6 +29811,34 @@ export namespace Prisma {
     update?: RefreshTokenUpdateWithWhereUniqueWithoutUserInput | RefreshTokenUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: RefreshTokenUpdateManyWithWhereWithoutUserInput | RefreshTokenUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
+  }
+
+  export type TillSessionUncheckedUpdateManyWithoutOpenedByNestedInput = {
+    create?: XOR<TillSessionCreateWithoutOpenedByInput, TillSessionUncheckedCreateWithoutOpenedByInput> | TillSessionCreateWithoutOpenedByInput[] | TillSessionUncheckedCreateWithoutOpenedByInput[]
+    connectOrCreate?: TillSessionCreateOrConnectWithoutOpenedByInput | TillSessionCreateOrConnectWithoutOpenedByInput[]
+    upsert?: TillSessionUpsertWithWhereUniqueWithoutOpenedByInput | TillSessionUpsertWithWhereUniqueWithoutOpenedByInput[]
+    createMany?: TillSessionCreateManyOpenedByInputEnvelope
+    set?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    disconnect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    delete?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    connect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    update?: TillSessionUpdateWithWhereUniqueWithoutOpenedByInput | TillSessionUpdateWithWhereUniqueWithoutOpenedByInput[]
+    updateMany?: TillSessionUpdateManyWithWhereWithoutOpenedByInput | TillSessionUpdateManyWithWhereWithoutOpenedByInput[]
+    deleteMany?: TillSessionScalarWhereInput | TillSessionScalarWhereInput[]
+  }
+
+  export type TillSessionUncheckedUpdateManyWithoutClosedByNestedInput = {
+    create?: XOR<TillSessionCreateWithoutClosedByInput, TillSessionUncheckedCreateWithoutClosedByInput> | TillSessionCreateWithoutClosedByInput[] | TillSessionUncheckedCreateWithoutClosedByInput[]
+    connectOrCreate?: TillSessionCreateOrConnectWithoutClosedByInput | TillSessionCreateOrConnectWithoutClosedByInput[]
+    upsert?: TillSessionUpsertWithWhereUniqueWithoutClosedByInput | TillSessionUpsertWithWhereUniqueWithoutClosedByInput[]
+    createMany?: TillSessionCreateManyClosedByInputEnvelope
+    set?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    disconnect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    delete?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    connect?: TillSessionWhereUniqueInput | TillSessionWhereUniqueInput[]
+    update?: TillSessionUpdateWithWhereUniqueWithoutClosedByInput | TillSessionUpdateWithWhereUniqueWithoutClosedByInput[]
+    updateMany?: TillSessionUpdateManyWithWhereWithoutClosedByInput | TillSessionUpdateManyWithWhereWithoutClosedByInput[]
+    deleteMany?: TillSessionScalarWhereInput | TillSessionScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutRefreshTokensInput = {
@@ -28452,6 +30247,10 @@ export namespace Prisma {
 
   export type EnumOrderStatusFieldUpdateOperationsInput = {
     set?: $Enums.OrderStatus
+  }
+
+  export type EnumDiscountTypeFieldUpdateOperationsInput = {
+    set?: $Enums.DiscountType
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -29042,6 +30841,48 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutClockEventsInput, UserUpdateWithoutClockEventsInput>, UserUncheckedUpdateWithoutClockEventsInput>
   }
 
+  export type UserCreateNestedOneWithoutTillSessionsOpenedInput = {
+    create?: XOR<UserCreateWithoutTillSessionsOpenedInput, UserUncheckedCreateWithoutTillSessionsOpenedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTillSessionsOpenedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutTillSessionsClosedInput = {
+    create?: XOR<UserCreateWithoutTillSessionsClosedInput, UserUncheckedCreateWithoutTillSessionsClosedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTillSessionsClosedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumTillSessionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TillSessionStatus
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutTillSessionsOpenedNestedInput = {
+    create?: XOR<UserCreateWithoutTillSessionsOpenedInput, UserUncheckedCreateWithoutTillSessionsOpenedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTillSessionsOpenedInput
+    upsert?: UserUpsertWithoutTillSessionsOpenedInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTillSessionsOpenedInput, UserUpdateWithoutTillSessionsOpenedInput>, UserUncheckedUpdateWithoutTillSessionsOpenedInput>
+  }
+
+  export type UserUpdateOneWithoutTillSessionsClosedNestedInput = {
+    create?: XOR<UserCreateWithoutTillSessionsClosedInput, UserUncheckedCreateWithoutTillSessionsClosedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTillSessionsClosedInput
+    upsert?: UserUpsertWithoutTillSessionsClosedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTillSessionsClosedInput, UserUpdateWithoutTillSessionsClosedInput>, UserUncheckedUpdateWithoutTillSessionsClosedInput>
+  }
+
   export type EnumCostCategoryFieldUpdateOperationsInput = {
     set?: $Enums.CostCategory
   }
@@ -29230,6 +31071,13 @@ export namespace Prisma {
     not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
   }
 
+  export type NestedEnumDiscountTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.DiscountType | EnumDiscountTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.DiscountType[] | ListEnumDiscountTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiscountType[] | ListEnumDiscountTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDiscountTypeFilter<$PrismaModel> | $Enums.DiscountType
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -29259,6 +31107,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDiscountTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DiscountType | EnumDiscountTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.DiscountType[] | ListEnumDiscountTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DiscountType[] | ListEnumDiscountTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumDiscountTypeWithAggregatesFilter<$PrismaModel> | $Enums.DiscountType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDiscountTypeFilter<$PrismaModel>
+    _max?: NestedEnumDiscountTypeFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -29359,6 +31217,50 @@ export namespace Prisma {
     _max?: NestedEnumInventoryLogReasonFilter<$PrismaModel>
   }
 
+  export type NestedEnumTillSessionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TillSessionStatus | EnumTillSessionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TillSessionStatus[] | ListEnumTillSessionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TillSessionStatus[] | ListEnumTillSessionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTillSessionStatusFilter<$PrismaModel> | $Enums.TillSessionStatus
+  }
+
+  export type NestedEnumTillSessionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TillSessionStatus | EnumTillSessionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TillSessionStatus[] | ListEnumTillSessionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TillSessionStatus[] | ListEnumTillSessionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTillSessionStatusWithAggregatesFilter<$PrismaModel> | $Enums.TillSessionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTillSessionStatusFilter<$PrismaModel>
+    _max?: NestedEnumTillSessionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumCostCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.CostCategory | EnumCostCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.CostCategory[] | ListEnumCostCategoryFieldRefInput<$PrismaModel>
@@ -29403,7 +31305,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -29425,7 +31330,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -29519,6 +31427,78 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TillSessionCreateWithoutOpenedByInput = {
+    id?: string
+    status?: $Enums.TillSessionStatus
+    openedAt?: Date | string
+    openingFloat: number
+    closedAt?: Date | string | null
+    expectedCash?: number | null
+    actualCash?: number | null
+    variance?: number | null
+    notes?: string | null
+    closedBy?: UserCreateNestedOneWithoutTillSessionsClosedInput
+  }
+
+  export type TillSessionUncheckedCreateWithoutOpenedByInput = {
+    id?: string
+    status?: $Enums.TillSessionStatus
+    openedAt?: Date | string
+    openingFloat: number
+    closedById?: string | null
+    closedAt?: Date | string | null
+    expectedCash?: number | null
+    actualCash?: number | null
+    variance?: number | null
+    notes?: string | null
+  }
+
+  export type TillSessionCreateOrConnectWithoutOpenedByInput = {
+    where: TillSessionWhereUniqueInput
+    create: XOR<TillSessionCreateWithoutOpenedByInput, TillSessionUncheckedCreateWithoutOpenedByInput>
+  }
+
+  export type TillSessionCreateManyOpenedByInputEnvelope = {
+    data: TillSessionCreateManyOpenedByInput | TillSessionCreateManyOpenedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TillSessionCreateWithoutClosedByInput = {
+    id?: string
+    status?: $Enums.TillSessionStatus
+    openedAt?: Date | string
+    openingFloat: number
+    closedAt?: Date | string | null
+    expectedCash?: number | null
+    actualCash?: number | null
+    variance?: number | null
+    notes?: string | null
+    openedBy: UserCreateNestedOneWithoutTillSessionsOpenedInput
+  }
+
+  export type TillSessionUncheckedCreateWithoutClosedByInput = {
+    id?: string
+    status?: $Enums.TillSessionStatus
+    openedById: string
+    openedAt?: Date | string
+    openingFloat: number
+    closedAt?: Date | string | null
+    expectedCash?: number | null
+    actualCash?: number | null
+    variance?: number | null
+    notes?: string | null
+  }
+
+  export type TillSessionCreateOrConnectWithoutClosedByInput = {
+    where: TillSessionWhereUniqueInput
+    create: XOR<TillSessionCreateWithoutClosedByInput, TillSessionUncheckedCreateWithoutClosedByInput>
+  }
+
+  export type TillSessionCreateManyClosedByInputEnvelope = {
+    data: TillSessionCreateManyClosedByInput | TillSessionCreateManyClosedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrderUpsertWithWhereUniqueWithoutStaffInput = {
     where: OrderWhereUniqueInput
     update: XOR<OrderUpdateWithoutStaffInput, OrderUncheckedUpdateWithoutStaffInput>
@@ -29550,7 +31530,10 @@ export namespace Prisma {
     notes?: StringNullableFilter<"Order"> | string | null
     subtotal?: IntFilter<"Order"> | number
     total?: IntFilter<"Order"> | number
+    discountType?: EnumDiscountTypeFilter<"Order"> | $Enums.DiscountType
     discountAmount?: IntFilter<"Order"> | number
+    discountIdNumber?: StringNullableFilter<"Order"> | string | null
+    vatAmount?: IntFilter<"Order"> | number
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     startedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
@@ -29640,6 +31623,55 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"RefreshToken"> | Date | string
   }
 
+  export type TillSessionUpsertWithWhereUniqueWithoutOpenedByInput = {
+    where: TillSessionWhereUniqueInput
+    update: XOR<TillSessionUpdateWithoutOpenedByInput, TillSessionUncheckedUpdateWithoutOpenedByInput>
+    create: XOR<TillSessionCreateWithoutOpenedByInput, TillSessionUncheckedCreateWithoutOpenedByInput>
+  }
+
+  export type TillSessionUpdateWithWhereUniqueWithoutOpenedByInput = {
+    where: TillSessionWhereUniqueInput
+    data: XOR<TillSessionUpdateWithoutOpenedByInput, TillSessionUncheckedUpdateWithoutOpenedByInput>
+  }
+
+  export type TillSessionUpdateManyWithWhereWithoutOpenedByInput = {
+    where: TillSessionScalarWhereInput
+    data: XOR<TillSessionUpdateManyMutationInput, TillSessionUncheckedUpdateManyWithoutOpenedByInput>
+  }
+
+  export type TillSessionScalarWhereInput = {
+    AND?: TillSessionScalarWhereInput | TillSessionScalarWhereInput[]
+    OR?: TillSessionScalarWhereInput[]
+    NOT?: TillSessionScalarWhereInput | TillSessionScalarWhereInput[]
+    id?: StringFilter<"TillSession"> | string
+    status?: EnumTillSessionStatusFilter<"TillSession"> | $Enums.TillSessionStatus
+    openedById?: StringFilter<"TillSession"> | string
+    openedAt?: DateTimeFilter<"TillSession"> | Date | string
+    openingFloat?: IntFilter<"TillSession"> | number
+    closedById?: StringNullableFilter<"TillSession"> | string | null
+    closedAt?: DateTimeNullableFilter<"TillSession"> | Date | string | null
+    expectedCash?: IntNullableFilter<"TillSession"> | number | null
+    actualCash?: IntNullableFilter<"TillSession"> | number | null
+    variance?: IntNullableFilter<"TillSession"> | number | null
+    notes?: StringNullableFilter<"TillSession"> | string | null
+  }
+
+  export type TillSessionUpsertWithWhereUniqueWithoutClosedByInput = {
+    where: TillSessionWhereUniqueInput
+    update: XOR<TillSessionUpdateWithoutClosedByInput, TillSessionUncheckedUpdateWithoutClosedByInput>
+    create: XOR<TillSessionCreateWithoutClosedByInput, TillSessionUncheckedCreateWithoutClosedByInput>
+  }
+
+  export type TillSessionUpdateWithWhereUniqueWithoutClosedByInput = {
+    where: TillSessionWhereUniqueInput
+    data: XOR<TillSessionUpdateWithoutClosedByInput, TillSessionUncheckedUpdateWithoutClosedByInput>
+  }
+
+  export type TillSessionUpdateManyWithWhereWithoutClosedByInput = {
+    where: TillSessionScalarWhereInput
+    data: XOR<TillSessionUpdateManyMutationInput, TillSessionUncheckedUpdateManyWithoutClosedByInput>
+  }
+
   export type UserCreateWithoutRefreshTokensInput = {
     id?: string
     name: string
@@ -29652,6 +31684,8 @@ export namespace Prisma {
     orders?: OrderCreateNestedManyWithoutStaffInput
     shifts?: ShiftCreateNestedManyWithoutUserInput
     clockEvents?: ClockEventCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionCreateNestedManyWithoutClosedByInput
   }
 
   export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -29666,6 +31700,8 @@ export namespace Prisma {
     orders?: OrderUncheckedCreateNestedManyWithoutStaffInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutUserInput
     clockEvents?: ClockEventUncheckedCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionUncheckedCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionUncheckedCreateNestedManyWithoutClosedByInput
   }
 
   export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -29696,6 +31732,8 @@ export namespace Prisma {
     orders?: OrderUpdateManyWithoutStaffNestedInput
     shifts?: ShiftUpdateManyWithoutUserNestedInput
     clockEvents?: ClockEventUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUpdateManyWithoutClosedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -29710,6 +31748,8 @@ export namespace Prisma {
     orders?: OrderUncheckedUpdateManyWithoutStaffNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutUserNestedInput
     clockEvents?: ClockEventUncheckedUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUncheckedUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUncheckedUpdateManyWithoutClosedByNestedInput
   }
 
   export type MenuItemCreateWithoutCategoryInput = {
@@ -30238,7 +32278,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -30260,7 +32303,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -30327,6 +32373,8 @@ export namespace Prisma {
     shifts?: ShiftCreateNestedManyWithoutUserInput
     clockEvents?: ClockEventCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionCreateNestedManyWithoutClosedByInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -30341,6 +32389,8 @@ export namespace Prisma {
     shifts?: ShiftUncheckedCreateNestedManyWithoutUserInput
     clockEvents?: ClockEventUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionUncheckedCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionUncheckedCreateNestedManyWithoutClosedByInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -30459,6 +32509,8 @@ export namespace Prisma {
     shifts?: ShiftUpdateManyWithoutUserNestedInput
     clockEvents?: ClockEventUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUpdateManyWithoutClosedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -30473,6 +32525,8 @@ export namespace Prisma {
     shifts?: ShiftUncheckedUpdateManyWithoutUserNestedInput
     clockEvents?: ClockEventUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUncheckedUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUncheckedUpdateManyWithoutClosedByNestedInput
   }
 
   export type OrderItemUpsertWithWhereUniqueWithoutOrderInput = {
@@ -30538,7 +32592,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -30561,7 +32618,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -30653,7 +32713,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -30676,7 +32739,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -30854,7 +32920,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -30877,7 +32946,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -30912,7 +32984,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -30935,7 +33010,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -31727,6 +33805,8 @@ export namespace Prisma {
     orders?: OrderCreateNestedManyWithoutStaffInput
     clockEvents?: ClockEventCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionCreateNestedManyWithoutClosedByInput
   }
 
   export type UserUncheckedCreateWithoutShiftsInput = {
@@ -31741,6 +33821,8 @@ export namespace Prisma {
     orders?: OrderUncheckedCreateNestedManyWithoutStaffInput
     clockEvents?: ClockEventUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionUncheckedCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionUncheckedCreateNestedManyWithoutClosedByInput
   }
 
   export type UserCreateOrConnectWithoutShiftsInput = {
@@ -31771,6 +33853,8 @@ export namespace Prisma {
     orders?: OrderUpdateManyWithoutStaffNestedInput
     clockEvents?: ClockEventUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUpdateManyWithoutClosedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutShiftsInput = {
@@ -31785,6 +33869,8 @@ export namespace Prisma {
     orders?: OrderUncheckedUpdateManyWithoutStaffNestedInput
     clockEvents?: ClockEventUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUncheckedUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUncheckedUpdateManyWithoutClosedByNestedInput
   }
 
   export type UserCreateWithoutClockEventsInput = {
@@ -31799,6 +33885,8 @@ export namespace Prisma {
     orders?: OrderCreateNestedManyWithoutStaffInput
     shifts?: ShiftCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionCreateNestedManyWithoutClosedByInput
   }
 
   export type UserUncheckedCreateWithoutClockEventsInput = {
@@ -31813,6 +33901,8 @@ export namespace Prisma {
     orders?: OrderUncheckedCreateNestedManyWithoutStaffInput
     shifts?: ShiftUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionUncheckedCreateNestedManyWithoutOpenedByInput
+    tillSessionsClosed?: TillSessionUncheckedCreateNestedManyWithoutClosedByInput
   }
 
   export type UserCreateOrConnectWithoutClockEventsInput = {
@@ -31843,6 +33933,8 @@ export namespace Prisma {
     orders?: OrderUpdateManyWithoutStaffNestedInput
     shifts?: ShiftUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUpdateManyWithoutClosedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutClockEventsInput = {
@@ -31857,6 +33949,168 @@ export namespace Prisma {
     orders?: OrderUncheckedUpdateManyWithoutStaffNestedInput
     shifts?: ShiftUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUncheckedUpdateManyWithoutOpenedByNestedInput
+    tillSessionsClosed?: TillSessionUncheckedUpdateManyWithoutClosedByNestedInput
+  }
+
+  export type UserCreateWithoutTillSessionsOpenedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    role?: $Enums.UserRole
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orders?: OrderCreateNestedManyWithoutStaffInput
+    shifts?: ShiftCreateNestedManyWithoutUserInput
+    clockEvents?: ClockEventCreateNestedManyWithoutUserInput
+    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    tillSessionsClosed?: TillSessionCreateNestedManyWithoutClosedByInput
+  }
+
+  export type UserUncheckedCreateWithoutTillSessionsOpenedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    role?: $Enums.UserRole
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orders?: OrderUncheckedCreateNestedManyWithoutStaffInput
+    shifts?: ShiftUncheckedCreateNestedManyWithoutUserInput
+    clockEvents?: ClockEventUncheckedCreateNestedManyWithoutUserInput
+    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    tillSessionsClosed?: TillSessionUncheckedCreateNestedManyWithoutClosedByInput
+  }
+
+  export type UserCreateOrConnectWithoutTillSessionsOpenedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTillSessionsOpenedInput, UserUncheckedCreateWithoutTillSessionsOpenedInput>
+  }
+
+  export type UserCreateWithoutTillSessionsClosedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    role?: $Enums.UserRole
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orders?: OrderCreateNestedManyWithoutStaffInput
+    shifts?: ShiftCreateNestedManyWithoutUserInput
+    clockEvents?: ClockEventCreateNestedManyWithoutUserInput
+    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionCreateNestedManyWithoutOpenedByInput
+  }
+
+  export type UserUncheckedCreateWithoutTillSessionsClosedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    role?: $Enums.UserRole
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    orders?: OrderUncheckedCreateNestedManyWithoutStaffInput
+    shifts?: ShiftUncheckedCreateNestedManyWithoutUserInput
+    clockEvents?: ClockEventUncheckedCreateNestedManyWithoutUserInput
+    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    tillSessionsOpened?: TillSessionUncheckedCreateNestedManyWithoutOpenedByInput
+  }
+
+  export type UserCreateOrConnectWithoutTillSessionsClosedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTillSessionsClosedInput, UserUncheckedCreateWithoutTillSessionsClosedInput>
+  }
+
+  export type UserUpsertWithoutTillSessionsOpenedInput = {
+    update: XOR<UserUpdateWithoutTillSessionsOpenedInput, UserUncheckedUpdateWithoutTillSessionsOpenedInput>
+    create: XOR<UserCreateWithoutTillSessionsOpenedInput, UserUncheckedCreateWithoutTillSessionsOpenedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTillSessionsOpenedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTillSessionsOpenedInput, UserUncheckedUpdateWithoutTillSessionsOpenedInput>
+  }
+
+  export type UserUpdateWithoutTillSessionsOpenedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: OrderUpdateManyWithoutStaffNestedInput
+    shifts?: ShiftUpdateManyWithoutUserNestedInput
+    clockEvents?: ClockEventUpdateManyWithoutUserNestedInput
+    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    tillSessionsClosed?: TillSessionUpdateManyWithoutClosedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTillSessionsOpenedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: OrderUncheckedUpdateManyWithoutStaffNestedInput
+    shifts?: ShiftUncheckedUpdateManyWithoutUserNestedInput
+    clockEvents?: ClockEventUncheckedUpdateManyWithoutUserNestedInput
+    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    tillSessionsClosed?: TillSessionUncheckedUpdateManyWithoutClosedByNestedInput
+  }
+
+  export type UserUpsertWithoutTillSessionsClosedInput = {
+    update: XOR<UserUpdateWithoutTillSessionsClosedInput, UserUncheckedUpdateWithoutTillSessionsClosedInput>
+    create: XOR<UserCreateWithoutTillSessionsClosedInput, UserUncheckedCreateWithoutTillSessionsClosedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTillSessionsClosedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTillSessionsClosedInput, UserUncheckedUpdateWithoutTillSessionsClosedInput>
+  }
+
+  export type UserUpdateWithoutTillSessionsClosedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: OrderUpdateManyWithoutStaffNestedInput
+    shifts?: ShiftUpdateManyWithoutUserNestedInput
+    clockEvents?: ClockEventUpdateManyWithoutUserNestedInput
+    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUpdateManyWithoutOpenedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTillSessionsClosedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: OrderUncheckedUpdateManyWithoutStaffNestedInput
+    shifts?: ShiftUncheckedUpdateManyWithoutUserNestedInput
+    clockEvents?: ClockEventUncheckedUpdateManyWithoutUserNestedInput
+    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    tillSessionsOpened?: TillSessionUncheckedUpdateManyWithoutOpenedByNestedInput
   }
 
   export type OrderCreateManyStaffInput = {
@@ -31870,7 +34124,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -31900,6 +34157,32 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type TillSessionCreateManyOpenedByInput = {
+    id?: string
+    status?: $Enums.TillSessionStatus
+    openedAt?: Date | string
+    openingFloat: number
+    closedById?: string | null
+    closedAt?: Date | string | null
+    expectedCash?: number | null
+    actualCash?: number | null
+    variance?: number | null
+    notes?: string | null
+  }
+
+  export type TillSessionCreateManyClosedByInput = {
+    id?: string
+    status?: $Enums.TillSessionStatus
+    openedById: string
+    openedAt?: Date | string
+    openingFloat: number
+    closedAt?: Date | string | null
+    expectedCash?: number | null
+    actualCash?: number | null
+    variance?: number | null
+    notes?: string | null
+  }
+
   export type OrderUpdateWithoutStaffInput = {
     id?: StringFieldUpdateOperationsInput | string
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
@@ -31910,7 +34193,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -31932,7 +34218,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -31953,7 +34242,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -32025,6 +34317,84 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TillSessionUpdateWithoutOpenedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    closedBy?: UserUpdateOneWithoutTillSessionsClosedNestedInput
+  }
+
+  export type TillSessionUncheckedUpdateWithoutOpenedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TillSessionUncheckedUpdateManyWithoutOpenedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TillSessionUpdateWithoutClosedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    openedBy?: UserUpdateOneRequiredWithoutTillSessionsOpenedNestedInput
+  }
+
+  export type TillSessionUncheckedUpdateWithoutClosedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedById?: StringFieldUpdateOperationsInput | string
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TillSessionUncheckedUpdateManyWithoutClosedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumTillSessionStatusFieldUpdateOperationsInput | $Enums.TillSessionStatus
+    openedById?: StringFieldUpdateOperationsInput | string
+    openedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    openingFloat?: IntFieldUpdateOperationsInput | number
+    closedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expectedCash?: NullableIntFieldUpdateOperationsInput | number | null
+    actualCash?: NullableIntFieldUpdateOperationsInput | number | null
+    variance?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MenuItemCreateManyCategoryInput = {
@@ -32242,7 +34612,10 @@ export namespace Prisma {
     notes?: string | null
     subtotal: number
     total: number
+    discountType?: $Enums.DiscountType
     discountAmount?: number
+    discountIdNumber?: string | null
+    vatAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     startedAt?: Date | string | null
@@ -32260,7 +34633,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -32282,7 +34658,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -32303,7 +34682,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     subtotal?: IntFieldUpdateOperationsInput | number
     total?: IntFieldUpdateOperationsInput | number
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
     discountAmount?: IntFieldUpdateOperationsInput | number
+    discountIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    vatAmount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -32706,6 +35088,10 @@ export namespace Prisma {
      * @deprecated Use ClockEventDefaultArgs instead
      */
     export type ClockEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ClockEventDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TillSessionDefaultArgs instead
+     */
+    export type TillSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TillSessionDefaultArgs<ExtArgs>
     /**
      * @deprecated Use OperatingCostDefaultArgs instead
      */

@@ -24,6 +24,20 @@ export default function ReportsPage() {
   }
   useEffect(() => { load(); }, []);
 
+  async function exportCsv() {
+    const res = await fetch(`${apiBase}/api/reports/sales?from=${from}&to=${to}&format=csv`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+    });
+    if (!res.ok) return;
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `sales-${from}-to-${to}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   const paymentData = report
     ? Object.entries(report.byPaymentMethod as Record<string, number>)
         .map(([name, value]) => ({ name, value: (value as number) / 100 })).filter((d) => d.value > 0)
@@ -53,10 +67,10 @@ export default function ReportsPage() {
             {loading ? "Loading…" : "Apply"}
           </button>
           {report && (
-            <a href={`${apiBase}/api/reports/sales?from=${from}&to=${to}&format=csv`}
+            <button onClick={exportCsv}
               className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">
               Export CSV ↓
-            </a>
+            </button>
           )}
         </div>
 

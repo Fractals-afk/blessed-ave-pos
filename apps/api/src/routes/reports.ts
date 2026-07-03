@@ -8,7 +8,13 @@ export const reportsRouter = Router();
 const rangeSchema = z.object({
   from: z.string(),
   to: z.string(),
+  format: z.enum(["json", "csv"]).default("json"),
 });
+
+function csvCell(v: string | number) {
+  const s = String(v);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
 
 // GET /api/reports/sales?from=&to=
 reportsRouter.get(
@@ -17,7 +23,7 @@ reportsRouter.get(
   requireRole("OWNER", "MANAGER"),
   async (req, res, next) => {
     try {
-      const { from, to } = rangeSchema.parse(req.query);
+      const { from, to, format } = rangeSchema.parse(req.query);
       const fromDate = new Date(from);
       const toDate = new Date(to);
       toDate.setHours(23, 59, 59, 999);
@@ -40,6 +46,25 @@ reportsRouter.get(
           },
         }),
       ]);
+
+      if (format === "csv") {
+        const header = ["Date", "Order ID", "Source", "Status", "Payment Method", "Subtotal", "Discount", "VAT", "Total"];
+        const rows = orders.map((o) => [
+          o.createdAt.toISOString().slice(0, 10),
+          o.id,
+          o.source,
+          o.status,
+          o.payment?.method ?? "",
+          (o.subtotal / 100).toFixed(2),
+          (o.discountAmount / 100).toFixed(2),
+          (o.vatAmount / 100).toFixed(2),
+          (o.total / 100).toFixed(2),
+        ]);
+        const csv = [header, ...rows].map((r) => r.map(csvCell).join(",")).join("\r\n");
+        res.setHeader("Content-Type", "text/csv; charset=utf-8");
+        res.setHeader("Content-Disposition", `attachment; filename="sales-${from}-to-${to}.csv"`);
+        return res.send(csv);
+      }
 
       const totalRevenue = payments.reduce((s, p) => s + p.amount, 0);
       const totalOrders = orders.length;

@@ -198,7 +198,10 @@ exports.Prisma.OrderScalarFieldEnum = {
   notes: 'notes',
   subtotal: 'subtotal',
   total: 'total',
+  discountType: 'discountType',
   discountAmount: 'discountAmount',
+  discountIdNumber: 'discountIdNumber',
+  vatAmount: 'vatAmount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   startedAt: 'startedAt',
@@ -312,6 +315,20 @@ exports.Prisma.ClockEventScalarFieldEnum = {
   timestamp: 'timestamp'
 };
 
+exports.Prisma.TillSessionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  openedById: 'openedById',
+  openedAt: 'openedAt',
+  openingFloat: 'openingFloat',
+  closedById: 'closedById',
+  closedAt: 'closedAt',
+  expectedCash: 'expectedCash',
+  actualCash: 'actualCash',
+  variance: 'variance',
+  notes: 'notes'
+};
+
 exports.Prisma.OperatingCostScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -360,6 +377,12 @@ exports.OrderStatus = exports.$Enums.OrderStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.DiscountType = exports.$Enums.DiscountType = {
+  NONE: 'NONE',
+  SENIOR_PWD: 'SENIOR_PWD',
+  CUSTOM: 'CUSTOM'
+};
+
 exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   GCASH: 'GCASH',
   MAYA: 'MAYA',
@@ -390,6 +413,11 @@ exports.InventoryLogReason = exports.$Enums.InventoryLogReason = {
   WASTE: 'WASTE',
   ADJUSTMENT: 'ADJUSTMENT',
   OPENING_STOCK: 'OPENING_STOCK'
+};
+
+exports.TillSessionStatus = exports.$Enums.TillSessionStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED'
 };
 
 exports.CostCategory = exports.$Enums.CostCategory = {
@@ -431,6 +459,7 @@ exports.Prisma.ModelName = {
   PurchaseOrderItem: 'PurchaseOrderItem',
   Shift: 'Shift',
   ClockEvent: 'ClockEvent',
+  TillSession: 'TillSession',
   OperatingCost: 'OperatingCost'
 };
 

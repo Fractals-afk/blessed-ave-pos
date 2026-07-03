@@ -5,6 +5,7 @@ import { requireAuth, requireRole, tryAuth } from "../middleware/auth";
 import { AppError } from "../middleware/errorHandler";
 import { io } from "../index";
 import { emitOrderStatusUpdate } from "../socket";
+import { vatPortion, seniorPwdDiscount } from "../lib/vat";
 
 export const ordersRouter = Router();
 
@@ -122,6 +123,7 @@ ordersRouter.post("/", tryAuth, async (req, res, next) => {
         notes: body.notes,
         subtotal,
         total: subtotal,
+        vatAmount: vatPortion(subtotal),
         items: { create: orderItemsData },
       },
       include: {
@@ -269,6 +271,80 @@ ordersRouter.patch("/:id/notes", requireAuth, async (req, res, next) => {
     emitOrderStatusUpdate(io, order.id, order.status, order);
 
     res.json({ data: order });
+  } catch (e) {
+    next(e);
+  }
+});
+
+// PATCH /api/orders/:id/discount — apply or remove a discount before payment.
+// SENIOR_PWD (RA 9994 / RA 10754): any staff member, requires an ID number.
+// CUSTOM: manager/owner only, manual peso amount off.
+const discountSchema = z.union([
+  z.object({ discountType: z.literal("NONE") }),
+  z.object({ discountType: z.literal("SENIOR_PWD"), discountIdNumber: z.string().min(1) }),
+  z.object({ discountType: z.literal("CUSTOM"), amount: z.number().int().positive() }),
+]);
+
+ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
+  try {
+    const body = discountSchema.parse(req.body);
+
+    if (body.discountType === "CUSTOM" && !["OWNER", "MANAGER"].includes(req.user!.role)) {
+      throw new AppError("Only managers can apply a custom discount", 403);
+    }
+
+    const order = await prisma.order.findUnique({ where: { id: req.params.id } });
+    if (!order) throw new AppError("Order not found", 404);
+    if (order.status !== "PENDING") {
+      throw new AppError("Discount can only be applied before payment is confirmed");
+    }
+
+    let data: {
+      discountType: "NONE" | "SENIOR_PWD" | "CUSTOM";
+      discountAmount: number;
+      discountIdNumber: string | null;
+      total: number;
+      vatAmount: number;
+    };
+
+    if (body.discountType === "NONE") {
+      data = {
+        discountType: "NONE",
+        discountAmount: 0,
+        discountIdNumber: null,
+        total: order.subtotal,
+        vatAmount: vatPortion(order.subtotal),
+      };
+    } else if (body.discountType === "SENIOR_PWD") {
+      const { total, discountAmount } = seniorPwdDiscount(order.subtotal);
+      data = {
+        discountType: "SENIOR_PWD",
+        discountAmount,
+        discountIdNumber: body.discountIdNumber,
+        total,
+        vatAmount: 0, // VAT-exempt
+      };
+    } else {
+      if (body.amount > order.subtotal) throw new AppError("Discount cannot exceed order subtotal");
+      const total = order.subtotal - body.amount;
+      data = {
+        discountType: "CUSTOM",
+        discountAmount: body.amount,
+        discountIdNumber: null,
+        total,
+        vatAmount: vatPortion(total),
+      };
+    }
+
+    const updated = await prisma.order.update({
+      where: { id: req.params.id },
+      data,
+      include: { items: { include: { selectedOptions: true } }, table: true, payment: true },
+    });
+
+    emitOrderStatusUpdate(io, updated.id, updated.status, updated);
+
+    res.json({ data: updated });
   } catch (e) {
     next(e);
   }

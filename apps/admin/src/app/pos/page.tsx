@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { AdminLayout } from "@/components/AdminLayout";
 import { adminApi, resolveApiBase } from "@/lib/api";
-import type { CafeTable, MenuCategory, MenuItem, ModifierOption, Order } from "@blessed-ave/types";
+import { useAuth } from "@/store/auth";
+import type { CafeTable, DiscountType, MenuCategory, MenuItem, ModifierOption, Order } from "@blessed-ave/types";
 import toast from "react-hot-toast";
 import { QrPlaceholder } from "@/components/QrPlaceholder";
 
@@ -28,6 +29,22 @@ function tableBadge(status?: string) {
   return { label: "Free", cls: "border-slate-200 bg-white text-slate-400" };
 }
 
+// Client-side preview only — server recomputes authoritatively from the
+// order's own subtotal once the discount is applied.
+function previewDiscount(subtotal: number, type: DiscountType, customAmount: string) {
+  if (type === "SENIOR_PWD") {
+    const vatExempt = Math.round(subtotal / 1.12);
+    const discount = Math.round(vatExempt * 0.2);
+    return { total: vatExempt - discount, discount, vat: 0 };
+  }
+  if (type === "CUSTOM") {
+    const cents = Math.round(parseFloat(customAmount || "0") * 100) || 0;
+    const total = Math.max(0, subtotal - cents);
+    return { total, discount: cents, vat: Math.round(total - total / 1.12) };
+  }
+  return { total: subtotal, discount: 0, vat: Math.round(subtotal - subtotal / 1.12) };
+}
+
 function tableSort(a: CafeTable, b: CafeTable) {
   const na = parseInt(a.name.replace(/\D/g, ""), 10);
   const nb = parseInt(b.name.replace(/\D/g, ""), 10);
@@ -43,6 +60,8 @@ interface POSItem {
 }
 
 export default function POSPage() {
+  const { user } = useAuth();
+  const isManager = user?.role === "OWNER" || user?.role === "MANAGER";
   const [categories,     setCategories]     = useState<MenuCategory[]>([]);
   const [activeGroup,    setActiveGroup]    = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -52,6 +71,17 @@ export default function POSPage() {
   const [payMethod,      setPayMethod]      = useState<"GCASH" | "MAYA" | "CASH">("CASH");
   const [placing,        setPlacing]        = useState(false);
   const [notes,          setNotes]          = useState("");
+
+  // Discount — applied to a new order before it's placed
+  const [discountType,   setDiscountType]   = useState<DiscountType>("NONE");
+  const [discountId,     setDiscountId]     = useState("");
+  const [customDiscount, setCustomDiscount] = useState("");
+
+  // Discount applied to an existing table order (dine-in, pending payment)
+  const [tableDiscountType, setTableDiscountType] = useState<DiscountType>("NONE");
+  const [tableDiscountId,   setTableDiscountId]   = useState("");
+  const [tableCustomDiscount, setTableCustomDiscount] = useState("");
+  const [applyingDiscount,  setApplyingDiscount]  = useState(false);
 
   // Tables with an active order or a check awaiting payment
   const [tables,       setTables]       = useState<CafeTable[]>([]);
@@ -178,6 +208,23 @@ export default function POSPage() {
     pushItem(selectedItem, allOptions, unitPrice);
   }
 
+  // Applies the currently-selected discount to a PENDING order; returns the
+  // updated order (with recomputed total) or throws.
+  async function applyDiscount(orderId: string, type: DiscountType, idNumber: string, customAmount: string): Promise<Order> {
+    let body: unknown;
+    if (type === "SENIOR_PWD") {
+      if (!idNumber.trim()) throw new Error("Senior/PWD ID number is required");
+      body = { discountType: "SENIOR_PWD", discountIdNumber: idNumber.trim() };
+    } else if (type === "CUSTOM") {
+      const cents = Math.round(parseFloat(customAmount || "0") * 100);
+      if (isNaN(cents) || cents <= 0) throw new Error("Enter a valid discount amount");
+      body = { discountType: "CUSTOM", amount: cents };
+    } else {
+      return (await adminApi.orders.setDiscount(orderId, { discountType: "NONE" })).data;
+    }
+    return (await adminApi.orders.setDiscount(orderId, body)).data;
+  }
+
   async function placeOrder() {
     if (cart.length === 0) return;
     setPlacing(true);
@@ -195,7 +242,11 @@ export default function POSPage() {
       });
       const orderBody = await res.json();
       if (!res.ok) throw new Error(orderBody.error ?? "Failed to place order");
-      const order = orderBody.data;
+      let order = orderBody.data;
+
+      if (discountType !== "NONE") {
+        order = await applyDiscount(order.id, discountType, discountId, customDiscount);
+      }
 
       if (payMethod === "CASH") {
         const payRes = await fetch(`${API}/api/payments/cash`, {
@@ -204,11 +255,11 @@ export default function POSPage() {
         });
         if (!payRes.ok) throw new Error((await payRes.json()).error ?? "Cash payment failed");
         toast.success(`Order #${order.id.slice(-4).toUpperCase()} — Cash paid ✓`);
-        setCart([]); setNotes("");
+        setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
       } else {
         // Show QR modal for cashier
         setQrMethod(payMethod);
-        setQrAmount(total);
+        setQrAmount(order.total);
         setQrOrderId(order.id);
       }
     } catch (err: any) {
@@ -230,7 +281,7 @@ export default function POSPage() {
       if (!res.ok) throw new Error((await res.json()).error ?? "Failed to confirm");
       toast.success(`Order #${qrOrderId.slice(-4).toUpperCase()} — ${qrMethod} paid ✓`);
       setQrOrderId(null);
-      setCart([]); setNotes("");
+      setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
       setSelectedTable(null);
     } catch (err: any) {
       toast.error(err.message ?? "Failed to confirm");
@@ -241,7 +292,23 @@ export default function POSPage() {
 
   function openTable(table: CafeTable) {
     setSelectedTable(table);
-    setNotesDraft(ordersByTable.get(table.id)?.[0]?.notes ?? "");
+    const order = ordersByTable.get(table.id)?.[0];
+    setNotesDraft(order?.notes ?? "");
+    setTableDiscountType(order?.discountType ?? "NONE");
+    setTableDiscountId(order?.discountIdNumber ?? "");
+    setTableCustomDiscount("");
+  }
+
+  async function applyTableDiscount(order: Order) {
+    setApplyingDiscount(true);
+    try {
+      await applyDiscount(order.id, tableDiscountType, tableDiscountId, tableCustomDiscount);
+      toast.success(tableDiscountType === "NONE" ? "Discount removed" : "Discount applied");
+    } catch (err: any) {
+      toast.error(err.message ?? "Failed to apply discount");
+    } finally {
+      setApplyingDiscount(false);
+    }
   }
 
   function requestPayment(order: Order, method: "GCASH" | "MAYA") {
@@ -401,10 +468,46 @@ export default function POSPage() {
               ))}
             </div>
 
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-slate-500">Total</span>
-              <span className="text-2xl font-bold text-slate-900">₱{(total / 100).toFixed(2)}</span>
+            <div>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Discount</p>
+              <div className="grid grid-cols-3 gap-1.5">
+                {(["NONE", "SENIOR_PWD", "CUSTOM"] as const).map((t) => (
+                  <button key={t} disabled={t === "CUSTOM" && !isManager}
+                    onClick={() => setDiscountType(t)}
+                    className={`rounded-lg border py-2 text-xs font-semibold transition disabled:opacity-30 ${
+                      discountType === t ? "border-slate-800 bg-slate-800 text-white" : "border-slate-200 text-slate-600 hover:border-slate-300"
+                    }`}>
+                    {t === "NONE" ? "None" : t === "SENIOR_PWD" ? "Senior/PWD" : "Custom"}
+                  </button>
+                ))}
+              </div>
+              {discountType === "SENIOR_PWD" && (
+                <input value={discountId} onChange={(e) => setDiscountId(e.target.value)}
+                  placeholder="OSCA / PWD ID number" className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500" />
+              )}
+              {discountType === "CUSTOM" && (
+                <input type="number" min="0" step="0.01" value={customDiscount} onChange={(e) => setCustomDiscount(e.target.value)}
+                  placeholder="Discount amount (₱)" className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500" />
+              )}
             </div>
+
+            {(() => {
+              const preview = previewDiscount(total, discountType, customDiscount);
+              return (
+                <div className="space-y-1 text-sm">
+                  {discountType !== "NONE" && (
+                    <>
+                      <div className="flex justify-between text-slate-500"><span>Subtotal</span><span>₱{(total / 100).toFixed(2)}</span></div>
+                      <div className="flex justify-between text-red-500"><span>Discount</span><span>−₱{(preview.discount / 100).toFixed(2)}</span></div>
+                    </>
+                  )}
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-500">Total <span className="text-xs text-slate-300">(incl. ₱{(preview.vat / 100).toFixed(2)} VAT)</span></span>
+                    <span className="text-2xl font-bold text-slate-900">₱{(preview.total / 100).toFixed(2)}</span>
+                  </div>
+                </div>
+              );
+            })()}
 
             <button onClick={placeOrder} disabled={cart.length === 0 || placing}
               className="w-full rounded-xl bg-[#0f172a] py-4 text-base font-semibold text-white hover:bg-slate-800 disabled:opacity-40 transition active:scale-[0.98]">
@@ -470,10 +573,45 @@ export default function POSPage() {
                       </li>
                     ))}
                   </ul>
+                  {selectedOrder.discountAmount > 0 && (
+                    <div className="flex justify-between text-xs text-red-500 pt-2">
+                      <span>Discount ({selectedOrder.discountType === "SENIOR_PWD" ? "Senior/PWD" : "Custom"})</span>
+                      <span>−₱{(selectedOrder.discountAmount / 100).toFixed(2)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between items-center border-t border-slate-100 pt-3">
-                    <span className="text-sm text-slate-500">Total</span>
+                    <span className="text-sm text-slate-500">Total <span className="text-xs text-slate-300">(incl. ₱{(selectedOrder.vatAmount / 100).toFixed(2)} VAT)</span></span>
                     <span className="text-lg font-bold text-slate-900">₱{(selectedOrder.total / 100).toFixed(2)}</span>
                   </div>
+
+                  {selectedOrder.status === "PENDING" && (
+                    <div>
+                      <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Discount</p>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {(["NONE", "SENIOR_PWD", "CUSTOM"] as const).map((t) => (
+                          <button key={t} disabled={t === "CUSTOM" && !isManager}
+                            onClick={() => setTableDiscountType(t)}
+                            className={`rounded-lg border py-1.5 text-xs font-semibold transition disabled:opacity-30 ${
+                              tableDiscountType === t ? "border-slate-800 bg-slate-800 text-white" : "border-slate-200 text-slate-600 hover:border-slate-300"
+                            }`}>
+                            {t === "NONE" ? "None" : t === "SENIOR_PWD" ? "Senior/PWD" : "Custom"}
+                          </button>
+                        ))}
+                      </div>
+                      {tableDiscountType === "SENIOR_PWD" && (
+                        <input value={tableDiscountId} onChange={(e) => setTableDiscountId(e.target.value)}
+                          placeholder="OSCA / PWD ID number" className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500" />
+                      )}
+                      {tableDiscountType === "CUSTOM" && (
+                        <input type="number" min="0" step="0.01" value={tableCustomDiscount} onChange={(e) => setTableCustomDiscount(e.target.value)}
+                          placeholder="Discount amount (₱)" className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500" />
+                      )}
+                      <button onClick={() => applyTableDiscount(selectedOrder)} disabled={applyingDiscount}
+                        className="mt-1.5 w-full rounded-lg border border-slate-200 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition disabled:opacity-50">
+                        {applyingDiscount ? "Applying…" : "Apply Discount"}
+                      </button>
+                    </div>
+                  )}
 
                   <div>
                     <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Special Instructions</p>
