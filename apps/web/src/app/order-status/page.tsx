@@ -154,7 +154,7 @@ function OrderStatusInner() {
             </div>
           )}
           <div className="mt-4 border-t border-cream-200 pt-4 flex justify-between font-bold">
-            <span className="text-brown-700">Total <span className="text-[10px] font-normal text-brown-300">(incl. ₱{(order.vatAmount / 100).toFixed(2)} VAT)</span></span>
+            <span className="text-brown-700">Total {order.vatAmount > 0 && <span className="text-[10px] font-normal text-brown-300">(incl. ₱{(order.vatAmount / 100).toFixed(2)} VAT)</span>}</span>
             <span className="text-gold-600">₱{(order.total / 100).toFixed(2)}</span>
           </div>
         </div>

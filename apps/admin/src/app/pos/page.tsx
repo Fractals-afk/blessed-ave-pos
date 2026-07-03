@@ -30,19 +30,21 @@ function tableBadge(status?: string) {
 }
 
 // Client-side preview only — server recomputes authoritatively from the
-// order's own subtotal once the discount is applied.
-function previewDiscount(subtotal: number, type: DiscountType, customAmount: string) {
+// order's own subtotal once the discount is applied. When VAT is off
+// (non-VAT registered business) there's no VAT to strip, so senior/PWD is a
+// straight 20% off and no VAT portion is shown.
+function previewDiscount(subtotal: number, type: DiscountType, customAmount: string, vatEnabled: boolean) {
   if (type === "SENIOR_PWD") {
-    const vatExempt = Math.round(subtotal / 1.12);
-    const discount = Math.round(vatExempt * 0.2);
-    return { total: vatExempt - discount, discount, vat: 0 };
+    const base = vatEnabled ? Math.round(subtotal / 1.12) : subtotal;
+    const discount = Math.round(base * 0.2);
+    return { total: base - discount, discount, vat: 0 };
   }
   if (type === "CUSTOM") {
     const cents = Math.round(parseFloat(customAmount || "0") * 100) || 0;
     const total = Math.max(0, subtotal - cents);
-    return { total, discount: cents, vat: Math.round(total - total / 1.12) };
+    return { total, discount: cents, vat: vatEnabled ? Math.round(total - total / 1.12) : 0 };
   }
-  return { total: subtotal, discount: 0, vat: Math.round(subtotal - subtotal / 1.12) };
+  return { total: subtotal, discount: 0, vat: vatEnabled ? Math.round(subtotal - subtotal / 1.12) : 0 };
 }
 
 function tableSort(a: CafeTable, b: CafeTable) {
@@ -77,6 +79,10 @@ export default function POSPage() {
   const [discountId,     setDiscountId]     = useState("");
   const [customDiscount, setCustomDiscount] = useState("");
 
+  // Business-level VAT toggle (server-side setting; manager/owner only)
+  const [vatEnabled,  setVatEnabled]  = useState(true);
+  const [togglingVat, setTogglingVat] = useState(false);
+
   // Discount applied to an existing table order (dine-in, pending payment)
   const [tableDiscountType, setTableDiscountType] = useState<DiscountType>("NONE");
   const [tableDiscountId,   setTableDiscountId]   = useState("");
@@ -101,6 +107,7 @@ export default function POSPage() {
   const [refunding,     setRefunding]     = useState(false);
 
   useEffect(() => {
+    adminApi.settings.getVat().then((r) => setVatEnabled(r.data.vatEnabled)).catch(() => {});
     adminApi.menu.getAll().then((r) => {
       setCategories(r.data);
       const firstVisible = r.data.find((c) => c.items.some((i) => i.available));
@@ -175,6 +182,19 @@ export default function POSPage() {
 
   function auth() {
     return { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("accessToken")}` };
+  }
+
+  async function toggleVat() {
+    setTogglingVat(true);
+    try {
+      const r = await adminApi.settings.setVat(!vatEnabled);
+      setVatEnabled(r.data.vatEnabled);
+      toast.success(r.data.vatEnabled ? "VAT on — totals include 12% VAT" : "VAT off — no VAT on new orders");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to update VAT setting");
+    } finally {
+      setTogglingVat(false);
+    }
   }
 
   function addToCart(item: MenuItem) {
@@ -468,6 +488,17 @@ export default function POSPage() {
               ))}
             </div>
 
+            {isManager && (
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">VAT (12% incl.)</p>
+                <button onClick={toggleVat} disabled={togglingVat}
+                  className={`relative h-6 w-11 rounded-full transition disabled:opacity-50 ${vatEnabled ? "bg-green-500" : "bg-slate-300"}`}
+                  aria-label={vatEnabled ? "Turn VAT off" : "Turn VAT on"}>
+                  <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${vatEnabled ? "left-[22px]" : "left-0.5"}`} />
+                </button>
+              </div>
+            )}
+
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Discount</p>
               <div className="grid grid-cols-3 gap-1.5">
@@ -492,7 +523,7 @@ export default function POSPage() {
             </div>
 
             {(() => {
-              const preview = previewDiscount(total, discountType, customDiscount);
+              const preview = previewDiscount(total, discountType, customDiscount, vatEnabled);
               return (
                 <div className="space-y-1 text-sm">
                   {discountType !== "NONE" && (
@@ -502,7 +533,7 @@ export default function POSPage() {
                     </>
                   )}
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-500">Total <span className="text-xs text-slate-300">(incl. ₱{(preview.vat / 100).toFixed(2)} VAT)</span></span>
+                    <span className="text-sm text-slate-500">Total {preview.vat > 0 && <span className="text-xs text-slate-300">(incl. ₱{(preview.vat / 100).toFixed(2)} VAT)</span>}</span>
                     <span className="text-2xl font-bold text-slate-900">₱{(preview.total / 100).toFixed(2)}</span>
                   </div>
                 </div>
@@ -580,7 +611,7 @@ export default function POSPage() {
                     </div>
                   )}
                   <div className="flex justify-between items-center border-t border-slate-100 pt-3">
-                    <span className="text-sm text-slate-500">Total <span className="text-xs text-slate-300">(incl. ₱{(selectedOrder.vatAmount / 100).toFixed(2)} VAT)</span></span>
+                    <span className="text-sm text-slate-500">Total {selectedOrder.vatAmount > 0 && <span className="text-xs text-slate-300">(incl. ₱{(selectedOrder.vatAmount / 100).toFixed(2)} VAT)</span>}</span>
                     <span className="text-lg font-bold text-slate-900">₱{(selectedOrder.total / 100).toFixed(2)}</span>
                   </div>
 

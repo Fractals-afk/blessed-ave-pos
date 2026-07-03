@@ -191,6 +191,14 @@ export const adminApi = {
     sales: (from: string, to: string) =>
       apiFetch<{ data: unknown }>(`/api/reports/sales?from=${from}&to=${to}`),
   },
+  settings: {
+    getVat: () => apiFetch<{ data: { vatEnabled: boolean } }>("/api/settings/vat"),
+    setVat: (vatEnabled: boolean) =>
+      apiFetch<{ data: { vatEnabled: boolean } }>("/api/settings/vat", {
+        method: "PUT",
+        body: JSON.stringify({ vatEnabled }),
+      }),
+  },
   tables: {
     list: () =>
       apiFetch<{ data: import("@blessed-ave/types").CafeTable[] }>("/api/tables"),

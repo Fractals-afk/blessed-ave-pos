@@ -428,6 +428,16 @@ enum CostFrequency {
   YEARLY
 }
 
+// Key-value store for business-level toggles (e.g. "vat_enabled").
+// Values are strings; booleans stored as "true"/"false".
+model AppSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("app_settings")
+}
+
 model OperatingCost {
   id         String        @id @default(cuid())
   name       String // e.g. "Monthly Rent", "Electricity Bill"

@@ -5,7 +5,7 @@ import { requireAuth, requireRole, tryAuth } from "../middleware/auth";
 import { AppError } from "../middleware/errorHandler";
 import { io } from "../index";
 import { emitOrderStatusUpdate } from "../socket";
-import { vatPortion, seniorPwdDiscount } from "../lib/vat";
+import { vatPortion, seniorPwdDiscount, isVatEnabled } from "../lib/vat";
 
 export const ordersRouter = Router();
 
@@ -123,7 +123,7 @@ ordersRouter.post("/", tryAuth, async (req, res, next) => {
         notes: body.notes,
         subtotal,
         total: subtotal,
-        vatAmount: vatPortion(subtotal),
+        vatAmount: vatPortion(subtotal, await isVatEnabled()),
         items: { create: orderItemsData },
       },
       include: {
@@ -299,6 +299,8 @@ ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
       throw new AppError("Discount can only be applied before payment is confirmed");
     }
 
+    const vatEnabled = await isVatEnabled();
+
     let data: {
       discountType: "NONE" | "SENIOR_PWD" | "CUSTOM";
       discountAmount: number;
@@ -313,10 +315,10 @@ ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
         discountAmount: 0,
         discountIdNumber: null,
         total: order.subtotal,
-        vatAmount: vatPortion(order.subtotal),
+        vatAmount: vatPortion(order.subtotal, vatEnabled),
       };
     } else if (body.discountType === "SENIOR_PWD") {
-      const { total, discountAmount } = seniorPwdDiscount(order.subtotal);
+      const { total, discountAmount } = seniorPwdDiscount(order.subtotal, vatEnabled);
       data = {
         discountType: "SENIOR_PWD",
         discountAmount,
@@ -332,7 +334,7 @@ ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
         discountAmount: body.amount,
         discountIdNumber: null,
         total,
-        vatAmount: vatPortion(total),
+        vatAmount: vatPortion(total, vatEnabled),
       };
     }
 

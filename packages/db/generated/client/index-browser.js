@@ -329,6 +329,12 @@ exports.Prisma.TillSessionScalarFieldEnum = {
   notes: 'notes'
 };
 
+exports.Prisma.AppSettingScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.OperatingCostScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -460,6 +466,7 @@ exports.Prisma.ModelName = {
   Shift: 'Shift',
   ClockEvent: 'ClockEvent',
   TillSession: 'TillSession',
+  AppSetting: 'AppSetting',
   OperatingCost: 'OperatingCost'
 };
 
