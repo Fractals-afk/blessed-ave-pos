@@ -20,6 +20,7 @@ import { operatingCostsRouter } from "./routes/operating-costs";
 import { pnlRouter } from "./routes/pnl";
 import { errorHandler } from "./middleware/errorHandler";
 import { registerSocketHandlers } from "./socket";
+import { scheduleLowStockAlertJob } from "./jobs/lowStockAlert";
 
 const app = express();
 const server = http.createServer(app);
@@ -77,5 +78,8 @@ const PORT = process.env.PORT ?? 4000;
 server.listen(PORT, () => {
   console.log(`🚀 Blessed Ave API running on http://localhost:${PORT}`);
 });
+
+// ─── Scheduled jobs ─────────────────────────────────────────────────────────
+scheduleLowStockAlertJob();
 
 export default app;
