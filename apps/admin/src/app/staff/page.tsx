@@ -17,6 +17,8 @@ export default function StaffPage() {
   const [weekStart, setWeekStart] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [showAdd,   setShowAdd]   = useState(false);
   const [form,      setForm]      = useState({ name:"", email:"", password:"", role:"STAFF" });
+  const [showAddShift, setShowAddShift] = useState(false);
+  const [shiftForm, setShiftForm] = useState({ userId:"", date:"", startTime:"09:00", endTime:"17:00", notes:"" });
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
   async function loadStaff() { const res = await adminApi.staff.list(); setStaff(res.data); }
@@ -34,6 +36,47 @@ export default function StaffPage() {
   async function toggleActive(user: User) {
     try { await adminApi.staff.update(user.id, { active: !user.active }); loadStaff(); }
     catch (err: any) { toast.error(err.message); }
+  }
+
+  function openAddShift(day?: Date) {
+    setShiftForm({ userId: staff[0]?.id ?? "", date: format(day ?? new Date(), "yyyy-MM-dd"), startTime: "09:00", endTime: "17:00", notes: "" });
+    setShowAddShift(true);
+  }
+  async function handleAddShift() {
+    if (!shiftForm.userId) { toast.error("Select a staff member"); return; }
+    try { await adminApi.staff.createShift(shiftForm); toast.success("Shift added"); setShowAddShift(false); loadShifts(); }
+    catch (err: any) { toast.error(err.message); }
+  }
+  async function handleDeleteShift(id: string) {
+    try { await adminApi.staff.deleteShift(id); loadShifts(); }
+    catch (err: any) { toast.error(err.message); }
+  }
+
+  async function copyRosterForMessenger() {
+    const lines: string[] = [];
+    for (const day of weekDays) {
+      const dayStr = format(day, "yyyy-MM-dd");
+      const dayShifts = shifts
+        .filter((s) => format(new Date(s.date), "yyyy-MM-dd") === dayStr)
+        .sort((a, b) => a.startTime.localeCompare(b.startTime));
+      const label = format(day, "EEE M/d");
+      if (dayShifts.length === 0) {
+        lines.push(`${label}: Off`);
+      } else {
+        const entries = dayShifts
+          .map((s) => `${(s as any).user?.name ?? "—"} ${s.startTime}-${s.endTime}`)
+          .join(", ");
+        lines.push(`${label}: ${entries}`);
+      }
+    }
+    const header = `Roster: ${format(weekStart, "MMM d")} - ${format(addDays(weekStart, 6), "MMM d, yyyy")}`;
+    const text = [header, "", ...lines].join("\n");
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Roster copied to clipboard");
+    } catch (err) {
+      toast.error("Could not copy to clipboard");
+    }
   }
 
   const ROLE_COLOR: Record<string, string> = {
@@ -109,10 +152,20 @@ export default function StaffPage() {
 
         {tab === "schedule" && (
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <button onClick={() => setWeekStart((w) => addDays(w,-7))} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50 transition">← Prev</button>
-              <span className="text-sm font-medium text-slate-700">{format(weekStart,"MMM d")} – {format(addDays(weekStart,6),"MMM d, yyyy")}</span>
-              <button onClick={() => setWeekStart((w) => addDays(w,7))} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50 transition">Next →</button>
+            <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
+              <div className="flex items-center gap-3">
+                <button onClick={() => setWeekStart((w) => addDays(w,-7))} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50 transition">← Prev</button>
+                <span className="text-sm font-medium text-slate-700">{format(weekStart,"MMM d")} – {format(addDays(weekStart,6),"MMM d, yyyy")}</span>
+                <button onClick={() => setWeekStart((w) => addDays(w,7))} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50 transition">Next →</button>
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={copyRosterForMessenger} className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">
+                  Copy for Messenger
+                </button>
+                <button onClick={() => openAddShift()} className="rounded-lg bg-[#0f172a] px-3 py-1.5 text-sm font-semibold text-white hover:bg-slate-800 transition">
+                  + Add Shift
+                </button>
+              </div>
             </div>
             <div className="grid grid-cols-7 gap-2">
               {weekDays.map((day) => {
@@ -120,11 +173,15 @@ export default function StaffPage() {
                 const dayShifts = shifts.filter((s) => format(new Date(s.date),"yyyy-MM-dd") === dayStr);
                 return (
                   <div key={dayStr} className="rounded-xl bg-white border border-slate-200 p-3 min-h-[110px]">
-                    <p className="text-xs font-semibold text-slate-400 mb-2">{format(day,"EEE d")}</p>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-semibold text-slate-400">{format(day,"EEE d")}</p>
+                      <button onClick={() => openAddShift(day)} className="text-xs text-slate-300 hover:text-slate-600 transition font-bold">+</button>
+                    </div>
                     {dayShifts.map((shift) => (
-                      <div key={shift.id} className="mb-1.5 rounded-md bg-slate-100 px-2 py-1.5">
+                      <div key={shift.id} className="mb-1.5 rounded-md bg-slate-100 px-2 py-1.5 group relative">
                         <p className="text-xs font-semibold text-slate-700">{(shift as any).user?.name ?? "—"}</p>
                         <p className="text-xs text-slate-500">{shift.startTime}–{shift.endTime}</p>
+                        <button onClick={() => handleDeleteShift(shift.id)} className="absolute top-1 right-1 text-[10px] text-slate-400 hover:text-red-500 transition opacity-0 group-hover:opacity-100">✕</button>
                       </div>
                     ))}
                   </div>
@@ -153,6 +210,41 @@ export default function StaffPage() {
             <div className="mt-5 flex gap-3">
               <button onClick={() => setShowAdd(false)} className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">Cancel</button>
               <button onClick={handleAddStaff} className="flex-1 rounded-lg bg-[#0f172a] py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition">Add</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showAddShift && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl border border-slate-200 mx-4">
+            <h3 className="font-bold text-slate-900 mb-5">Add Shift</h3>
+            <div className="space-y-3">
+              <div>
+                <label className={lCls}>Staff Member</label>
+                <select value={shiftForm.userId} onChange={(e) => setShiftForm((p) => ({...p,userId:e.target.value}))} className={iCls}>
+                  {staff.length === 0 && <option value="">No staff yet</option>}
+                  {staff.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className={lCls}>Date</label>
+                <input type="date" value={shiftForm.date} onChange={(e) => setShiftForm((p) => ({...p,date:e.target.value}))} className={iCls} />
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-1"><label className={lCls}>Start</label>
+                  <input type="time" value={shiftForm.startTime} onChange={(e) => setShiftForm((p) => ({...p,startTime:e.target.value}))} className={iCls} /></div>
+                <div className="flex-1"><label className={lCls}>End</label>
+                  <input type="time" value={shiftForm.endTime} onChange={(e) => setShiftForm((p) => ({...p,endTime:e.target.value}))} className={iCls} /></div>
+              </div>
+              <div>
+                <label className={lCls}>Notes (optional)</label>
+                <input type="text" value={shiftForm.notes} onChange={(e) => setShiftForm((p) => ({...p,notes:e.target.value}))} className={iCls} />
+              </div>
+            </div>
+            <div className="mt-5 flex gap-3">
+              <button onClick={() => setShowAddShift(false)} className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">Cancel</button>
+              <button onClick={handleAddShift} className="flex-1 rounded-lg bg-[#0f172a] py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition">Add</button>
             </div>
           </div>
         </div>
