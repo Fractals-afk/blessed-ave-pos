@@ -18,6 +18,7 @@ enum UserRole {
   OWNER
   MANAGER
   STAFF
+  KITCHEN
 }
 
 model User {
@@ -155,6 +156,7 @@ model Order {
   status           OrderStatus  @default(PENDING)
   tableId          String?
   staffId          String? // for POS orders
+  offlineId        String?      @unique // client-generated UUID for offline cart sync idempotency
   customerName     String?
   customerPhone    String?
   customerEmail    String?

@@ -9,6 +9,8 @@ import { useRequireRole } from "@/lib/useRequireRole";
 import type { CafeTable, DiscountType, MenuCategory, MenuItem, ModifierOption, Order } from "@blessed-ave/types";
 import toast from "react-hot-toast";
 import { QrPlaceholder } from "@/components/QrPlaceholder";
+import { enqueueOrder, loadMenuCache, newOfflineId, pendingCount, saveMenuCache } from "@/lib/offline";
+import { syncOfflineQueue } from "@/lib/sync";
 
 const ACTIVE_STATUSES = ["PENDING", "CONFIRMED", "PREPARING", "READY"];
 
@@ -114,16 +116,67 @@ export default function POSPage() {
   const [savingNotes,   setSavingNotes]   = useState(false);
   const [refunding,     setRefunding]     = useState(false);
 
+  // Offline cart support — connectivity state, queued-sale count, and the
+  // not-yet-created order waiting on the cash/QR modal to pick a payment
+  // method before it's written to the local queue.
+  const [online,       setOnline]       = useState(true);
+  const [queuedCount,  setQueuedCount]  = useState(0);
+  const [offlinePending, setOfflinePending] = useState<{
+    offlineId: string;
+    orderBody: Record<string, unknown>;
+    discount?: { discountType: string; discountIdNumber?: string; amount?: number };
+  } | null>(null);
+
   useEffect(() => {
     adminApi.settings.getVat().then((r) => setVatEnabled(r.data.vatEnabled)).catch(() => {});
     adminApi.menu.getAll().then((r) => {
       setCategories(r.data);
+      saveMenuCache(r.data);
       const firstVisible = r.data.find((c) => c.items.some((i) => i.available));
       if (firstVisible) {
         setActiveGroup(groupForCategory(firstVisible.name));
         setActiveCategory(firstVisible.id);
       }
+    }).catch(() => {
+      // No connection on load — fall back to whatever menu was last cached
+      // so the cart can still take orders.
+      const cached = loadMenuCache();
+      if (!cached) return;
+      setCategories(cached);
+      const firstVisible = cached.find((c) => c.items.some((i) => i.available));
+      if (firstVisible) {
+        setActiveGroup(groupForCategory(firstVisible.name));
+        setActiveCategory(firstVisible.id);
+      }
     });
+  }, []);
+
+  // Connectivity tracking + offline queue sync. `navigator.onLine` only
+  // reflects the network interface, not real reachability, so a successful
+  // sync pass is what actually clears the "offline" banner.
+  useEffect(() => {
+    setOnline(navigator.onLine);
+    setQueuedCount(pendingCount());
+
+    async function attemptSync() {
+      if (!navigator.onLine) return;
+      const result = await syncOfflineQueue();
+      setQueuedCount(pendingCount());
+      if (result.synced > 0) toast.success(`Synced ${result.synced} offline sale${result.synced === 1 ? "" : "s"}`);
+    }
+
+    function goOnline() { setOnline(true); attemptSync(); }
+    function goOffline() { setOnline(false); }
+
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+    attemptSync();
+    const syncPoll = setInterval(attemptSync, 30000);
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+      clearInterval(syncPoll);
+    };
   }, []);
 
   useEffect(() => {
@@ -253,24 +306,51 @@ export default function POSPage() {
     return (await adminApi.orders.setDiscount(orderId, body)).data;
   }
 
+  function discountForSync(): { discountType: string; discountIdNumber?: string; amount?: number } | undefined {
+    if (discountType === "NONE") return undefined;
+    if (discountType === "SENIOR_PWD") return { discountType, discountIdNumber: discountId.trim() };
+    return { discountType, amount: Math.round(parseFloat(customDiscount || "0") * 100) };
+  }
+
   async function placeOrder() {
     if (cart.length === 0) return;
     setPlacing(true);
     try {
+      const orderBody = {
+        source: "POS", notes,
+        items: cart.map((i) => ({
+          menuItemId: i.menuItem.id, quantity: i.quantity,
+          selectedOptions: i.selectedOptions.map((o) => ({ modifierOptionId: o.id })),
+        })),
+      };
+
+      if (!online) {
+        // No connection — stash the order locally and let the cashier still
+        // pick cash/QR and enter the tendered amount; nothing hits the
+        // network until confirmCashPayment/confirmQrPayment enqueue it.
+        const preview = previewDiscount(total, discountType, customDiscount, vatEnabled);
+        const offlineId = newOfflineId();
+        setOfflinePending({ offlineId, orderBody, discount: discountForSync() });
+        if (payMethod === "CASH") {
+          setCashOrderId(offlineId);
+          setCashDue(preview.total);
+          setCashTendered("");
+          setCashOnPaid(() => () => {
+            setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
+          });
+        } else {
+          setQrMethod(payMethod);
+          setQrAmount(preview.total);
+          setQrOrderId(offlineId);
+        }
+        return;
+      }
+
       const API = await resolveApiBase();
-      const res = await fetch(`${API}/api/orders`, {
-        method: "POST", headers: auth(),
-        body: JSON.stringify({
-          source: "POS", notes,
-          items: cart.map((i) => ({
-            menuItemId: i.menuItem.id, quantity: i.quantity,
-            selectedOptions: i.selectedOptions.map((o) => ({ modifierOptionId: o.id })),
-          })),
-        }),
-      });
-      const orderBody = await res.json();
-      if (!res.ok) throw new Error(orderBody.error ?? "Failed to place order");
-      let order = orderBody.data;
+      const res = await fetch(`${API}/api/orders`, { method: "POST", headers: auth(), body: JSON.stringify(orderBody) });
+      const resBody = await res.json();
+      if (!res.ok) throw new Error(resBody.error ?? "Failed to place order");
+      let order = resBody.data;
 
       if (discountType !== "NONE") {
         order = await applyDiscount(order.id, discountType, discountId, customDiscount);
@@ -300,6 +380,19 @@ export default function POSPage() {
     if (!qrOrderId) return;
     setConfirming(true);
     try {
+      if (offlinePending && offlinePending.offlineId === qrOrderId) {
+        enqueueOrder({
+          offlineId: offlinePending.offlineId, createdAt: new Date().toISOString(),
+          orderBody: offlinePending.orderBody, discount: offlinePending.discount,
+          payment: { method: qrMethod }, synced: false, localPreview: {} as Order,
+        });
+        setQueuedCount(pendingCount());
+        toast.success(`${qrMethod === "GCASH" ? "GCash" : "Maya"} sale saved offline — will sync when online`);
+        setOfflinePending(null);
+        setQrOrderId(null);
+        setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
+        return;
+      }
       const API = await resolveApiBase();
       const res = await fetch(`${API}/api/payments/qr-confirm`, {
         method: "POST", headers: auth(),
@@ -355,6 +448,19 @@ export default function POSPage() {
     if (!cashOrderId) return;
     setCashConfirming(true);
     try {
+      if (offlinePending && offlinePending.offlineId === cashOrderId) {
+        enqueueOrder({
+          offlineId: offlinePending.offlineId, createdAt: new Date().toISOString(),
+          orderBody: offlinePending.orderBody, discount: offlinePending.discount,
+          payment: { method: "CASH" }, synced: false, localPreview: {} as Order,
+        });
+        setQueuedCount(pendingCount());
+        toast.success("Cash sale saved offline — will sync when online");
+        setOfflinePending(null);
+        cashOnPaid?.();
+        setCashOrderId(null);
+        return;
+      }
       const API = await resolveApiBase();
       const res = await fetch(`${API}/api/payments/cash`, {
         method: "POST", headers: auth(),
@@ -411,6 +517,13 @@ export default function POSPage() {
   return (
     <AdminLayout>
       <div className="flex h-screen flex-col overflow-hidden">
+      {(!online || queuedCount > 0) && (
+        <div className={`flex items-center justify-center gap-2 px-4 py-1.5 text-xs font-semibold ${online ? "bg-amber-100 text-amber-800" : "bg-red-100 text-red-800"}`}>
+          <span className={`h-2 w-2 rounded-full ${online ? "bg-amber-500" : "bg-red-500 animate-pulse"}`} />
+          {online ? `Syncing — ${queuedCount} offline sale${queuedCount === 1 ? "" : "s"} pending` : `Offline — ${queuedCount} sale${queuedCount === 1 ? "" : "s"} queued, will sync automatically`}
+        </div>
+      )}
+      <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex h-[68%] overflow-hidden">
 
         {/* ── Menu panel ───────────────────────────────────────── */}
@@ -585,6 +698,7 @@ export default function POSPage() {
             })}
           </div>
         </div>
+      </div>
       </div>
       </div>
 

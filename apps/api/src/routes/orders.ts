@@ -28,6 +28,9 @@ const createOrderSchema = z.object({
   customerEmail: z.string().email().optional(),
   notes: z.string().optional(),
   items: z.array(orderItemSchema).min(1),
+  // Client-generated UUID set by offline carts so a retried sync doesn't
+  // create a duplicate order once connectivity returns.
+  offlineId: z.string().optional(),
 });
 
 // POST /api/orders — create a new order (public for ONLINE & QR, auth for POS)
@@ -37,6 +40,17 @@ ordersRouter.post("/", tryAuth, async (req, res, next) => {
 
     if (body.source === "POS" && !req.user) {
       throw new AppError("Authentication required for POS orders", 401);
+    }
+
+    if (body.offlineId) {
+      const existing = await prisma.order.findUnique({
+        where: { offlineId: body.offlineId },
+        include: { items: { include: { selectedOptions: true } }, table: true, payment: true },
+      });
+      if (existing) {
+        res.status(200).json({ data: existing });
+        return;
+      }
     }
 
     if (body.source === "QR_TABLE" && !body.tableId) {
@@ -116,6 +130,7 @@ ordersRouter.post("/", tryAuth, async (req, res, next) => {
       data: {
         source: body.source,
         tableId: body.tableId,
+        offlineId: body.offlineId,
         staffId: body.source === "POS" ? req.user!.userId : undefined,
         customerName: body.customerName,
         customerPhone: body.customerPhone,

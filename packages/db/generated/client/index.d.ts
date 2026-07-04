@@ -10331,6 +10331,7 @@ export namespace Prisma {
     status: $Enums.OrderStatus | null
     tableId: string | null
     staffId: string | null
+    offlineId: string | null
     customerName: string | null
     customerPhone: string | null
     customerEmail: string | null
@@ -10354,6 +10355,7 @@ export namespace Prisma {
     status: $Enums.OrderStatus | null
     tableId: string | null
     staffId: string | null
+    offlineId: string | null
     customerName: string | null
     customerPhone: string | null
     customerEmail: string | null
@@ -10377,6 +10379,7 @@ export namespace Prisma {
     status: number
     tableId: number
     staffId: number
+    offlineId: number
     customerName: number
     customerPhone: number
     customerEmail: number
@@ -10416,6 +10419,7 @@ export namespace Prisma {
     status?: true
     tableId?: true
     staffId?: true
+    offlineId?: true
     customerName?: true
     customerPhone?: true
     customerEmail?: true
@@ -10439,6 +10443,7 @@ export namespace Prisma {
     status?: true
     tableId?: true
     staffId?: true
+    offlineId?: true
     customerName?: true
     customerPhone?: true
     customerEmail?: true
@@ -10462,6 +10467,7 @@ export namespace Prisma {
     status?: true
     tableId?: true
     staffId?: true
+    offlineId?: true
     customerName?: true
     customerPhone?: true
     customerEmail?: true
@@ -10572,6 +10578,7 @@ export namespace Prisma {
     status: $Enums.OrderStatus
     tableId: string | null
     staffId: string | null
+    offlineId: string | null
     customerName: string | null
     customerPhone: string | null
     customerEmail: string | null
@@ -10614,6 +10621,7 @@ export namespace Prisma {
     status?: boolean
     tableId?: boolean
     staffId?: boolean
+    offlineId?: boolean
     customerName?: boolean
     customerPhone?: boolean
     customerEmail?: boolean
@@ -10642,6 +10650,7 @@ export namespace Prisma {
     status?: boolean
     tableId?: boolean
     staffId?: boolean
+    offlineId?: boolean
     customerName?: boolean
     customerPhone?: boolean
     customerEmail?: boolean
@@ -10667,6 +10676,7 @@ export namespace Prisma {
     status?: boolean
     tableId?: boolean
     staffId?: boolean
+    offlineId?: boolean
     customerName?: boolean
     customerPhone?: boolean
     customerEmail?: boolean
@@ -10710,6 +10720,7 @@ export namespace Prisma {
       status: $Enums.OrderStatus
       tableId: string | null
       staffId: string | null
+      offlineId: string | null
       customerName: string | null
       customerPhone: string | null
       customerEmail: string | null
@@ -11127,6 +11138,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Order", 'OrderStatus'>
     readonly tableId: FieldRef<"Order", 'String'>
     readonly staffId: FieldRef<"Order", 'String'>
+    readonly offlineId: FieldRef<"Order", 'String'>
     readonly customerName: FieldRef<"Order", 'String'>
     readonly customerPhone: FieldRef<"Order", 'String'>
     readonly customerEmail: FieldRef<"Order", 'String'>
@@ -25521,6 +25533,7 @@ export namespace Prisma {
     status: 'status',
     tableId: 'tableId',
     staffId: 'staffId',
+    offlineId: 'offlineId',
     customerName: 'customerName',
     customerPhone: 'customerPhone',
     customerEmail: 'customerEmail',
@@ -26443,6 +26456,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     tableId?: StringNullableFilter<"Order"> | string | null
     staffId?: StringNullableFilter<"Order"> | string | null
+    offlineId?: StringNullableFilter<"Order"> | string | null
     customerName?: StringNullableFilter<"Order"> | string | null
     customerPhone?: StringNullableFilter<"Order"> | string | null
     customerEmail?: StringNullableFilter<"Order"> | string | null
@@ -26470,6 +26484,7 @@ export namespace Prisma {
     status?: SortOrder
     tableId?: SortOrderInput | SortOrder
     staffId?: SortOrderInput | SortOrder
+    offlineId?: SortOrderInput | SortOrder
     customerName?: SortOrderInput | SortOrder
     customerPhone?: SortOrderInput | SortOrder
     customerEmail?: SortOrderInput | SortOrder
@@ -26493,6 +26508,7 @@ export namespace Prisma {
 
   export type OrderWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    offlineId?: string
     AND?: OrderWhereInput | OrderWhereInput[]
     OR?: OrderWhereInput[]
     NOT?: OrderWhereInput | OrderWhereInput[]
@@ -26519,7 +26535,7 @@ export namespace Prisma {
     staff?: XOR<UserNullableRelationFilter, UserWhereInput> | null
     items?: OrderItemListRelationFilter
     payment?: XOR<PaymentNullableRelationFilter, PaymentWhereInput> | null
-  }, "id">
+  }, "id" | "offlineId">
 
   export type OrderOrderByWithAggregationInput = {
     id?: SortOrder
@@ -26527,6 +26543,7 @@ export namespace Prisma {
     status?: SortOrder
     tableId?: SortOrderInput | SortOrder
     staffId?: SortOrderInput | SortOrder
+    offlineId?: SortOrderInput | SortOrder
     customerName?: SortOrderInput | SortOrder
     customerPhone?: SortOrderInput | SortOrder
     customerEmail?: SortOrderInput | SortOrder
@@ -26558,6 +26575,7 @@ export namespace Prisma {
     status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
     tableId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     staffId?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    offlineId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     customerName?: StringNullableWithAggregatesFilter<"Order"> | string | null
     customerPhone?: StringNullableWithAggregatesFilter<"Order"> | string | null
     customerEmail?: StringNullableWithAggregatesFilter<"Order"> | string | null
@@ -28028,6 +28046,7 @@ export namespace Prisma {
     id?: string
     source: $Enums.OrderSource
     status?: $Enums.OrderStatus
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -28055,6 +28074,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     tableId?: string | null
     staffId?: string | null
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -28078,6 +28098,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28105,6 +28126,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     tableId?: NullableStringFieldUpdateOperationsInput | string | null
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28130,6 +28152,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     tableId?: string | null
     staffId?: string | null
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -28151,6 +28174,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28174,6 +28198,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     tableId?: NullableStringFieldUpdateOperationsInput | string | null
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29736,6 +29761,7 @@ export namespace Prisma {
     status?: SortOrder
     tableId?: SortOrder
     staffId?: SortOrder
+    offlineId?: SortOrder
     customerName?: SortOrder
     customerPhone?: SortOrder
     customerEmail?: SortOrder
@@ -29766,6 +29792,7 @@ export namespace Prisma {
     status?: SortOrder
     tableId?: SortOrder
     staffId?: SortOrder
+    offlineId?: SortOrder
     customerName?: SortOrder
     customerPhone?: SortOrder
     customerEmail?: SortOrder
@@ -29789,6 +29816,7 @@ export namespace Prisma {
     status?: SortOrder
     tableId?: SortOrder
     staffId?: SortOrder
+    offlineId?: SortOrder
     customerName?: SortOrder
     customerPhone?: SortOrder
     customerEmail?: SortOrder
@@ -32351,6 +32379,7 @@ export namespace Prisma {
     id?: string
     source: $Enums.OrderSource
     status?: $Enums.OrderStatus
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -32376,6 +32405,7 @@ export namespace Prisma {
     source: $Enums.OrderSource
     status?: $Enums.OrderStatus
     tableId?: string | null
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -32576,6 +32606,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
     tableId?: StringNullableFilter<"Order"> | string | null
     staffId?: StringNullableFilter<"Order"> | string | null
+    offlineId?: StringNullableFilter<"Order"> | string | null
     customerName?: StringNullableFilter<"Order"> | string | null
     customerPhone?: StringNullableFilter<"Order"> | string | null
     customerEmail?: StringNullableFilter<"Order"> | string | null
@@ -33324,6 +33355,7 @@ export namespace Prisma {
     id?: string
     source: $Enums.OrderSource
     status?: $Enums.OrderStatus
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -33349,6 +33381,7 @@ export namespace Prisma {
     source: $Enums.OrderSource
     status?: $Enums.OrderStatus
     staffId?: string | null
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -33638,6 +33671,7 @@ export namespace Prisma {
     id?: string
     source: $Enums.OrderSource
     status?: $Enums.OrderStatus
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -33664,6 +33698,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     tableId?: string | null
     staffId?: string | null
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -33759,6 +33794,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33785,6 +33821,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     tableId?: NullableStringFieldUpdateOperationsInput | string | null
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33966,6 +34003,7 @@ export namespace Prisma {
     id?: string
     source: $Enums.OrderSource
     status?: $Enums.OrderStatus
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -33992,6 +34030,7 @@ export namespace Prisma {
     status?: $Enums.OrderStatus
     tableId?: string | null
     staffId?: string | null
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -34030,6 +34069,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34056,6 +34096,7 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     tableId?: NullableStringFieldUpdateOperationsInput | string | null
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35170,6 +35211,7 @@ export namespace Prisma {
     source: $Enums.OrderSource
     status?: $Enums.OrderStatus
     tableId?: string | null
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -35239,6 +35281,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35264,6 +35307,7 @@ export namespace Prisma {
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     tableId?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35288,6 +35332,7 @@ export namespace Prisma {
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     tableId?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35658,6 +35703,7 @@ export namespace Prisma {
     source: $Enums.OrderSource
     status?: $Enums.OrderStatus
     staffId?: string | null
+    offlineId?: string | null
     customerName?: string | null
     customerPhone?: string | null
     customerEmail?: string | null
@@ -35679,6 +35725,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35704,6 +35751,7 @@ export namespace Prisma {
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35728,6 +35776,7 @@ export namespace Prisma {
     source?: EnumOrderSourceFieldUpdateOperationsInput | $Enums.OrderSource
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     staffId?: NullableStringFieldUpdateOperationsInput | string | null
+    offlineId?: NullableStringFieldUpdateOperationsInput | string | null
     customerName?: NullableStringFieldUpdateOperationsInput | string | null
     customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
     customerEmail?: NullableStringFieldUpdateOperationsInput | string | null

@@ -72,6 +72,7 @@ export interface Order {
   status: OrderStatus;
   tableId?: string;
   table?: CafeTable;
+  offlineId?: string;
   customerName?: string;
   customerPhone?: string;
   customerEmail?: string;
