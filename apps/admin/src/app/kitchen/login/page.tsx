@@ -6,7 +6,7 @@ import { adminApi } from "@/lib/api";
 import { useAuth } from "@/store/auth";
 import toast from "react-hot-toast";
 
-export default function LoginPage() {
+export default function KitchenLoginPage() {
   const router  = useRouter();
   const setAuth = useAuth((s) => s.setAuth);
   const [email,    setEmail]    = useState("");
@@ -18,12 +18,12 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await adminApi.auth.login(email, password);
-      if (!["OWNER", "MANAGER"].includes(res.data.user.role)) {
-        toast.error("This login is for admin accounts. Use the POS or Kitchen login instead.");
+      if (!["OWNER", "MANAGER", "KITCHEN"].includes(res.data.user.role)) {
+        toast.error("This account isn't authorized for Kitchen.");
         return;
       }
       setAuth(res.data.user, res.data.accessToken, res.data.refreshToken);
-      router.replace("/dashboard");
+      router.replace("/kitchen");
     } catch (err: any) {
       toast.error(err.message ?? "Login failed");
     } finally {
@@ -35,21 +35,19 @@ export default function LoginPage() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
-        {/* Logo */}
         <div className="flex items-center gap-2.5 mb-8">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0f172a]">
             <span className="text-sm font-black text-green-400">B</span>
           </div>
           <div>
             <p className="text-sm font-bold text-slate-900 leading-none">Blessed Ave</p>
-            <p className="text-xs text-slate-400 mt-0.5">Management Portal</p>
+            <p className="text-xs text-slate-400 mt-0.5">Kitchen Login</p>
           </div>
         </div>
 
-        {/* Card */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
-          <h1 className="text-xl font-bold text-slate-900 mb-1">Sign in</h1>
-          <p className="text-sm text-slate-500 mb-6">Enter your credentials to continue</p>
+          <h1 className="text-xl font-bold text-slate-900 mb-1">Kitchen Sign in</h1>
+          <p className="text-sm text-slate-500 mb-6">Staff login for the kitchen display</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

@@ -25,7 +25,7 @@ async function computeExpectedCash(openingFloat: number, openedAt: Date, until: 
 }
 
 // POST /api/till/open
-tillRouter.post("/open", requireAuth, async (req, res, next) => {
+tillRouter.post("/open", requireAuth, requireRole("OWNER", "MANAGER", "STAFF"), async (req, res, next) => {
   try {
     const { openingFloat } = z.object({ openingFloat: z.number().int().nonnegative() }).parse(req.body);
 
@@ -43,7 +43,7 @@ tillRouter.post("/open", requireAuth, async (req, res, next) => {
 });
 
 // GET /api/till/current — the open session plus a live expected-cash preview
-tillRouter.get("/current", requireAuth, async (_req, res, next) => {
+tillRouter.get("/current", requireAuth, requireRole("OWNER", "MANAGER", "STAFF"), async (_req, res, next) => {
   try {
     const session = await prisma.tillSession.findFirst({
       where: { status: "OPEN" },
@@ -59,7 +59,7 @@ tillRouter.get("/current", requireAuth, async (_req, res, next) => {
 });
 
 // POST /api/till/close
-tillRouter.post("/close", requireAuth, async (req, res, next) => {
+tillRouter.post("/close", requireAuth, requireRole("OWNER", "MANAGER", "STAFF"), async (req, res, next) => {
   try {
     const { actualCash, notes } = z
       .object({ actualCash: z.number().int().nonnegative(), notes: z.string().optional() })

@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { AdminLayout } from "@/components/AdminLayout";
 import { adminApi, resolveApiBase } from "@/lib/api";
+import { useRequireRole } from "@/lib/useRequireRole";
 import type { Order } from "@blessed-ave/types";
 import toast from "react-hot-toast";
 import clsx from "clsx";
@@ -48,6 +49,7 @@ function formatDuration(ms: number) {
 }
 
 export default function KitchenPage() {
+  const authorized = useRequireRole(["OWNER", "MANAGER", "KITCHEN"], "/kitchen/login");
   const [orders, setOrders] = useState<Order[]>([]);
   const [now, setNow] = useState(() => Date.now());
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -93,6 +95,8 @@ export default function KitchenPage() {
   }
 
   const cols = COLS.map((c) => ({ ...c, orders: orders.filter((o) => o.status === c.key) }));
+
+  if (!authorized) return null;
 
   return (
     <AdminLayout>

@@ -20,8 +20,8 @@ function useAdminBase() {
 }
 
 const OPTIONS = [
-  { label: "POS", desc: "Take orders, ring up sales", path: "/pos", icon: "🛒" },
-  { label: "Kitchen", desc: "Live order queue", path: "/kitchen", icon: "🍳" },
+  { label: "POS", desc: "Take orders, ring up sales", path: "/pos/login", icon: "🛒" },
+  { label: "Kitchen", desc: "Live order queue", path: "/kitchen/login", icon: "🍳" },
   { label: "Admin", desc: "Reports, menu, inventory", path: "/login", icon: "🔐" },
 ];
 

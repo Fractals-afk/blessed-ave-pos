@@ -217,7 +217,7 @@ ordersRouter.get("/:id", async (req, res, next) => {
 // Note: CONFIRMED is intentionally excluded — only the payment routes
 // (payments.ts) may move an order into CONFIRMED, so it can't be pushed to
 // the kitchen without a recorded payment.
-ordersRouter.patch("/:id/status", requireAuth, async (req, res, next) => {
+ordersRouter.patch("/:id/status", requireAuth, requireRole("OWNER", "MANAGER", "KITCHEN"), async (req, res, next) => {
   try {
     const { status } = z
       .object({

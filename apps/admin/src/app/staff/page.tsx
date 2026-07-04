@@ -80,7 +80,7 @@ export default function StaffPage() {
   }
 
   const ROLE_COLOR: Record<string, string> = {
-    OWNER: "bg-violet-100 text-violet-700", MANAGER: "bg-blue-100 text-blue-700", STAFF: "bg-slate-100 text-slate-600",
+    OWNER: "bg-violet-100 text-violet-700", MANAGER: "bg-blue-100 text-blue-700", STAFF: "bg-slate-100 text-slate-600", KITCHEN: "bg-amber-100 text-amber-700",
   };
 
   return (
@@ -203,7 +203,7 @@ export default function StaffPage() {
               ))}
               <div><label className={lCls}>Role</label>
                 <select value={form.role} onChange={(e) => setForm((p) => ({...p,role:e.target.value}))} className={iCls}>
-                  <option value="STAFF">Staff</option><option value="MANAGER">Manager</option><option value="OWNER">Owner</option>
+                  <option value="STAFF">Staff (POS)</option><option value="KITCHEN">Kitchen</option><option value="MANAGER">Manager</option><option value="OWNER">Owner</option>
                 </select>
               </div>
             </div>

@@ -54,8 +54,14 @@ export async function apiFetch<T>(
         return apiFetch<T>(path, { ...options, token: data.accessToken });
       }
     }
-    // Redirect to login
-    if (typeof window !== "undefined") window.location.href = "/login";
+    // Redirect to the login page matching where the request came from
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname;
+      const loginPath = path.startsWith("/kitchen") ? "/kitchen/login"
+        : path.startsWith("/pos") ? "/pos/login"
+        : "/login";
+      window.location.href = loginPath;
+    }
     throw new Error("Unauthorised");
   }
 

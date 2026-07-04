@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 import { AdminLayout } from "@/components/AdminLayout";
 import { adminApi, resolveApiBase } from "@/lib/api";
 import { useAuth } from "@/store/auth";
+import { useRequireRole } from "@/lib/useRequireRole";
 import type { CafeTable, DiscountType, MenuCategory, MenuItem, ModifierOption, Order } from "@blessed-ave/types";
 import toast from "react-hot-toast";
 import { QrPlaceholder } from "@/components/QrPlaceholder";
@@ -62,6 +63,7 @@ interface POSItem {
 }
 
 export default function POSPage() {
+  const authorized = useRequireRole(["OWNER", "MANAGER", "STAFF"], "/pos/login");
   const { user } = useAuth();
   const isManager = user?.role === "OWNER" || user?.role === "MANAGER";
   const [categories,     setCategories]     = useState<MenuCategory[]>([]);
@@ -389,6 +391,8 @@ export default function POSPage() {
   const GCASH_QR = process.env.NEXT_PUBLIC_GCASH_QR_URL;
   const MAYA_QR  = process.env.NEXT_PUBLIC_MAYA_QR_URL;
   const qrUrl    = qrMethod === "GCASH" ? GCASH_QR : MAYA_QR;
+
+  if (!authorized) return null;
 
   return (
     <AdminLayout>

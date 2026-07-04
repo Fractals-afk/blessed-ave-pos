@@ -80,8 +80,11 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     : NAV_SECTIONS;
 
   function handleLogout() {
+    const role = user?.role;
     logout();
-    router.replace("/login");
+    if (role === "KITCHEN") router.replace("/kitchen/login");
+    else if (role === "STAFF") router.replace("/pos/login");
+    else router.replace("/login");
   }
 
   return (

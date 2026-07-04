@@ -365,7 +365,8 @@ exports.Prisma.NullsOrder = {
 exports.UserRole = exports.$Enums.UserRole = {
   OWNER: 'OWNER',
   MANAGER: 'MANAGER',
-  STAFF: 'STAFF'
+  STAFF: 'STAFF',
+  KITCHEN: 'KITCHEN'
 };
 
 exports.OrderSource = exports.$Enums.OrderSource = {

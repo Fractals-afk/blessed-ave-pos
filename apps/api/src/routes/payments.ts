@@ -6,12 +6,12 @@ import { io } from "../index";
 import { emitNewOrder, emitOrderStatusUpdate } from "../socket";
 import { sendOrderReceipt } from "../mailer";
 import { decrementInventory, restoreInventory } from "./orders";
-import { requireAuth } from "../middleware/auth";
+import { requireAuth, requireRole } from "../middleware/auth";
 
 export const paymentsRouter = Router();
 
 // POST /api/payments/cash — mark a POS cash order as paid
-paymentsRouter.post("/cash", requireAuth, async (req, res, next) => {
+paymentsRouter.post("/cash", requireAuth, requireRole("OWNER", "MANAGER", "STAFF"), async (req, res, next) => {
   try {
     const { orderId } = z.object({ orderId: z.string() }).parse(req.body);
 
@@ -56,7 +56,7 @@ paymentsRouter.post("/cash", requireAuth, async (req, res, next) => {
 });
 
 // POST /api/payments/refund — staff refunds a paid order and cancels it
-paymentsRouter.post("/refund", requireAuth, async (req, res, next) => {
+paymentsRouter.post("/refund", requireAuth, requireRole("OWNER", "MANAGER", "STAFF"), async (req, res, next) => {
   try {
     const { orderId } = z.object({ orderId: z.string() }).parse(req.body);
 
@@ -86,7 +86,7 @@ paymentsRouter.post("/refund", requireAuth, async (req, res, next) => {
 });
 
 // POST /api/payments/qr-confirm — cashier confirms a GCash or Maya QR payment
-paymentsRouter.post("/qr-confirm", requireAuth, async (req, res, next) => {
+paymentsRouter.post("/qr-confirm", requireAuth, requireRole("OWNER", "MANAGER", "STAFF"), async (req, res, next) => {
   try {
     const { orderId, method } = z
       .object({
