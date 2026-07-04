@@ -165,13 +165,60 @@ staffRouter.delete(
 
 // ─── Clock in/out ─────────────────────────────────────────────────────────────
 
+const CLOCK_TYPES = ["CLOCK_IN", "CLOCK_OUT", "BREAK_START", "BREAK_END"] as const;
+
 staffRouter.post("/clock", requireAuth, async (req, res, next) => {
   try {
-    const { type } = z.object({ type: z.enum(["CLOCK_IN", "CLOCK_OUT"]) }).parse(req.body);
+    const { type } = z.object({ type: z.enum(CLOCK_TYPES) }).parse(req.body);
     const event = await prisma.clockEvent.create({
       data: { userId: req.user!.userId, type },
     });
     res.status(201).json({ data: event });
+  } catch (e) {
+    next(e);
+  }
+});
+
+// Kiosk mode: no login required, staff just tap their name on a shared touchscreen
+// (the /store page). Only exposes id/name of active staff, not credentials.
+staffRouter.get("/kiosk", async (_req, res, next) => {
+  try {
+    const staff = await prisma.user.findMany({
+      where: { active: true },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+    res.json({ data: staff });
+  } catch (e) {
+    next(e);
+  }
+});
+
+staffRouter.post("/kiosk/clock", async (req, res, next) => {
+  try {
+    const { userId, type } = z
+      .object({ userId: z.string(), type: z.enum(CLOCK_TYPES) })
+      .parse(req.body);
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user || !user.active) throw new AppError("Staff account not found");
+
+    const event = await prisma.clockEvent.create({ data: { userId, type } });
+    res.status(201).json({ data: event });
+  } catch (e) {
+    next(e);
+  }
+});
+
+staffRouter.get("/kiosk/:userId/today", async (req, res, next) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const events = await prisma.clockEvent.findMany({
+      where: { userId: req.params.userId, timestamp: { gte: today } },
+      orderBy: { timestamp: "asc" },
+    });
+    res.json({ data: events });
   } catch (e) {
     next(e);
   }

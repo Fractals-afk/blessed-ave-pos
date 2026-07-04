@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const FALLBACK_ADMIN_URL = process.env.NEXT_PUBLIC_ADMIN_URL ?? "http://localhost:3001";
 
@@ -59,6 +60,13 @@ export default function StorePage() {
           </a>
         ))}
       </div>
+
+      <Link
+        href="/store/clock"
+        className="mt-8 rounded-full border border-gold-500/40 bg-white/[0.03] px-8 py-3 text-sm font-semibold text-gold-400 hover:bg-white/[0.06] transition"
+      >
+        ⏱ Staff Time Clock
+      </Link>
     </main>
   );
 }

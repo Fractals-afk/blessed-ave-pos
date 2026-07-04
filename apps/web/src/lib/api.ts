@@ -62,4 +62,16 @@ export const api = {
         body: JSON.stringify({ orderId, method }),
       }),
   },
+  staffKiosk: {
+    list: () => apiFetch<{ data: { id: string; name: string }[] }>("/api/staff/kiosk"),
+    today: (userId: string) =>
+      apiFetch<{ data: { id: string; type: string; timestamp: string }[] }>(
+        `/api/staff/kiosk/${userId}/today`
+      ),
+    clock: (userId: string, type: "CLOCK_IN" | "CLOCK_OUT" | "BREAK_START" | "BREAK_END") =>
+      apiFetch<{ data: { id: string; type: string; timestamp: string } }>("/api/staff/kiosk/clock", {
+        method: "POST",
+        body: JSON.stringify({ userId, type }),
+      }),
+  },
 };
