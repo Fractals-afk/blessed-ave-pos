@@ -101,11 +101,17 @@ export default function POSPage() {
   const [qrAmount,   setQrAmount]   = useState(0);
   const [confirming, setConfirming] = useState(false);
 
+  // Cash payment modal — cashier enters amount tendered, change is computed
+  const [cashOrderId,   setCashOrderId]   = useState<string | null>(null);
+  const [cashDue,       setCashDue]       = useState(0);
+  const [cashTendered,  setCashTendered]  = useState("");
+  const [cashConfirming, setCashConfirming] = useState(false);
+  const [cashOnPaid,    setCashOnPaid]    = useState<(() => void) | null>(null);
+
   // Table detail modal (request payment / refund / special instructions)
   const [selectedTable, setSelectedTable] = useState<CafeTable | null>(null);
   const [notesDraft,    setNotesDraft]    = useState("");
   const [savingNotes,   setSavingNotes]   = useState(false);
-  const [payingCash,    setPayingCash]    = useState(false);
   const [refunding,     setRefunding]     = useState(false);
 
   useEffect(() => {
@@ -271,13 +277,12 @@ export default function POSPage() {
       }
 
       if (payMethod === "CASH") {
-        const payRes = await fetch(`${API}/api/payments/cash`, {
-          method: "POST", headers: auth(),
-          body: JSON.stringify({ orderId: order.id }),
+        setCashOrderId(order.id);
+        setCashDue(order.total);
+        setCashTendered("");
+        setCashOnPaid(() => () => {
+          setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
         });
-        if (!payRes.ok) throw new Error((await payRes.json()).error ?? "Cash payment failed");
-        toast.success(`Order #${order.id.slice(-4).toUpperCase()} — Cash paid ✓`);
-        setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
       } else {
         // Show QR modal for cashier
         setQrMethod(payMethod);
@@ -339,21 +344,30 @@ export default function POSPage() {
     setQrOrderId(order.id);
   }
 
-  async function requestCashPayment(order: Order) {
-    setPayingCash(true);
+  function requestCashPayment(order: Order) {
+    setCashOrderId(order.id);
+    setCashDue(order.total);
+    setCashTendered("");
+    setCashOnPaid(() => () => setSelectedTable(null));
+  }
+
+  async function confirmCashPayment() {
+    if (!cashOrderId) return;
+    setCashConfirming(true);
     try {
       const API = await resolveApiBase();
       const res = await fetch(`${API}/api/payments/cash`, {
         method: "POST", headers: auth(),
-        body: JSON.stringify({ orderId: order.id }),
+        body: JSON.stringify({ orderId: cashOrderId }),
       });
       if (!res.ok) throw new Error((await res.json()).error ?? "Cash payment failed");
-      toast.success(`Order #${order.id.slice(-4).toUpperCase()} — Cash paid ✓`);
-      setSelectedTable(null);
+      toast.success(`Order #${cashOrderId.slice(-4).toUpperCase()} — Cash paid ✓`);
+      cashOnPaid?.();
+      setCashOrderId(null);
     } catch (err: any) {
       toast.error(err.message ?? "Failed");
     } finally {
-      setPayingCash(false);
+      setCashConfirming(false);
     }
   }
 
@@ -663,9 +677,9 @@ export default function POSPage() {
                     <div>
                       <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Request Payment</p>
                       <div className="grid grid-cols-3 gap-1.5">
-                        <button onClick={() => requestCashPayment(selectedOrder)} disabled={payingCash}
-                          className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition disabled:opacity-50">
-                          {payingCash ? "…" : "Cash"}
+                        <button onClick={() => requestCashPayment(selectedOrder)}
+                          className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition">
+                          Cash
                         </button>
                         <button onClick={() => requestPayment(selectedOrder, "GCASH")}
                           className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition">
@@ -794,6 +808,70 @@ export default function POSPage() {
           </div>
         </div>
       )}
+
+      {/* ── Cash Payment modal ───────────────────────────────────── */}
+      {cashOrderId && (() => {
+        const tenderedCents = Math.round(parseFloat(cashTendered || "0") * 100) || 0;
+        const change = tenderedCents - cashDue;
+        const insufficient = tenderedCents <= 0 || change < 0;
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+            <div className="w-full max-w-sm rounded-2xl bg-white shadow-2xl border border-slate-200 mx-4 overflow-hidden">
+              <div className="px-6 py-4 bg-slate-800 text-white">
+                <p className="font-bold text-lg">Cash Payment</p>
+                <p className="text-sm opacity-80 mt-0.5">
+                  Order #{cashOrderId.slice(-6).toUpperCase()} · ₱{(cashDue / 100).toFixed(2)} due
+                </p>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5 block">
+                    Cash received
+                  </label>
+                  <input
+                    type="number" min="0" step="0.01" inputMode="decimal" autoFocus
+                    value={cashTendered}
+                    onChange={(e) => setCashTendered(e.target.value)}
+                    placeholder={`₱${(cashDue / 100).toFixed(2)}`}
+                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-2xl font-bold text-slate-900 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-4 gap-1.5">
+                  {[100, 200, 500, 1000].map((bill) => (
+                    <button key={bill} onClick={() => setCashTendered(bill.toFixed(2))}
+                      className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition active:scale-[0.95]">
+                      ₱{bill}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex justify-between items-center border-t border-slate-100 pt-3">
+                  <span className="text-sm text-slate-500">Change</span>
+                  <span className={`text-2xl font-bold ${insufficient ? "text-slate-300" : "text-green-600"}`}>
+                    ₱{(Math.max(change, 0) / 100).toFixed(2)}
+                  </span>
+                </div>
+                {tenderedCents > 0 && change < 0 && (
+                  <p className="text-xs text-red-500 -mt-2">Short by ₱{(Math.abs(change) / 100).toFixed(2)}</p>
+                )}
+
+                <div className="space-y-2 pt-1">
+                  <button onClick={confirmCashPayment} disabled={cashConfirming || insufficient}
+                    className="w-full rounded-xl bg-slate-800 py-3.5 font-bold text-white transition active:scale-[0.98] disabled:opacity-40 hover:bg-slate-700">
+                    {cashConfirming ? "Confirming…" : "✓ Confirm Cash Payment"}
+                  </button>
+                  <button onClick={() => setCashOrderId(null)} disabled={cashConfirming}
+                    className="w-full rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-500 hover:bg-slate-50 transition disabled:opacity-50">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </AdminLayout>
   );
 }
