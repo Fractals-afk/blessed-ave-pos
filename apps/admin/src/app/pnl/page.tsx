@@ -12,6 +12,7 @@ interface PnLData {
   grossProfit: number; grossMargin: number; totalOpCosts: number;
   opCostsByCategory: Record<string, number>; netProfit: number; netMargin: number;
   itemBreakdown: { name: string; quantity: number; revenue: number; cogs: number; margin: number }[];
+  hasOrders: boolean;
   daily: { date: string; revenue: number; cogs: number; opCosts: number; netProfit: number }[];
 }
 
@@ -170,8 +171,17 @@ export default function PnLPage() {
 
             {data.itemBreakdown.length === 0 && (
               <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm">
-                <p className="font-semibold text-amber-800">No recipe costs found</p>
-                <p className="text-amber-600 mt-1">Map ingredients to menu items in Inventory to see item-level margins.</p>
+                {data.hasOrders ? (
+                  <>
+                    <p className="font-semibold text-amber-800">No recipe costs found</p>
+                    <p className="text-amber-600 mt-1">Map ingredients to menu items in Inventory to see item-level margins.</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="font-semibold text-amber-800">No orders in this period</p>
+                    <p className="text-amber-600 mt-1">Item-level margins will appear once orders are placed in the selected date range.</p>
+                  </>
+                )}
               </div>
             )}
           </>

@@ -148,6 +148,7 @@ pnlRouter.get("/", requireAuth, requireRole("OWNER", "MANAGER"), async (req, res
         netMargin,
         // Breakdowns
         itemBreakdown: Object.values(cogsByItem).sort((a, b) => b.revenue - a.revenue),
+        hasOrders: orders.length > 0,
         daily,
       },
     });
