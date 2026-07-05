@@ -12,24 +12,19 @@ const ICONS: Record<string, string> = { RENT:"🏠",UTILITIES:"💡",WAGES:"👥
 const iCls = "w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition";
 const lCls = "block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1.5";
 
-interface Cost { id: string; name: string; category: string; frequency: string; amount: number; date: string; vendor?: string; notes?: string }
+interface Cost { id: string; name: string; category: string; frequency: string; amount: number; date: string; vendor?: string; notes?: string; receiptRef?: string }
 
 // Additional/arbitrary operating expenses: any number of line items can be
 // added via "+ Add Cost" below, tagged OTHER if they don't fit the fixed
 // categories — there's no cap on entries per period.
-//
-// TODO(ai-receipt-reader): no AI/OCR receipt scanner exists in this repo
-// yet. When one is built, non-inventory receipts (utility bills, repair
-// invoices, etc.) should POST straight to /api/operating-costs using this
-// same shape (name/category/frequency/amount/date/vendor/notes +
-// receiptRef pointing at the uploaded receipt image) instead of creating
-// inventory/food-costing line items.
 export default function CostsPage() {
   const [costs,   setCosts]   = useState<Cost[]>([]);
   const [showAdd, setShowAdd] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const [scanNotice, setScanNotice] = useState("");
   const [from, setFrom] = useState(format(new Date(new Date().getFullYear(), new Date().getMonth(), 1), "yyyy-MM-dd"));
   const [to,   setTo]   = useState(format(new Date(), "yyyy-MM-dd"));
-  const [form, setForm] = useState({ name:"", category:"RENT", frequency:"MONTHLY", amount:"", date:format(new Date(),"yyyy-MM-dd"), vendor:"", notes:"" });
+  const [form, setForm] = useState({ name:"", category:"RENT", frequency:"MONTHLY", amount:"", date:format(new Date(),"yyyy-MM-dd"), vendor:"", notes:"", receiptRef:"" });
 
   async function load() {
     const API = await resolveApiBase();
@@ -45,10 +40,40 @@ export default function CostsPage() {
       await fetch(`${API}/api/operating-costs`, { method:"POST",
         headers: { "Content-Type":"application/json", Authorization:`Bearer ${localStorage.getItem("accessToken")}` },
         body: JSON.stringify({ ...form, amount: Math.round(Number(form.amount) * 100) }) });
-      toast.success("Cost added"); setShowAdd(false);
-      setForm({ name:"", category:"RENT", frequency:"MONTHLY", amount:"", date:format(new Date(),"yyyy-MM-dd"), vendor:"", notes:"" });
+      toast.success("Cost added"); setShowAdd(false); setScanNotice("");
+      setForm({ name:"", category:"RENT", frequency:"MONTHLY", amount:"", date:format(new Date(),"yyyy-MM-dd"), vendor:"", notes:"", receiptRef:"" });
       load();
     } catch (err: any) { toast.error(err.message); }
+  }
+
+  async function handleScanReceipt(file: File) {
+    setScanning(true); setScanNotice("");
+    try {
+      const API = await resolveApiBase();
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch(`${API}/api/operating-costs/scan-receipt`, { method:"POST",
+        headers: { Authorization:`Bearer ${localStorage.getItem("accessToken")}` }, body });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Scan failed");
+
+      const { suggested, aiError } = json.data;
+      const receiptUrl: string = json.data.receiptUrl.startsWith("http") ? json.data.receiptUrl : `${API}${json.data.receiptUrl}`;
+      if (suggested) {
+        setForm({
+          name: suggested.name, category: suggested.category, frequency: "ONE_TIME",
+          amount: (suggested.amount / 100).toFixed(2), date: suggested.date,
+          vendor: suggested.vendor, notes: suggested.notes, receiptRef: receiptUrl,
+        });
+        toast.success("Receipt scanned — review and confirm");
+      } else {
+        setForm((p) => ({ ...p, receiptRef: receiptUrl }));
+        setScanNotice(aiError ?? "Couldn't read the receipt — fill in details manually");
+        toast(aiError ?? "Couldn't read the receipt — fill in details manually");
+      }
+      setShowAdd(true);
+    } catch (err: any) { toast.error(err.message); }
+    finally { setScanning(false); }
   }
 
   async function handleDelete(id: string) {
@@ -69,9 +94,16 @@ export default function CostsPage() {
           <h1 className="text-xl font-bold text-slate-900">Operating Costs</h1>
           <p className="text-xs text-slate-400 mt-0.5">Track rent, utilities, wages and expenses</p>
         </div>
-        <button onClick={() => setShowAdd(true)} className="rounded-lg bg-[#0f172a] px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 transition">
-          + Add Cost
-        </button>
+        <div className="flex gap-2">
+          <label className="cursor-pointer rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5">
+            {scanning ? "Scanning…" : "📷 Scan Receipt"}
+            <input type="file" accept="image/*" capture="environment" disabled={scanning} className="hidden"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleScanReceipt(f); e.target.value = ""; }} />
+          </label>
+          <button onClick={() => setShowAdd(true)} className="rounded-lg bg-[#0f172a] px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 transition">
+            + Add Cost
+          </button>
+        </div>
       </div>
 
       <div className="p-6">
@@ -126,7 +158,10 @@ export default function CostsPage() {
       {showAdd && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl border border-slate-200 mx-4">
-            <h3 className="font-bold text-slate-900 mb-5">Add Operating Cost</h3>
+            <h3 className="font-bold text-slate-900 mb-1">Add Operating Cost</h3>
+            {form.receiptRef && <p className="text-xs text-green-600 mb-1">🧾 <a href={form.receiptRef} target="_blank" rel="noreferrer" className="underline">Receipt attached</a>{!scanNotice && " — review the fields below"}</p>}
+            {scanNotice && <p className="text-xs text-amber-600 mb-4">{scanNotice}</p>}
+            {!form.receiptRef && !scanNotice && <div className="mb-3" />}
             <div className="space-y-3">
               <div><label className={lCls}>Description</label><input type="text" value={form.name} onChange={(e) => setForm((p) => ({...p,name:e.target.value}))} placeholder="e.g. Monthly Rent" className={iCls} /></div>
               <div className="grid grid-cols-2 gap-3">
@@ -141,7 +176,7 @@ export default function CostsPage() {
               <div><label className={lCls}>Notes <span className="normal-case font-normal text-slate-400">(optional)</span></label><input type="text" value={form.notes} onChange={(e) => setForm((p) => ({...p,notes:e.target.value}))} className={iCls} /></div>
             </div>
             <div className="mt-5 flex gap-3">
-              <button onClick={() => setShowAdd(false)} className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">Cancel</button>
+              <button onClick={() => { setShowAdd(false); setScanNotice(""); }} className="flex-1 rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">Cancel</button>
               <button onClick={handleAdd} className="flex-1 rounded-lg bg-[#0f172a] py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition">Add</button>
             </div>
           </div>

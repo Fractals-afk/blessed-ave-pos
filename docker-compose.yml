@@ -18,6 +18,10 @@ services:
       - apps/api/.env
     depends_on:
       - blessed-db
+    volumes:
+      # Local-disk fallback for uploads (used whenever S3_BUCKET is unset —
+      # see lib/storage.ts) — must survive container rebuilds on redeploy.
+      - blessed_api_uploads:/app/apps/api/uploads
     networks:
       - default
       - fairway-villa_default
@@ -53,3 +57,4 @@ networks:
 
 volumes:
   blessed_db_data:
+  blessed_api_uploads:

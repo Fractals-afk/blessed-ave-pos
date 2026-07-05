@@ -26,3 +26,6 @@ dev-servers/ports.json
 apps/*/public/dev-ports.json
 
 *.tsbuildinfo
+
+# Local-disk fallback for uploads when S3 isn't configured (see apps/api/src/lib/storage.ts)
+apps/api/uploads/

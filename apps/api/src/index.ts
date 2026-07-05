@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import http from "http";
+import path from "path";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -56,6 +57,10 @@ app.use(morgan("dev"));
 app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+// Serves images saved by lib/storage.ts's local-disk fallback (used whenever
+// S3_BUCKET is unset — see DEPLOY.md).
+app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use("/api/auth", authRouter);
