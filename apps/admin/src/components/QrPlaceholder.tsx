@@ -6,7 +6,7 @@ interface Props {
 export function QrPlaceholder({ method, size = 224 }: Props) {
   const isGcash = method === "GCASH";
   const color   = isGcash ? "#1d4ed8" : "#16a34a";
-  const label   = isGcash ? "GCash" : "Maya";
+  const label   = isGcash ? "QR" : "Credit Card";
 
   return (
     <svg width={size} height={size} viewBox="0 0 224 224" fill="none" xmlns="http://www.w3.org/2000/svg">

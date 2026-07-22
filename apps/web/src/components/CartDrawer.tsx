@@ -90,7 +90,7 @@ export function CartDrawer({ open, onClose, isTableOrder }: Props) {
             <div className={`text-white px-5 py-5 ${method === "GCASH" ? "bg-blue-600" : "bg-green-600"}`}>
               <p className="font-display font-bold text-xl">Scan to Pay</p>
               <p className="text-sm opacity-80 mt-0.5">
-                {method === "GCASH" ? "GCash" : "Maya"} · ₱{(total() / 100).toFixed(2)}
+                {method === "GCASH" ? "QR" : "Credit Card"} · ₱{(total() / 100).toFixed(2)}
               </p>
             </div>
 
@@ -102,7 +102,7 @@ export function CartDrawer({ open, onClose, isTableOrder }: Props) {
                 }
               </div>
               <p className="text-sm text-slate-600 mb-1">
-                Open your <strong>{method === "GCASH" ? "GCash" : "Maya"}</strong> app and scan
+                Scan to pay via <strong>{method === "GCASH" ? "QR" : "Credit Card"}</strong>
               </p>
               <p className="text-2xl font-bold text-slate-900 mb-1">₱{(total() / 100).toFixed(2)}</p>
               <p className="text-xs text-slate-400">Order #{qrOrderId.slice(-6).toUpperCase()}</p>
@@ -200,13 +200,13 @@ export function CartDrawer({ open, onClose, isTableOrder }: Props) {
                                 ? "border-gold-500 bg-gold-500/10 text-brown-800"
                                 : "border-cream-200 bg-white text-brown-500 hover:border-brown-300"
                             }`}>
-                            {m === "GCASH" ? "GCash" : m === "MAYA" ? "Maya" : "Cash"}
+                            {m === "GCASH" ? "QR" : m === "MAYA" ? "Credit Card" : "Cash"}
                           </button>
                         ))}
                       </div>
                       {(method === "GCASH" || method === "MAYA") && (
                         <p className="text-xs text-brown-400 mt-1.5 text-center">
-                          QR code will appear after placing your order
+                          {method === "GCASH" ? "QR code will appear after placing your order" : "Card payment screen will appear after placing your order"}
                         </p>
                       )}
                     </div>
@@ -225,7 +225,7 @@ export function CartDrawer({ open, onClose, isTableOrder }: Props) {
 
                   <button onClick={handleCheckout} disabled={placing}
                     className="w-full rounded-xl bg-brown-800 py-3.5 font-semibold text-cream-100 shadow transition hover:bg-brown-700 active:scale-95 disabled:opacity-60">
-                    {placing ? "Placing order..." : isTableOrder ? "📨 Send to Kitchen" : method === "CASH" ? "Place Order (Cash)" : `Place Order → Scan QR`}
+                    {placing ? "Placing order..." : isTableOrder ? "📨 Send to Kitchen" : method === "CASH" ? "Place Order (Cash)" : method === "GCASH" ? "Place Order → Scan QR" : "Place Order → Pay by Card"}
                   </button>
                 </div>
               </>

@@ -387,7 +387,7 @@ export default function POSPage() {
           payment: { method: qrMethod }, synced: false, localPreview: {} as Order,
         });
         setQueuedCount(pendingCount());
-        toast.success(`${qrMethod === "GCASH" ? "GCash" : "Maya"} sale saved offline — will sync when online`);
+        toast.success(`${qrMethod === "GCASH" ? "QR" : "Credit Card"} sale saved offline — will sync when online`);
         setOfflinePending(null);
         setQrOrderId(null);
         setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
@@ -614,7 +614,7 @@ export default function POSPage() {
                   className={`rounded-xl border py-3 text-sm font-semibold transition active:scale-[0.97] ${
                     payMethod === m ? "border-slate-800 bg-slate-800 text-white" : "border-slate-200 text-slate-600 hover:border-slate-300"
                   }`}>
-                  {m === "GCASH" ? "GCash" : m === "MAYA" ? "Maya" : "Cash"}
+                  {m === "GCASH" ? "QR" : m === "MAYA" ? "Credit Card" : "Cash"}
                 </button>
               ))}
             </div>
@@ -797,11 +797,11 @@ export default function POSPage() {
                         </button>
                         <button onClick={() => requestPayment(selectedOrder, "GCASH")}
                           className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition">
-                          GCash
+                          QR
                         </button>
                         <button onClick={() => requestPayment(selectedOrder, "MAYA")}
                           className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition">
-                          Maya
+                          Credit Card
                         </button>
                       </div>
                     </div>
@@ -886,7 +886,7 @@ export default function POSPage() {
           <div className="w-full max-w-sm rounded-2xl bg-white shadow-2xl border border-slate-200 mx-4 overflow-hidden">
             {/* Header */}
             <div className={`px-6 py-4 text-white ${qrMethod === "GCASH" ? "bg-blue-600" : "bg-green-600"}`}>
-              <p className="font-bold text-lg">{qrMethod === "GCASH" ? "GCash" : "Maya"} Payment</p>
+              <p className="font-bold text-lg">{qrMethod === "GCASH" ? "QR" : "Credit Card"} Payment</p>
               <p className="text-sm opacity-80 mt-0.5">
                 Order #{qrOrderId.slice(-6).toUpperCase()} · ₱{(qrAmount / 100).toFixed(2)}
               </p>
@@ -894,7 +894,7 @@ export default function POSPage() {
 
             <div className="p-6 text-center">
               <p className="text-sm text-slate-500 mb-4">
-                Ask customer to scan with their {qrMethod === "GCASH" ? "GCash" : "Maya"} app
+                Ask customer to scan to pay via {qrMethod === "GCASH" ? "QR" : "Credit Card"}
               </p>
               <div className="inline-block rounded-2xl border-4 border-slate-100 overflow-hidden shadow-sm">
                 {qrUrl
