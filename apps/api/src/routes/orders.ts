@@ -20,6 +20,81 @@ const orderItemSchema = z.object({
   notes: z.string().optional(),
 });
 
+// Shared by order creation and item edits — resolves each requested line
+// against the menu server-side (never trusts client-supplied prices) and
+// returns Prisma create-input for OrderItem rows plus the resulting subtotal.
+interface MenuItemWithModifiers {
+  id: string;
+  name: string;
+  price: number;
+  modifierGroups: {
+    id: string;
+    name: string;
+    required: boolean;
+    multiSelect: boolean;
+    options: { id: string; name: string; priceAdjustment: number }[];
+  }[];
+}
+
+function resolveOrderItems(
+  items: z.infer<typeof orderItemSchema>[],
+  menuMap: Map<string, MenuItemWithModifiers>
+) {
+  let subtotal = 0;
+  const orderItemsData = items.map((item) => {
+    const menuItem = menuMap.get(item.menuItemId)!;
+
+    // Selected options must come from this item's own modifier groups —
+    // prices are resolved server-side, never trusted from the client.
+    const validOptions = new Map(
+      menuItem.modifierGroups.flatMap((g) => g.options.map((o) => [o.id, { option: o, group: g }] as const))
+    );
+    const selectedIds = [...new Set(item.selectedOptions.map((o) => o.modifierOptionId))];
+    const selectedByGroup = new Map<string, number>();
+    const options = selectedIds.map((id) => {
+      const match = validOptions.get(id);
+      if (!match) {
+        throw new AppError(`Invalid option for ${menuItem.name}`);
+      }
+      const count = (selectedByGroup.get(match.group.id) ?? 0) + 1;
+      if (count > 1 && !match.group.multiSelect) {
+        throw new AppError(`Only one ${match.group.name} option allowed for ${menuItem.name}`);
+      }
+      selectedByGroup.set(match.group.id, count);
+      return match.option;
+    });
+
+    for (const group of menuItem.modifierGroups) {
+      if (group.required && !selectedByGroup.has(group.id)) {
+        throw new AppError(`${group.name} is required for ${menuItem.name}`);
+      }
+    }
+
+    const unitPrice =
+      menuItem.price + options.reduce((sum, o) => sum + o.priceAdjustment, 0);
+    const itemSubtotal = unitPrice * item.quantity;
+    subtotal += itemSubtotal;
+
+    return {
+      menuItemId: menuItem.id,
+      menuItemName: menuItem.name,
+      quantity: item.quantity,
+      unitPrice,
+      subtotal: itemSubtotal,
+      notes: item.notes,
+      selectedOptions: {
+        create: options.map((o) => ({
+          modifierOptionId: o.id,
+          name: o.name,
+          priceAdjustment: o.priceAdjustment,
+        })),
+      },
+    };
+  });
+
+  return { orderItemsData, subtotal };
+}
+
 const createOrderSchema = z.object({
   source: z.enum(["ONLINE", "QR_TABLE", "POS"]),
   tableId: z.string().optional(),
@@ -73,58 +148,7 @@ ordersRouter.post("/", tryAuth, async (req, res, next) => {
     }
 
     const menuMap = new Map(menuItems.map((m) => [m.id, m]));
-
-    let subtotal = 0;
-    const orderItemsData = body.items.map((item) => {
-      const menuItem = menuMap.get(item.menuItemId)!;
-
-      // Selected options must come from this item's own modifier groups —
-      // prices are resolved server-side, never trusted from the client.
-      const validOptions = new Map(
-        menuItem.modifierGroups.flatMap((g) => g.options.map((o) => [o.id, { option: o, group: g }] as const))
-      );
-      const selectedIds = [...new Set(item.selectedOptions.map((o) => o.modifierOptionId))];
-      const selectedByGroup = new Map<string, number>();
-      const options = selectedIds.map((id) => {
-        const match = validOptions.get(id);
-        if (!match) {
-          throw new AppError(`Invalid option for ${menuItem.name}`);
-        }
-        const count = (selectedByGroup.get(match.group.id) ?? 0) + 1;
-        if (count > 1 && !match.group.multiSelect) {
-          throw new AppError(`Only one ${match.group.name} option allowed for ${menuItem.name}`);
-        }
-        selectedByGroup.set(match.group.id, count);
-        return match.option;
-      });
-
-      for (const group of menuItem.modifierGroups) {
-        if (group.required && !selectedByGroup.has(group.id)) {
-          throw new AppError(`${group.name} is required for ${menuItem.name}`);
-        }
-      }
-
-      const unitPrice =
-        menuItem.price + options.reduce((sum, o) => sum + o.priceAdjustment, 0);
-      const itemSubtotal = unitPrice * item.quantity;
-      subtotal += itemSubtotal;
-
-      return {
-        menuItemId: menuItem.id,
-        menuItemName: menuItem.name,
-        quantity: item.quantity,
-        unitPrice,
-        subtotal: itemSubtotal,
-        notes: item.notes,
-        selectedOptions: {
-          create: options.map((o) => ({
-            modifierOptionId: o.id,
-            name: o.name,
-            priceAdjustment: o.priceAdjustment,
-          })),
-        },
-      };
-    });
+    const { orderItemsData, subtotal } = resolveOrderItems(body.items, menuMap);
 
     const order = await (prisma.order.create as any)({
       data: {
@@ -357,6 +381,67 @@ ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
       where: { id: req.params.id },
       data,
       include: { items: { include: { selectedOptions: true } }, table: true, payment: true },
+    });
+
+    emitOrderStatusUpdate(io, updated.id, updated.status, updated);
+
+    res.json({ data: updated });
+  } catch (e) {
+    next(e);
+  }
+});
+
+// PATCH /api/orders/:id/items — cashier edits the item list of an order that
+// hasn't been paid yet (add/remove/change quantity). Only PENDING orders are
+// editable — once payment is confirmed the order moves to CONFIRMED and is
+// visible in the kitchen, so items are locked from that point on.
+const updateItemsSchema = z.object({ items: z.array(orderItemSchema).min(1) });
+
+ordersRouter.patch("/:id/items", requireAuth, async (req, res, next) => {
+  try {
+    const body = updateItemsSchema.parse(req.body);
+
+    const order = await prisma.order.findUnique({ where: { id: req.params.id } });
+    if (!order) throw new AppError("Order not found", 404);
+    if (order.status !== "PENDING") {
+      throw new AppError("Items can only be edited before payment is confirmed");
+    }
+
+    const menuItemIds = body.items.map((i) => i.menuItemId);
+    const menuItems = await prisma.menuItem.findMany({
+      where: { id: { in: menuItemIds }, available: true },
+      include: { modifierGroups: { include: { options: true } } },
+    });
+    if (menuItems.length !== new Set(menuItemIds).size) {
+      throw new AppError("One or more menu items not found or unavailable");
+    }
+
+    const menuMap = new Map(menuItems.map((m) => [m.id, m]));
+    const { orderItemsData, subtotal } = resolveOrderItems(body.items, menuMap);
+
+    const vatEnabled = await isVatEnabled();
+    let discountAmount = 0;
+    let total = subtotal;
+    let vatAmount = vatPortion(subtotal, vatEnabled);
+
+    if (order.discountType === "SENIOR_PWD") {
+      const discount = seniorPwdDiscount(subtotal, vatEnabled);
+      total = discount.total;
+      discountAmount = discount.discountAmount;
+      vatAmount = 0;
+    } else if (order.discountType === "CUSTOM") {
+      discountAmount = Math.min(order.discountAmount, subtotal);
+      total = subtotal - discountAmount;
+      vatAmount = vatPortion(total, vatEnabled);
+    }
+
+    const updated = await prisma.$transaction(async (tx) => {
+      await tx.orderItem.deleteMany({ where: { orderId: order.id } });
+      return tx.order.update({
+        where: { id: order.id },
+        data: { subtotal, total, vatAmount, discountAmount, items: { create: orderItemsData } },
+        include: { items: { include: { selectedOptions: true } }, table: true, payment: true },
+      });
     });
 
     emitOrderStatusUpdate(io, updated.id, updated.status, updated);

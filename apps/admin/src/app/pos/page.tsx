@@ -64,6 +64,14 @@ interface POSItem {
   unitPrice: number;
 }
 
+interface EditItem {
+  menuItemId: string;
+  menuItemName: string;
+  quantity: number;
+  unitPrice: number;
+  selectedOptions: { modifierOptionId: string; name: string; priceAdjustment: number }[];
+}
+
 export default function POSPage() {
   const authorized = useRequireRole(["OWNER", "MANAGER", "STAFF"], "/pos/login");
   const { user } = useAuth();
@@ -115,6 +123,13 @@ export default function POSPage() {
   const [notesDraft,    setNotesDraft]    = useState("");
   const [savingNotes,   setSavingNotes]   = useState(false);
   const [refunding,     setRefunding]     = useState(false);
+
+  // Table order item editor — add/remove items on a PENDING table order
+  // before it's paid. null = read-only view; array = actively editing a draft.
+  const [editItems,     setEditItems]     = useState<EditItem[] | null>(null);
+  const [savingItems,   setSavingItems]   = useState(false);
+  const [addItemPicker, setAddItemPicker] = useState(false);
+  const [modifierTarget, setModifierTarget] = useState<"CART" | "EDIT">("CART");
 
   // Offline cart support — connectivity state, queued-sale count, and the
   // not-yet-created order waiting on the cash/QR modal to pick a payment
@@ -283,8 +298,73 @@ export default function POSPage() {
   }
 
   function addToCart(item: MenuItem) {
-    if ((item.modifierGroups ?? []).length > 0) { setSelectedItem(item); setItemOptions({}); return; }
+    if ((item.modifierGroups ?? []).length > 0) { setModifierTarget("CART"); setSelectedItem(item); setItemOptions({}); return; }
     pushItem(item, [], item.price);
+  }
+
+  function addItemToEdit(item: MenuItem) {
+    if ((item.modifierGroups ?? []).length > 0) { setModifierTarget("EDIT"); setAddItemPicker(false); setSelectedItem(item); setItemOptions({}); return; }
+    pushEditItem(item, [], item.price);
+  }
+
+  function pushEditItem(item: MenuItem, options: ModifierOption[], unitPrice: number) {
+    setEditItems((prev) => {
+      if (!prev) return prev;
+      const existing = prev.find(
+        (i) => i.menuItemId === item.id &&
+          JSON.stringify(i.selectedOptions.map((o) => o.modifierOptionId).sort()) ===
+          JSON.stringify(options.map((o) => o.id).sort())
+      );
+      if (existing) return prev.map((i) => i === existing ? { ...i, quantity: i.quantity + 1 } : i);
+      return [...prev, {
+        menuItemId: item.id, menuItemName: item.name, quantity: 1, unitPrice,
+        selectedOptions: options.map((o) => ({ modifierOptionId: o.id, name: o.name, priceAdjustment: o.priceAdjustment })),
+      }];
+    });
+    setSelectedItem(null);
+  }
+
+  function incEditItem(idx: number) {
+    setEditItems((prev) => prev ? prev.map((it, i) => i === idx ? { ...it, quantity: it.quantity + 1 } : it) : prev);
+  }
+  function decEditItem(idx: number) {
+    setEditItems((prev) => {
+      if (!prev) return prev;
+      if (prev[idx].quantity <= 1) return prev.filter((_, i) => i !== idx);
+      return prev.map((it, i) => i === idx ? { ...it, quantity: it.quantity - 1 } : it);
+    });
+  }
+  function removeEditItem(idx: number) {
+    setEditItems((prev) => prev ? prev.filter((_, i) => i !== idx) : prev);
+  }
+
+  function startEditItems(order: Order) {
+    setEditItems(order.items.map((i) => ({
+      menuItemId: i.menuItemId, menuItemName: i.menuItemName, quantity: i.quantity,
+      unitPrice: i.unitPrice, selectedOptions: i.selectedOptions,
+    })));
+  }
+  function cancelEditItems() {
+    setEditItems(null);
+    setAddItemPicker(false);
+  }
+  async function saveEditItems(order: Order) {
+    if (!editItems || editItems.length === 0) { toast.error("Order must have at least one item"); return; }
+    setSavingItems(true);
+    try {
+      const res = await adminApi.orders.updateItems(order.id, editItems.map((i) => ({
+        menuItemId: i.menuItemId, quantity: i.quantity,
+        selectedOptions: i.selectedOptions.map((o) => ({ modifierOptionId: o.modifierOptionId })),
+      })));
+      setActiveOrders((prev) => prev.map((o) => o.id === res.data.id ? res.data : o));
+      toast.success("Order updated");
+      setEditItems(null);
+      setAddItemPicker(false);
+    } catch (err: any) {
+      toast.error(err.message ?? "Failed to update order");
+    } finally {
+      setSavingItems(false);
+    }
   }
 
   function pushItem(item: MenuItem, options: ModifierOption[], unitPrice: number) {
@@ -310,7 +390,8 @@ export default function POSPage() {
     }
     const allOptions = Object.values(itemOptions).flat();
     const unitPrice  = selectedItem.price + allOptions.reduce((s, o) => s + o.priceAdjustment, 0);
-    pushItem(selectedItem, allOptions, unitPrice);
+    if (modifierTarget === "EDIT") pushEditItem(selectedItem, allOptions, unitPrice);
+    else pushItem(selectedItem, allOptions, unitPrice);
   }
 
   // Applies the currently-selected discount to a PENDING order; returns the
@@ -441,6 +522,13 @@ export default function POSPage() {
     setTableDiscountType(order?.discountType ?? "NONE");
     setTableDiscountId(order?.discountIdNumber ?? "");
     setTableCustomDiscount("");
+    setEditItems(null);
+    setAddItemPicker(false);
+  }
+  function closeTable() {
+    setSelectedTable(null);
+    setEditItems(null);
+    setAddItemPicker(false);
   }
 
   async function applyTableDiscount(order: Order) {
@@ -728,7 +816,7 @@ export default function POSPage() {
 
       {/* ── Table detail modal ──────────────────────────────────── */}
       {selectedTable && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setSelectedTable(null)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={closeTable}>
           <div className="w-full max-w-sm rounded-2xl bg-white shadow-xl border border-slate-200 mx-4 overflow-hidden" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
               <div>
@@ -739,7 +827,7 @@ export default function POSPage() {
                   </p>
                 )}
               </div>
-              <button onClick={() => setSelectedTable(null)}
+              <button onClick={closeTable}
                 className="h-7 w-7 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 text-lg leading-none">
                 ×
               </button>
@@ -752,14 +840,83 @@ export default function POSPage() {
 
               {selectedOrder && (
                 <>
-                  <ul className="space-y-1">
-                    {selectedOrder.items.map((item) => (
-                      <li key={item.id} className="text-sm flex justify-between">
-                        <span className="text-slate-700">{item.quantity}× {item.menuItemName}</span>
-                        <span className="text-slate-500">₱{(item.subtotal / 100).toFixed(2)}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {editItems === null ? (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Items</p>
+                        {selectedOrder.status === "PENDING" && (
+                          <button onClick={() => startEditItems(selectedOrder)} className="text-xs font-semibold text-blue-600 hover:underline">
+                            Edit Items
+                          </button>
+                        )}
+                      </div>
+                      <ul className="space-y-1">
+                        {selectedOrder.items.map((item) => (
+                          <li key={item.id} className="text-sm flex justify-between">
+                            <span className="text-slate-700">{item.quantity}× {item.menuItemName}</span>
+                            <span className="text-slate-500">₱{(item.subtotal / 100).toFixed(2)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Edit Items</p>
+                        <button onClick={() => setAddItemPicker(true)} className="text-xs font-semibold text-blue-600 hover:underline">
+                          + Add Item
+                        </button>
+                      </div>
+                      {editItems.length === 0 && (
+                        <p className="text-sm text-slate-400 text-center py-4">No items — add at least one.</p>
+                      )}
+                      {editItems.map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between py-1.5 border-b border-slate-50">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-slate-800 leading-tight">{item.menuItemName}</p>
+                            {item.selectedOptions.length > 0 && (
+                              <p className="text-xs text-slate-400 truncate">{item.selectedOptions.map((o) => o.name).join(", ")}</p>
+                            )}
+                            <p className="text-xs font-semibold text-green-600 mt-0.5">₱{((item.unitPrice * item.quantity) / 100).toFixed(2)}</p>
+                          </div>
+                          <div className="flex items-center gap-1.5 ml-2 flex-shrink-0">
+                            <button onClick={() => decEditItem(idx)}
+                              className="h-7 w-7 rounded-lg bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 transition text-sm flex items-center justify-center">
+                              −
+                            </button>
+                            <span className="text-sm font-bold text-slate-800 w-5 text-center">{item.quantity}</span>
+                            <button onClick={() => incEditItem(idx)}
+                              className="h-7 w-7 rounded-lg bg-slate-800 text-white font-bold hover:bg-slate-700 transition text-sm flex items-center justify-center">
+                              +
+                            </button>
+                            <button onClick={() => removeEditItem(idx)}
+                              className="h-7 w-7 rounded-lg bg-red-50 text-red-500 font-bold hover:bg-red-100 transition text-sm flex items-center justify-center ml-1">
+                              ×
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="flex justify-between text-sm font-semibold text-slate-700 pt-1">
+                        <span>New Subtotal</span>
+                        <span>₱{(editItems.reduce((s, i) => s + i.unitPrice * i.quantity, 0) / 100).toFixed(2)}</span>
+                      </div>
+                      <div className="flex gap-2 pt-1">
+                        <button onClick={cancelEditItems}
+                          className="flex-1 rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+                          Cancel
+                        </button>
+                        <button onClick={() => saveEditItems(selectedOrder)} disabled={savingItems || editItems.length === 0}
+                          className="flex-1 rounded-lg bg-[#0f172a] py-2 text-xs font-semibold text-white hover:bg-slate-800 transition disabled:opacity-40">
+                          {savingItems ? "Saving…" : "Save Changes"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {selectedOrder && editItems === null && (
+                <>
                   {selectedOrder.discountAmount > 0 && (
                     <div className="flex justify-between text-xs text-red-500 pt-2">
                       <span>Discount ({selectedOrder.discountType === "SENIOR_PWD" ? "Senior/PWD" : "Custom"})</span>
@@ -839,6 +996,37 @@ export default function POSPage() {
                   )}
                 </>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Add item to order picker ─────────────────────────────── */}
+      {addItemPicker && editItems !== null && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setAddItemPicker(false)}>
+          <div className="w-full max-w-md rounded-2xl bg-white shadow-xl border border-slate-200 mx-4 max-h-[80vh] flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+              <h3 className="font-bold text-slate-900">Add Item</h3>
+              <button onClick={() => setAddItemPicker(false)}
+                className="h-7 w-7 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 text-lg leading-none">
+                ×
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {visibleCategories.map((cat) => (
+                <div key={cat.id}>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">{cat.name}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {cat.items.filter((i) => i.available).map((item) => (
+                      <button key={item.id} onClick={() => addItemToEdit(item)}
+                        className="rounded-xl border border-slate-200 p-3 text-left hover:border-slate-300 hover:shadow-sm transition active:scale-[0.97]">
+                        <p className="text-sm font-semibold text-slate-800 leading-tight">{item.name}</p>
+                        <p className="text-xs font-bold text-green-600 mt-1">₱{(item.price / 100).toFixed(2)}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

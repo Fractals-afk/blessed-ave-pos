@@ -101,6 +101,11 @@ export const adminApi = {
         method: "PATCH",
         body: JSON.stringify(body),
       }),
+    updateItems: (id: string, items: unknown) =>
+      apiFetch<{ data: import("@blessed-ave/types").Order }>(`/api/orders/${id}/items`, {
+        method: "PATCH",
+        body: JSON.stringify({ items }),
+      }),
   },
   till: {
     current: () =>
