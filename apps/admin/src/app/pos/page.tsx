@@ -142,6 +142,11 @@ export default function POSPage() {
   const [savingItems,   setSavingItems]   = useState(false);
   const [addItemPicker, setAddItemPicker] = useState(false);
   const [modifierTarget, setModifierTarget] = useState<"CART" | "EDIT">("CART");
+  // When editing a table order that's already paid, changing items changes
+  // what's owed. The cashier must pick how the refund/extra was settled
+  // before Save is enabled; any further item change clears the choice so a
+  // stale settlement can't be sent with a different delta.
+  const [settleMethod,  setSettleMethod]  = useState<"CASH" | "GCASH" | "MAYA" | null>(null);
 
   // Offline cart support — connectivity state, queued-sale count, and the
   // not-yet-created order waiting on the cash/QR modal to pick a payment
@@ -338,6 +343,7 @@ export default function POSPage() {
 
   function incEditItem(idx: number) {
     setEditItems((prev) => prev ? prev.map((it, i) => i === idx ? { ...it, quantity: it.quantity + 1 } : it) : prev);
+    setSettleMethod(null);
   }
   function decEditItem(idx: number) {
     setEditItems((prev) => {
@@ -345,9 +351,11 @@ export default function POSPage() {
       if (prev[idx].quantity <= 1) return prev.filter((_, i) => i !== idx);
       return prev.map((it, i) => i === idx ? { ...it, quantity: it.quantity - 1 } : it);
     });
+    setSettleMethod(null);
   }
   function removeEditItem(idx: number) {
     setEditItems((prev) => prev ? prev.filter((_, i) => i !== idx) : prev);
+    setSettleMethod(null);
   }
 
   function startEditItems(order: Order) {
@@ -355,23 +363,52 @@ export default function POSPage() {
       menuItemId: i.menuItemId, menuItemName: i.menuItemName, quantity: i.quantity,
       unitPrice: i.unitPrice, selectedOptions: i.selectedOptions,
     })));
+    setSettleMethod(null);
   }
   function cancelEditItems() {
     setEditItems(null);
     setAddItemPicker(false);
+    setSettleMethod(null);
   }
+
+  // Mirrors the server's total recompute in PATCH /orders/:id/items — lets
+  // the cashier see the refund/owed delta before saving.
+  function previewEditTotal(subtotal: number, order: Order) {
+    if (order.discountType === "SENIOR_PWD") {
+      const base = vatEnabled ? Math.round(subtotal / 1.12) : subtotal;
+      const discount = Math.round(base * 0.2);
+      return { total: base - discount, discount, vat: 0 };
+    }
+    if (order.discountType === "CUSTOM") {
+      const discount = Math.min(order.discountAmount, subtotal);
+      const total = subtotal - discount;
+      return { total, discount, vat: vatEnabled ? Math.round(total - total / 1.12) : 0 };
+    }
+    return { total: subtotal, discount: 0, vat: vatEnabled ? Math.round(subtotal - subtotal / 1.12) : 0 };
+  }
+
   async function saveEditItems(order: Order) {
     if (!editItems || editItems.length === 0) { toast.error("Order must have at least one item"); return; }
+    const newSubtotal = editItems.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+    const newTotal = previewEditTotal(newSubtotal, order).total;
+    const delta = newTotal - order.total;
+    const isPaid = order.status !== "PENDING";
+    if (isPaid && delta !== 0 && !settleMethod) {
+      toast.error(delta > 0 ? "Pick how the extra amount was collected" : "Pick how the refund was given");
+      return;
+    }
     setSavingItems(true);
     try {
+      const settlement = isPaid && delta !== 0 && settleMethod ? { method: settleMethod, amount: Math.abs(delta) } : undefined;
       const res = await adminApi.orders.updateItems(order.id, editItems.map((i) => ({
         menuItemId: i.menuItemId, quantity: i.quantity,
         selectedOptions: i.selectedOptions.map((o) => ({ modifierOptionId: o.modifierOptionId })),
-      })));
+      })), settlement);
       setActiveOrders((prev) => prev.map((o) => o.id === res.data.id ? res.data : o));
       toast.success("Order updated");
       setEditItems(null);
       setAddItemPicker(false);
+      setSettleMethod(null);
     } catch (err: any) {
       toast.error(err.message ?? "Failed to update order");
     } finally {
@@ -919,7 +956,7 @@ export default function POSPage() {
                     <>
                       <div className="flex items-center justify-between">
                         <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Items</p>
-                        {selectedOrder.status === "PENDING" && (
+                        {selectedOrder.status !== "COLLECTED" && selectedOrder.status !== "CANCELLED" && (
                           <button onClick={() => startEditItems(selectedOrder)} className="text-xs font-semibold text-blue-600 hover:underline">
                             Edit Items
                           </button>
@@ -971,20 +1008,51 @@ export default function POSPage() {
                           </div>
                         </div>
                       ))}
-                      <div className="flex justify-between text-sm font-semibold text-slate-700 pt-1">
-                        <span>New Subtotal</span>
-                        <span>₱{(editItems.reduce((s, i) => s + i.unitPrice * i.quantity, 0) / 100).toFixed(2)}</span>
-                      </div>
-                      <div className="flex gap-2 pt-1">
-                        <button onClick={cancelEditItems}
-                          className="flex-1 rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
-                          Cancel
-                        </button>
-                        <button onClick={() => saveEditItems(selectedOrder)} disabled={savingItems || editItems.length === 0}
-                          className="flex-1 rounded-lg bg-[#0f172a] py-2 text-xs font-semibold text-white hover:bg-slate-800 transition disabled:opacity-40">
-                          {savingItems ? "Saving…" : "Save Changes"}
-                        </button>
-                      </div>
+                      {(() => {
+                        const newSubtotal = editItems.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+                        const preview = previewEditTotal(newSubtotal, selectedOrder);
+                        const isPaid = selectedOrder.status !== "PENDING";
+                        const delta = preview.total - selectedOrder.total;
+                        const needsSettlement = isPaid && delta !== 0;
+                        return (
+                          <>
+                            <div className="flex justify-between text-sm font-semibold text-slate-700 pt-1">
+                              <span>New Total</span>
+                              <span>₱{(preview.total / 100).toFixed(2)}</span>
+                            </div>
+                            {needsSettlement && (
+                              <div className={`rounded-lg border p-2.5 space-y-1.5 ${delta > 0 ? "border-amber-200 bg-amber-50" : "border-blue-200 bg-blue-50"}`}>
+                                <p className={`text-xs font-bold ${delta > 0 ? "text-amber-700" : "text-blue-700"}`}>
+                                  {delta > 0 ? `Collect ₱${(delta / 100).toFixed(2)} more` : `Refund ₱${(-delta / 100).toFixed(2)}`}
+                                </p>
+                                <div className="grid grid-cols-3 gap-1.5">
+                                  {(["CASH", "GCASH", "MAYA"] as const).map((m) => (
+                                    <button key={m} onClick={() => setSettleMethod(m)}
+                                      className={`rounded-lg border py-1.5 text-xs font-semibold transition ${
+                                        settleMethod === m ? "border-slate-800 bg-slate-800 text-white" : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                                      }`}>
+                                      {m === "GCASH" ? "QR" : m === "MAYA" ? "Credit Card" : "Cash"}
+                                    </button>
+                                  ))}
+                                </div>
+                                <p className="text-[11px] text-slate-500">
+                                  {settleMethod ? `Confirm you ${delta > 0 ? "collected" : "gave"} ₱${(Math.abs(delta) / 100).toFixed(2)} via ${settleMethod === "GCASH" ? "QR" : settleMethod === "MAYA" ? "Credit Card" : "Cash"}, then save.` : `Pick how the ${delta > 0 ? "extra amount was collected" : "refund was given"} before saving.`}
+                                </p>
+                              </div>
+                            )}
+                            <div className="flex gap-2 pt-1">
+                              <button onClick={cancelEditItems}
+                                className="flex-1 rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
+                                Cancel
+                              </button>
+                              <button onClick={() => saveEditItems(selectedOrder)} disabled={savingItems || editItems.length === 0 || (needsSettlement && !settleMethod)}
+                                className="flex-1 rounded-lg bg-[#0f172a] py-2 text-xs font-semibold text-white hover:bg-slate-800 transition disabled:opacity-40">
+                                {savingItems ? "Saving…" : "Save Changes"}
+                              </button>
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
                   )}
                 </>

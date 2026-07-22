@@ -101,10 +101,10 @@ export const adminApi = {
         method: "PATCH",
         body: JSON.stringify(body),
       }),
-    updateItems: (id: string, items: unknown) =>
+    updateItems: (id: string, items: unknown, settlement?: { method: "CASH" | "GCASH" | "MAYA"; amount: number }) =>
       apiFetch<{ data: import("@blessed-ave/types").Order }>(`/api/orders/${id}/items`, {
         method: "PATCH",
-        body: JSON.stringify({ items }),
+        body: JSON.stringify({ items, settlement }),
       }),
   },
   till: {

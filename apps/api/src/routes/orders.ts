@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { prisma } from "@blessed-ave/db";
+import { prisma, Prisma } from "@blessed-ave/db";
 import { requireAuth, requireRole, tryAuth } from "../middleware/auth";
 import { AppError } from "../middleware/errorHandler";
 import { io } from "../index";
@@ -391,20 +391,31 @@ ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
   }
 });
 
-// PATCH /api/orders/:id/items — cashier edits the item list of an order that
-// hasn't been paid yet (add/remove/change quantity). Only PENDING orders are
-// editable — once payment is confirmed the order moves to CONFIRMED and is
-// visible in the kitchen, so items are locked from that point on.
-const updateItemsSchema = z.object({ items: z.array(orderItemSchema).min(1) });
+// PATCH /api/orders/:id/items — cashier edits the item list of an order
+// (add/remove/change quantity). Allowed any time before the order is
+// collected or cancelled. If the order has already been paid, changing the
+// items changes what's owed — the cashier must settle that difference (a
+// refund or an extra collection) in the same request via `settlement`, or
+// the request is rejected. This keeps payment.amount always equal to
+// order.total, so reports stay accurate.
+const settlementSchema = z.object({
+  method: z.enum(["CASH", "GCASH", "MAYA"]),
+  amount: z.number().int().positive(),
+});
+const updateItemsSchema = z.object({
+  items: z.array(orderItemSchema).min(1),
+  settlement: settlementSchema.optional(),
+});
+const EDITABLE_STATUSES = ["PENDING", "CONFIRMED", "PREPARING", "READY"];
 
 ordersRouter.patch("/:id/items", requireAuth, async (req, res, next) => {
   try {
     const body = updateItemsSchema.parse(req.body);
 
-    const order = await prisma.order.findUnique({ where: { id: req.params.id } });
+    const order = await prisma.order.findUnique({ where: { id: req.params.id }, include: { payment: true } });
     if (!order) throw new AppError("Order not found", 404);
-    if (order.status !== "PENDING") {
-      throw new AppError("Items can only be edited before payment is confirmed");
+    if (!EDITABLE_STATUSES.includes(order.status)) {
+      throw new AppError("This order can no longer be edited");
     }
 
     const menuItemIds = body.items.map((i) => i.menuItemId);
@@ -435,14 +446,58 @@ ordersRouter.patch("/:id/items", requireAuth, async (req, res, next) => {
       vatAmount = vatPortion(total, vatEnabled);
     }
 
+    // Paid orders must have the refund/extra-owed delta settled in this
+    // same request — the client shows the delta and collects it before
+    // calling save, so a mismatch here means the client total drifted.
+    let paymentUpdate: { method: "CASH" | "GCASH" | "MAYA" | "CARD" | "SPLIT"; amount: number; splitDetails: { method: string; amount: number }[] | typeof Prisma.JsonNull } | null = null;
+    if (order.status !== "PENDING") {
+      if (!order.payment || order.payment.status !== "PAID") {
+        throw new AppError("No confirmed payment found for this order", 400);
+      }
+      const delta = total - order.payment.amount;
+      if (delta !== 0) {
+        if (!body.settlement) {
+          throw new AppError(
+            delta > 0
+              ? `Collect ₱${(delta / 100).toFixed(2)} more before saving`
+              : `Refund ₱${(-delta / 100).toFixed(2)} before saving`,
+            400
+          );
+        }
+        if (body.settlement.amount !== Math.abs(delta)) {
+          throw new AppError("Settlement amount doesn't match the change in total — refresh and try again", 400);
+        }
+        const priorLines: { method: string; amount: number }[] =
+          order.payment.method === "SPLIT" && Array.isArray(order.payment.splitDetails)
+            ? (order.payment.splitDetails as { method: string; amount: number }[])
+            : [{ method: order.payment.method, amount: order.payment.amount }];
+        const lines = [...priorLines];
+        const existing = lines.find((l) => l.method === body.settlement!.method);
+        if (existing) existing.amount += delta;
+        else lines.push({ method: body.settlement.method, amount: delta });
+        const nonZeroLines = lines.filter((l) => l.amount !== 0);
+        paymentUpdate =
+          nonZeroLines.length > 1
+            ? { method: "SPLIT", amount: total, splitDetails: nonZeroLines }
+            : { method: nonZeroLines[0].method as "CASH" | "GCASH" | "MAYA", amount: total, splitDetails: Prisma.JsonNull };
+      }
+    }
+
+    if (order.status !== "PENDING") await restoreInventory(order.id);
+
     const updated = await prisma.$transaction(async (tx) => {
       await tx.orderItem.deleteMany({ where: { orderId: order.id } });
+      if (paymentUpdate) {
+        await tx.payment.update({ where: { orderId: order.id }, data: paymentUpdate });
+      }
       return tx.order.update({
         where: { id: order.id },
         data: { subtotal, total, vatAmount, discountAmount, items: { create: orderItemsData } },
         include: { items: { include: { selectedOptions: true } }, table: true, payment: true },
       });
     });
+
+    if (order.status !== "PENDING") await decrementInventory(order.id);
 
     emitOrderStatusUpdate(io, updated.id, updated.status, updated);
 
