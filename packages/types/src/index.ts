@@ -112,8 +112,13 @@ export interface SelectedOption {
 
 // ─── Payments ────────────────────────────────────────────────────────────────
 
-export type PaymentMethod = "GCASH" | "MAYA" | "CARD" | "CASH";
+export type PaymentMethod = "GCASH" | "MAYA" | "CARD" | "CASH" | "SPLIT";
 export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
+
+export interface PaymentSplitLine {
+  method: Exclude<PaymentMethod, "SPLIT">;
+  amount: number; // centavos
+}
 
 export interface Payment {
   id: string;
@@ -121,6 +126,7 @@ export interface Payment {
   method: PaymentMethod;
   status: PaymentStatus;
   amount: number; // centavos
+  splitDetails?: PaymentSplitLine[];
   paymongoPaymentIntentId?: string;
   paymongoSourceId?: string;
   paidAt?: string;

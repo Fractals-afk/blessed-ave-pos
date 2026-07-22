@@ -77,7 +77,13 @@ reportsRouter.get(
         CASH: 0,
       };
       for (const p of payments) {
-        byPaymentMethod[p.method] = (byPaymentMethod[p.method] ?? 0) + p.amount;
+        if (p.method === "SPLIT" && Array.isArray(p.splitDetails)) {
+          for (const line of p.splitDetails as { method: string; amount: number }[]) {
+            byPaymentMethod[line.method] = (byPaymentMethod[line.method] ?? 0) + line.amount;
+          }
+        } else {
+          byPaymentMethod[p.method] = (byPaymentMethod[p.method] ?? 0) + p.amount;
+        }
       }
 
       // Revenue by order source

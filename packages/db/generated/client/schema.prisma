@@ -218,6 +218,7 @@ enum PaymentMethod {
   MAYA
   CARD
   CASH
+  SPLIT
 }
 
 enum PaymentStatus {
@@ -233,6 +234,7 @@ model Payment {
   method                  PaymentMethod
   status                  PaymentStatus @default(PENDING)
   amount                  Int // centavos
+  splitDetails            Json? // when method = SPLIT: [{ method, amount }]
   paymongoPaymentIntentId String?
   paymongoSourceId        String?
   receiptUrl              String?

@@ -172,7 +172,8 @@ export const PaymentMethod: {
   GCASH: 'GCASH',
   MAYA: 'MAYA',
   CARD: 'CARD',
-  CASH: 'CASH'
+  CASH: 'CASH',
+  SPLIT: 'SPLIT'
 };
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
@@ -13621,6 +13622,7 @@ export namespace Prisma {
     method: number
     status: number
     amount: number
+    splitDetails: number
     paymongoPaymentIntentId: number
     paymongoSourceId: number
     receiptUrl: number
@@ -13673,6 +13675,7 @@ export namespace Prisma {
     method?: true
     status?: true
     amount?: true
+    splitDetails?: true
     paymongoPaymentIntentId?: true
     paymongoSourceId?: true
     receiptUrl?: true
@@ -13774,6 +13777,7 @@ export namespace Prisma {
     method: $Enums.PaymentMethod
     status: $Enums.PaymentStatus
     amount: number
+    splitDetails: JsonValue | null
     paymongoPaymentIntentId: string | null
     paymongoSourceId: string | null
     receiptUrl: string | null
@@ -13807,6 +13811,7 @@ export namespace Prisma {
     method?: boolean
     status?: boolean
     amount?: boolean
+    splitDetails?: boolean
     paymongoPaymentIntentId?: boolean
     paymongoSourceId?: boolean
     receiptUrl?: boolean
@@ -13822,6 +13827,7 @@ export namespace Prisma {
     method?: boolean
     status?: boolean
     amount?: boolean
+    splitDetails?: boolean
     paymongoPaymentIntentId?: boolean
     paymongoSourceId?: boolean
     receiptUrl?: boolean
@@ -13837,6 +13843,7 @@ export namespace Prisma {
     method?: boolean
     status?: boolean
     amount?: boolean
+    splitDetails?: boolean
     paymongoPaymentIntentId?: boolean
     paymongoSourceId?: boolean
     receiptUrl?: boolean
@@ -13863,6 +13870,7 @@ export namespace Prisma {
       method: $Enums.PaymentMethod
       status: $Enums.PaymentStatus
       amount: number
+      splitDetails: Prisma.JsonValue | null
       paymongoPaymentIntentId: string | null
       paymongoSourceId: string | null
       receiptUrl: string | null
@@ -14268,6 +14276,7 @@ export namespace Prisma {
     readonly method: FieldRef<"Payment", 'PaymentMethod'>
     readonly status: FieldRef<"Payment", 'PaymentStatus'>
     readonly amount: FieldRef<"Payment", 'Int'>
+    readonly splitDetails: FieldRef<"Payment", 'Json'>
     readonly paymongoPaymentIntentId: FieldRef<"Payment", 'String'>
     readonly paymongoSourceId: FieldRef<"Payment", 'String'>
     readonly receiptUrl: FieldRef<"Payment", 'String'>
@@ -25585,6 +25594,7 @@ export namespace Prisma {
     method: 'method',
     status: 'status',
     amount: 'amount',
+    splitDetails: 'splitDetails',
     paymongoPaymentIntentId: 'paymongoPaymentIntentId',
     paymongoSourceId: 'paymongoSourceId',
     receiptUrl: 'receiptUrl',
@@ -25743,6 +25753,14 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -25757,6 +25775,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -25894,6 +25921,13 @@ export namespace Prisma {
    * Reference to a field of type 'PaymentStatus[]'
    */
   export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
     
 
 
@@ -26740,6 +26774,7 @@ export namespace Prisma {
     method?: EnumPaymentMethodFilter<"Payment"> | $Enums.PaymentMethod
     status?: EnumPaymentStatusFilter<"Payment"> | $Enums.PaymentStatus
     amount?: IntFilter<"Payment"> | number
+    splitDetails?: JsonNullableFilter<"Payment">
     paymongoPaymentIntentId?: StringNullableFilter<"Payment"> | string | null
     paymongoSourceId?: StringNullableFilter<"Payment"> | string | null
     receiptUrl?: StringNullableFilter<"Payment"> | string | null
@@ -26755,6 +26790,7 @@ export namespace Prisma {
     method?: SortOrder
     status?: SortOrder
     amount?: SortOrder
+    splitDetails?: SortOrderInput | SortOrder
     paymongoPaymentIntentId?: SortOrderInput | SortOrder
     paymongoSourceId?: SortOrderInput | SortOrder
     receiptUrl?: SortOrderInput | SortOrder
@@ -26773,6 +26809,7 @@ export namespace Prisma {
     method?: EnumPaymentMethodFilter<"Payment"> | $Enums.PaymentMethod
     status?: EnumPaymentStatusFilter<"Payment"> | $Enums.PaymentStatus
     amount?: IntFilter<"Payment"> | number
+    splitDetails?: JsonNullableFilter<"Payment">
     paymongoPaymentIntentId?: StringNullableFilter<"Payment"> | string | null
     paymongoSourceId?: StringNullableFilter<"Payment"> | string | null
     receiptUrl?: StringNullableFilter<"Payment"> | string | null
@@ -26788,6 +26825,7 @@ export namespace Prisma {
     method?: SortOrder
     status?: SortOrder
     amount?: SortOrder
+    splitDetails?: SortOrderInput | SortOrder
     paymongoPaymentIntentId?: SortOrderInput | SortOrder
     paymongoSourceId?: SortOrderInput | SortOrder
     receiptUrl?: SortOrderInput | SortOrder
@@ -26810,6 +26848,7 @@ export namespace Prisma {
     method?: EnumPaymentMethodWithAggregatesFilter<"Payment"> | $Enums.PaymentMethod
     status?: EnumPaymentStatusWithAggregatesFilter<"Payment"> | $Enums.PaymentStatus
     amount?: IntWithAggregatesFilter<"Payment"> | number
+    splitDetails?: JsonNullableWithAggregatesFilter<"Payment">
     paymongoPaymentIntentId?: StringNullableWithAggregatesFilter<"Payment"> | string | null
     paymongoSourceId?: StringNullableWithAggregatesFilter<"Payment"> | string | null
     receiptUrl?: StringNullableWithAggregatesFilter<"Payment"> | string | null
@@ -28354,6 +28393,7 @@ export namespace Prisma {
     method: $Enums.PaymentMethod
     status?: $Enums.PaymentStatus
     amount: number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: string | null
     paymongoSourceId?: string | null
     receiptUrl?: string | null
@@ -28369,6 +28409,7 @@ export namespace Prisma {
     method: $Enums.PaymentMethod
     status?: $Enums.PaymentStatus
     amount: number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: string | null
     paymongoSourceId?: string | null
     receiptUrl?: string | null
@@ -28382,6 +28423,7 @@ export namespace Prisma {
     method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     amount?: IntFieldUpdateOperationsInput | number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
     paymongoSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28397,6 +28439,7 @@ export namespace Prisma {
     method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     amount?: IntFieldUpdateOperationsInput | number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
     paymongoSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28411,6 +28454,7 @@ export namespace Prisma {
     method: $Enums.PaymentMethod
     status?: $Enums.PaymentStatus
     amount: number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: string | null
     paymongoSourceId?: string | null
     receiptUrl?: string | null
@@ -28424,6 +28468,7 @@ export namespace Prisma {
     method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     amount?: IntFieldUpdateOperationsInput | number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
     paymongoSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28438,6 +28483,7 @@ export namespace Prisma {
     method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     amount?: IntFieldUpdateOperationsInput | number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
     paymongoSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29990,6 +30036,28 @@ export namespace Prisma {
     notIn?: $Enums.PaymentStatus[] | ListEnumPaymentStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPaymentStatusFilter<$PrismaModel> | $Enums.PaymentStatus
   }
+  export type JsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type PaymentCountOrderByAggregateInput = {
     id?: SortOrder
@@ -29997,6 +30065,7 @@ export namespace Prisma {
     method?: SortOrder
     status?: SortOrder
     amount?: SortOrder
+    splitDetails?: SortOrder
     paymongoPaymentIntentId?: SortOrder
     paymongoSourceId?: SortOrder
     receiptUrl?: SortOrder
@@ -30059,6 +30128,31 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type EnumInventoryUnitFilter<$PrismaModel = never> = {
@@ -32246,6 +32340,28 @@ export namespace Prisma {
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumInventoryUnitFilter<$PrismaModel = never> = {
     equals?: $Enums.InventoryUnit | EnumInventoryUnitFieldRefInput<$PrismaModel>
@@ -33520,6 +33636,7 @@ export namespace Prisma {
     method: $Enums.PaymentMethod
     status?: $Enums.PaymentStatus
     amount: number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: string | null
     paymongoSourceId?: string | null
     receiptUrl?: string | null
@@ -33533,6 +33650,7 @@ export namespace Prisma {
     method: $Enums.PaymentMethod
     status?: $Enums.PaymentStatus
     amount: number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: string | null
     paymongoSourceId?: string | null
     receiptUrl?: string | null
@@ -33646,6 +33764,7 @@ export namespace Prisma {
     method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     amount?: IntFieldUpdateOperationsInput | number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
     paymongoSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33659,6 +33778,7 @@ export namespace Prisma {
     method?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
     status?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     amount?: IntFieldUpdateOperationsInput | number
+    splitDetails?: NullableJsonNullValueInput | InputJsonValue
     paymongoPaymentIntentId?: NullableStringFieldUpdateOperationsInput | string | null
     paymongoSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null

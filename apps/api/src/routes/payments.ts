@@ -55,6 +55,67 @@ paymentsRouter.post("/cash", requireAuth, requireRole("OWNER", "MANAGER", "STAFF
   }
 });
 
+// POST /api/payments/split — cashier splits one order's bill across multiple methods
+paymentsRouter.post("/split", requireAuth, requireRole("OWNER", "MANAGER", "STAFF"), async (req, res, next) => {
+  try {
+    const { orderId, splits } = z
+      .object({
+        orderId: z.string(),
+        splits: z
+          .array(
+            z.object({
+              method: z.enum(["GCASH", "MAYA", "CARD", "CASH"]),
+              amount: z.number().int().positive(),
+            })
+          )
+          .min(2, "Split payment needs at least 2 methods"),
+      })
+      .parse(req.body);
+
+    const order = await prisma.order.findUnique({ where: { id: orderId } });
+    if (!order) throw new AppError("Order not found", 404);
+
+    const splitTotal = splits.reduce((s, l) => s + l.amount, 0);
+    if (splitTotal !== order.total) throw new AppError(`Split amounts (₱${(splitTotal / 100).toFixed(2)}) must equal order total (₱${(order.total / 100).toFixed(2)})`, 400);
+
+    const payment = await prisma.payment.upsert({
+      where: { orderId },
+      create: { orderId, method: "SPLIT", status: "PAID", amount: order.total, splitDetails: splits, paidAt: new Date() },
+      update: { method: "SPLIT", status: "PAID", amount: order.total, splitDetails: splits, paidAt: new Date() },
+    });
+
+    const confirmed = await prisma.order.update({
+      where: { id: orderId },
+      data: { status: "CONFIRMED" },
+      include: { items: { include: { selectedOptions: true } }, table: true, payment: true },
+    });
+
+    emitOrderStatusUpdate(io, confirmed.id, "CONFIRMED", confirmed);
+    emitNewOrder(io, confirmed); // payment confirmed — now safe to push to kitchen
+    decrementInventory(confirmed.id).catch(console.error);
+
+    const methodLabel = (m: string) => (m === "GCASH" ? "QR" : m === "MAYA" ? "Credit Card" : m === "CARD" ? "Card" : "Cash");
+    sendOrderReceipt({
+      orderId,
+      customerName: confirmed.customerName ?? undefined,
+      customerEmail: (confirmed as any).customerEmail ?? undefined,
+      items: confirmed.items.map((i) => ({
+        name: i.menuItemName,
+        quantity: i.quantity,
+        subtotal: i.subtotal,
+        options: i.selectedOptions.map((o) => o.name).join(", ") || undefined,
+      })),
+      total: confirmed.total,
+      paymentMethod: `Split (${splits.map((l) => `${methodLabel(l.method)} ₱${(l.amount / 100).toFixed(2)}`).join(" + ")})`,
+      source: confirmed.source,
+    }).catch(console.error);
+
+    res.json({ data: payment });
+  } catch (e) {
+    next(e);
+  }
+});
+
 // POST /api/payments/refund — staff refunds a paid order and cancels it
 paymentsRouter.post("/refund", requireAuth, requireRole("OWNER", "MANAGER", "STAFF"), async (req, res, next) => {
   try {

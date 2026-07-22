@@ -235,6 +235,7 @@ exports.Prisma.PaymentScalarFieldEnum = {
   method: 'method',
   status: 'status',
   amount: 'amount',
+  splitDetails: 'splitDetails',
   paymongoPaymentIntentId: 'paymongoPaymentIntentId',
   paymongoSourceId: 'paymongoSourceId',
   receiptUrl: 'receiptUrl',
@@ -354,6 +355,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -362,6 +368,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.UserRole = exports.$Enums.UserRole = {
   OWNER: 'OWNER',
@@ -395,7 +407,8 @@ exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   GCASH: 'GCASH',
   MAYA: 'MAYA',
   CARD: 'CARD',
-  CASH: 'CASH'
+  CASH: 'CASH',
+  SPLIT: 'SPLIT'
 };
 
 exports.PaymentStatus = exports.$Enums.PaymentStatus = {

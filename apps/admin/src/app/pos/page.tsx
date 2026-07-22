@@ -82,7 +82,7 @@ export default function POSPage() {
   const [cart,           setCart]           = useState<POSItem[]>([]);
   const [selectedItem,   setSelectedItem]   = useState<MenuItem | null>(null);
   const [itemOptions,    setItemOptions]    = useState<Record<string, ModifierOption[]>>({});
-  const [payMethod,      setPayMethod]      = useState<"GCASH" | "MAYA" | "CASH">("CASH");
+  const [payMethod,      setPayMethod]      = useState<"GCASH" | "MAYA" | "CASH" | "SPLIT">("CASH");
   const [placing,        setPlacing]        = useState(false);
   const [notes,          setNotes]          = useState("");
 
@@ -117,6 +117,13 @@ export default function POSPage() {
   const [cashTendered,  setCashTendered]  = useState("");
   const [cashConfirming, setCashConfirming] = useState(false);
   const [cashOnPaid,    setCashOnPaid]    = useState<(() => void) | null>(null);
+
+  // Split payment modal — bill divided across 2+ methods, must sum to the due amount
+  const [splitOrderId,    setSplitOrderId]    = useState<string | null>(null);
+  const [splitDue,        setSplitDue]        = useState(0);
+  const [splitRows,       setSplitRows]       = useState<{ method: "CASH" | "GCASH" | "MAYA"; amount: string }[]>([]);
+  const [splitConfirming, setSplitConfirming] = useState(false);
+  const [splitOnPaid,     setSplitOnPaid]     = useState<(() => void) | null>(null);
 
   // Table detail modal (request payment / refund / special instructions)
   const [selectedTable, setSelectedTable] = useState<CafeTable | null>(null);
@@ -439,6 +446,11 @@ export default function POSPage() {
         })),
       };
 
+      if (payMethod === "SPLIT" && !online) {
+        toast.error("Split payment needs a connection — pick Cash or QR to sell offline");
+        return;
+      }
+
       if (!online) {
         // No connection — stash the order locally and let the cashier still
         // pick cash/QR and enter the tendered amount; nothing hits the
@@ -453,7 +465,7 @@ export default function POSPage() {
           setCashOnPaid(() => () => {
             setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
           });
-        } else {
+        } else if (payMethod === "GCASH" || payMethod === "MAYA") {
           setQrMethod(payMethod);
           setQrAmount(preview.total);
           setQrOrderId(offlineId);
@@ -476,6 +488,10 @@ export default function POSPage() {
         setCashDue(order.total);
         setCashTendered("");
         setCashOnPaid(() => () => {
+          setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
+        });
+      } else if (payMethod === "SPLIT") {
+        openSplitModal(order.id, order.total, () => {
           setCart([]); setNotes(""); setDiscountType("NONE"); setDiscountId(""); setCustomDiscount("");
         });
       } else {
@@ -564,6 +580,42 @@ export default function POSPage() {
     setCashDue(order.total);
     setCashTendered("");
     setCashOnPaid(() => () => setSelectedTable(null));
+  }
+
+  function openSplitModal(orderId: string, due: number, onPaid: () => void) {
+    setSplitOrderId(orderId);
+    setSplitDue(due);
+    setSplitRows([{ method: "CASH", amount: "" }, { method: "GCASH", amount: "" }]);
+    setSplitOnPaid(() => onPaid);
+  }
+
+  function requestSplitPayment(order: Order) {
+    openSplitModal(order.id, order.total, () => setSelectedTable(null));
+  }
+
+  async function confirmSplitPayment() {
+    if (!splitOrderId) return;
+    const splits = splitRows.map((r) => ({ method: r.method, amount: Math.round(parseFloat(r.amount || "0") * 100) || 0 }));
+    const splitSum = splits.reduce((s, l) => s + l.amount, 0);
+    if (splits.some((l) => l.amount <= 0)) { toast.error("Every split needs an amount"); return; }
+    if (splitSum !== splitDue) { toast.error(`Splits total ₱${(splitSum / 100).toFixed(2)}, order needs ₱${(splitDue / 100).toFixed(2)}`); return; }
+
+    setSplitConfirming(true);
+    try {
+      const API = await resolveApiBase();
+      const res = await fetch(`${API}/api/payments/split`, {
+        method: "POST", headers: auth(),
+        body: JSON.stringify({ orderId: splitOrderId, splits }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error ?? "Split payment failed");
+      toast.success(`Order #${splitOrderId.slice(-4).toUpperCase()} — Split payment ✓`);
+      splitOnPaid?.();
+      setSplitOrderId(null);
+    } catch (err: any) {
+      toast.error(err.message ?? "Failed");
+    } finally {
+      setSplitConfirming(false);
+    }
   }
 
   async function confirmCashPayment() {
@@ -737,13 +789,13 @@ export default function POSPage() {
               placeholder="Order notes…" rows={2}
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none" />
 
-            <div className="grid grid-cols-3 gap-2">
-              {(["CASH", "GCASH", "MAYA"] as const).map((m) => (
+            <div className="grid grid-cols-4 gap-2">
+              {(["CASH", "GCASH", "MAYA", "SPLIT"] as const).map((m) => (
                 <button key={m} onClick={() => setPayMethod(m)}
-                  className={`rounded-xl border py-3 text-sm font-semibold transition active:scale-[0.97] ${
+                  className={`rounded-xl border py-3 text-xs font-semibold transition active:scale-[0.97] ${
                     payMethod === m ? "border-slate-800 bg-slate-800 text-white" : "border-slate-200 text-slate-600 hover:border-slate-300"
                   }`}>
-                  {m === "GCASH" ? "QR" : m === "MAYA" ? "Credit Card" : "Cash"}
+                  {m === "GCASH" ? "QR" : m === "MAYA" ? "Credit Card" : m === "SPLIT" ? "Split" : "Cash"}
                 </button>
               ))}
             </div>
@@ -802,7 +854,7 @@ export default function POSPage() {
 
             <button onClick={placeOrder} disabled={cart.length === 0 || placing}
               className="w-full rounded-xl bg-[#0f172a] py-4 text-base font-semibold text-white hover:bg-slate-800 disabled:opacity-40 transition active:scale-[0.98]">
-              {placing ? "Placing…" : payMethod === "CASH" ? "Place Order (Cash)" : `Place Order → Show QR`}
+              {placing ? "Placing…" : payMethod === "CASH" ? "Place Order (Cash)" : payMethod === "SPLIT" ? "Place Order → Split Payment" : `Place Order → Show QR`}
             </button>
           </div>
         </div>
@@ -988,7 +1040,7 @@ export default function POSPage() {
                   {selectedOrder.status === "PENDING" && (
                     <div>
                       <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Request Payment</p>
-                      <div className="grid grid-cols-3 gap-1.5">
+                      <div className="grid grid-cols-4 gap-1.5">
                         <button onClick={() => requestCashPayment(selectedOrder)}
                           className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition">
                           Cash
@@ -1000,6 +1052,10 @@ export default function POSPage() {
                         <button onClick={() => requestPayment(selectedOrder, "MAYA")}
                           className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition">
                           Credit Card
+                        </button>
+                        <button onClick={() => requestSplitPayment(selectedOrder)}
+                          className="rounded-lg border border-slate-200 py-2 text-xs font-semibold text-slate-600 hover:border-slate-300 transition">
+                          Split
                         </button>
                       </div>
                     </div>
@@ -1206,6 +1262,76 @@ export default function POSPage() {
                     {cashConfirming ? "Confirming…" : "✓ Confirm Cash Payment"}
                   </button>
                   <button onClick={() => setCashOrderId(null)} disabled={cashConfirming}
+                    className="w-full rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-500 hover:bg-slate-50 transition disabled:opacity-50">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── Split Payment modal ──────────────────────────────────── */}
+      {splitOrderId && (() => {
+        const rowsCents = splitRows.map((r) => Math.round(parseFloat(r.amount || "0") * 100) || 0);
+        const splitSum = rowsCents.reduce((s, c) => s + c, 0);
+        const remaining = splitDue - splitSum;
+        const canSubmit = splitRows.length >= 2 && rowsCents.every((c) => c > 0) && remaining === 0;
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+            <div className="w-full max-w-sm rounded-2xl bg-white shadow-2xl border border-slate-200 mx-4 overflow-hidden">
+              <div className="px-6 py-4 bg-slate-800 text-white">
+                <p className="font-bold text-lg">Split Payment</p>
+                <p className="text-sm opacity-80 mt-0.5">
+                  Order #{splitOrderId.slice(-6).toUpperCase()} · ₱{(splitDue / 100).toFixed(2)} due
+                </p>
+              </div>
+
+              <div className="p-6 space-y-3">
+                {splitRows.map((row, idx) => (
+                  <div key={idx} className="flex items-center gap-2">
+                    <select
+                      value={row.method}
+                      onChange={(e) => setSplitRows((prev) => prev.map((r, i) => i === idx ? { ...r, method: e.target.value as typeof r.method } : r))}
+                      className="rounded-lg border border-slate-200 px-2 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                      <option value="CASH">Cash</option>
+                      <option value="GCASH">QR</option>
+                      <option value="MAYA">Credit Card</option>
+                    </select>
+                    <input
+                      type="number" min="0" step="0.01" inputMode="decimal"
+                      value={row.amount}
+                      onChange={(e) => setSplitRows((prev) => prev.map((r, i) => i === idx ? { ...r, amount: e.target.value } : r))}
+                      placeholder="0.00"
+                      className="flex-1 rounded-lg border border-slate-200 px-3 py-2.5 text-sm font-semibold text-slate-900 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    />
+                    <button onClick={() => setSplitRows((prev) => prev.filter((_, i) => i !== idx))}
+                      disabled={splitRows.length <= 2}
+                      className="h-9 w-9 flex-shrink-0 rounded-lg bg-slate-100 text-slate-500 font-bold hover:bg-slate-200 transition disabled:opacity-30 flex items-center justify-center">
+                      ×
+                    </button>
+                  </div>
+                ))}
+
+                <button onClick={() => setSplitRows((prev) => [...prev, { method: "CASH", amount: "" }])}
+                  className="w-full rounded-lg border border-dashed border-slate-300 py-2 text-xs font-semibold text-slate-500 hover:border-slate-400 transition">
+                  + Add payment method
+                </button>
+
+                <div className="flex justify-between items-center border-t border-slate-100 pt-3">
+                  <span className="text-sm text-slate-500">{remaining === 0 ? "Fully covered" : remaining > 0 ? "Remaining" : "Over by"}</span>
+                  <span className={`text-xl font-bold ${remaining === 0 ? "text-green-600" : "text-red-500"}`}>
+                    ₱{(Math.abs(remaining) / 100).toFixed(2)}
+                  </span>
+                </div>
+
+                <div className="space-y-2 pt-1">
+                  <button onClick={confirmSplitPayment} disabled={splitConfirming || !canSubmit}
+                    className="w-full rounded-xl bg-slate-800 py-3.5 font-bold text-white transition active:scale-[0.98] disabled:opacity-40 hover:bg-slate-700">
+                    {splitConfirming ? "Confirming…" : "✓ Confirm Split Payment"}
+                  </button>
+                  <button onClick={() => setSplitOrderId(null)} disabled={splitConfirming}
                     className="w-full rounded-xl border border-slate-200 py-3 text-sm font-medium text-slate-500 hover:bg-slate-50 transition disabled:opacity-50">
                     Cancel
                   </button>
