@@ -125,6 +125,11 @@ export default function POSPage() {
   const [splitConfirming, setSplitConfirming] = useState(false);
   const [splitOnPaid,     setSplitOnPaid]     = useState<(() => void) | null>(null);
 
+  // Order-type modal — shown when "Place Order" is pressed, asks Takeout vs
+  // Dine-in before the order is created; Dine-in drills into a table picker.
+  const [orderTypeModalOpen, setOrderTypeModalOpen] = useState(false);
+  const [orderTypeStep,      setOrderTypeStep]      = useState<"CHOOSE" | "TABLE">("CHOOSE");
+
   // Table detail modal (request payment / refund / special instructions)
   const [selectedTable, setSelectedTable] = useState<CafeTable | null>(null);
   const [notesDraft,    setNotesDraft]    = useState("");
@@ -434,12 +439,13 @@ export default function POSPage() {
     localStorage.removeItem("pos_cart_draft");
   }
 
-  async function placeOrder() {
+  async function placeOrder(tableId?: string) {
     if (cart.length === 0) return;
+    setOrderTypeModalOpen(false);
     setPlacing(true);
     try {
       const orderBody = {
-        source: "POS", notes,
+        source: "POS", notes, tableId,
         items: cart.map((i) => ({
           menuItemId: i.menuItem.id, quantity: i.quantity,
           selectedOptions: i.selectedOptions.map((o) => ({ modifierOptionId: o.id })),
@@ -852,7 +858,7 @@ export default function POSPage() {
               );
             })()}
 
-            <button onClick={placeOrder} disabled={cart.length === 0 || placing}
+            <button onClick={() => { setOrderTypeStep("CHOOSE"); setOrderTypeModalOpen(true); }} disabled={cart.length === 0 || placing}
               className="w-full rounded-xl bg-[#0f172a] py-4 text-base font-semibold text-white hover:bg-slate-800 disabled:opacity-40 transition active:scale-[0.98]">
               {placing ? "Placing…" : payMethod === "CASH" ? "Place Order (Cash)" : payMethod === "SPLIT" ? "Place Order → Split Payment" : `Place Order → Show QR`}
             </button>
@@ -1161,6 +1167,56 @@ export default function POSPage() {
                 Add to Order
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Order-type modal (Takeout vs Dine-in table pick) ───────── */}
+      {orderTypeModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          onClick={() => setOrderTypeModalOpen(false)}>
+          <div className="w-full max-w-sm rounded-2xl bg-white shadow-2xl border border-slate-200 mx-4 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}>
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <p className="font-bold text-lg text-slate-900">
+                {orderTypeStep === "CHOOSE" ? "Order Type" : "Assign a Table"}
+              </p>
+              <button onClick={() => setOrderTypeModalOpen(false)} className="text-slate-400 hover:text-slate-600 text-xl leading-none">
+                ×
+              </button>
+            </div>
+
+            {orderTypeStep === "CHOOSE" ? (
+              <div className="p-6 space-y-3">
+                <button onClick={() => placeOrder()} disabled={placing}
+                  className="w-full rounded-xl bg-[#0f172a] py-4 text-base font-semibold text-white hover:bg-slate-800 disabled:opacity-40 transition active:scale-[0.98]">
+                  🥡 Takeout
+                </button>
+                <button onClick={() => setOrderTypeStep("TABLE")} disabled={placing}
+                  className="w-full rounded-xl border-2 border-slate-800 py-4 text-base font-semibold text-slate-800 hover:bg-slate-50 disabled:opacity-40 transition active:scale-[0.98]">
+                  🍽️ Dine-in
+                </button>
+              </div>
+            ) : (
+              <div className="p-6">
+                {sortedTables.length === 0 ? (
+                  <p className="text-sm text-slate-400 text-center py-6">No tables configured.</p>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2 max-h-72 overflow-y-auto">
+                    {sortedTables.map((table) => (
+                      <button key={table.id} onClick={() => placeOrder(table.id)} disabled={placing}
+                        className="rounded-xl border-2 border-slate-200 py-3 text-sm font-bold text-slate-700 hover:border-slate-800 hover:bg-slate-50 disabled:opacity-40 transition active:scale-[0.97]">
+                        {table.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <button onClick={() => setOrderTypeStep("CHOOSE")} disabled={placing}
+                  className="w-full mt-4 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-500 hover:bg-slate-50 transition">
+                  ← Back
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
