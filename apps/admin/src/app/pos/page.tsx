@@ -127,6 +127,30 @@ export default function POSPage() {
     discount?: { discountType: string; discountIdNumber?: string; amount?: number };
   } | null>(null);
 
+  // Restore an in-progress order after a refresh — cart is otherwise pure
+  // React state and would be wiped on reload mid-sale.
+  useEffect(() => {
+    const raw = localStorage.getItem("pos_cart_draft");
+    if (!raw) return;
+    try {
+      const draft = JSON.parse(raw);
+      if (Array.isArray(draft.cart) && draft.cart.length > 0) setCart(draft.cart);
+      if (typeof draft.notes === "string") setNotes(draft.notes);
+      if (draft.payMethod) setPayMethod(draft.payMethod);
+      if (draft.discountType) setDiscountType(draft.discountType);
+      if (typeof draft.discountId === "string") setDiscountId(draft.discountId);
+      if (typeof draft.customDiscount === "string") setCustomDiscount(draft.customDiscount);
+    } catch {
+      // Corrupt draft — ignore and start fresh.
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("pos_cart_draft", JSON.stringify({
+      cart, notes, payMethod, discountType, discountId, customDiscount,
+    }));
+  }, [cart, notes, payMethod, discountType, discountId, customDiscount]);
+
   useEffect(() => {
     adminApi.settings.getVat().then((r) => setVatEnabled(r.data.vatEnabled)).catch(() => {});
     adminApi.menu.getAll().then((r) => {
