@@ -417,6 +417,16 @@ export default function POSPage() {
     return { discountType, amount: Math.round(parseFloat(customDiscount || "0") * 100) };
   }
 
+  function cancelOrder() {
+    if (!confirm("Cancel this order? Cart will be cleared.")) return;
+    setCart([]);
+    setNotes("");
+    setDiscountType("NONE");
+    setDiscountId("");
+    setCustomDiscount("");
+    localStorage.removeItem("pos_cart_draft");
+  }
+
   async function placeOrder() {
     if (cart.length === 0) return;
     setPlacing(true);
@@ -679,7 +689,14 @@ export default function POSPage() {
         <div className="flex w-80 flex-col border-l border-slate-200 bg-white">
           <div className="border-b border-slate-100 px-4 py-4 flex items-center justify-between">
             <h2 className="font-semibold text-slate-900 text-sm">Current Order</h2>
-            {itemCount > 0 && <span className="text-xs text-slate-400">{itemCount} item{itemCount !== 1 ? "s" : ""}</span>}
+            <div className="flex items-center gap-2">
+              {itemCount > 0 && <span className="text-xs text-slate-400">{itemCount} item{itemCount !== 1 ? "s" : ""}</span>}
+              {cart.length > 0 && (
+                <button onClick={cancelOrder} className="text-xs font-semibold text-red-500 hover:underline">
+                  Cancel Order
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
