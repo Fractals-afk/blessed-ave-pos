@@ -1,7 +1,9 @@
 import { Router } from "express";
 import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
 import { requireAuth, requireRole } from "../middleware/auth";
 import { AppError } from "../middleware/errorHandler";
+import { uploadImage } from "../lib/storage";
 
 export const uploadRouter = Router();
 
@@ -17,7 +19,11 @@ const upload = multer({
   },
 });
 
-// POST /api/upload/image
+// POST /api/upload/image — used for menu item photos. Resizes/recompresses
+// before storing so a full-res phone photo doesn't end up shipped to every
+// POS/kitchen screen; matches the receipt-scan compression in
+// operating-costs.ts and goes through the same storage helper (local disk
+// fallback when S3 isn't configured, which is true in dev and today's prod).
 uploadRouter.post(
   "/image",
   requireAuth,
@@ -27,32 +33,14 @@ uploadRouter.post(
     try {
       if (!req.file) throw new AppError("No file uploaded");
 
-      // Upload to S3-compatible storage (Cloudflare R2 or AWS S3)
-      const { S3Client, PutObjectCommand } = await import("@aws-sdk/client-s3");
-      const { v4: uuidv4 } = await import("uuid");
+      const sharp = (await import("sharp")).default;
+      const compressed = await sharp(req.file.buffer)
+        .rotate() // respect EXIF orientation from phone cameras
+        .resize({ width: 800, withoutEnlargement: true })
+        .jpeg({ quality: 75 })
+        .toBuffer();
 
-      const client = new S3Client({
-        region: process.env.S3_REGION ?? "auto",
-        endpoint: process.env.S3_ENDPOINT,
-        credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY!,
-          secretAccessKey: process.env.S3_SECRET_KEY!,
-        },
-      });
-
-      const ext = req.file.originalname.split(".").pop();
-      const key = `menu/${uuidv4()}.${ext}`;
-
-      await client.send(
-        new PutObjectCommand({
-          Bucket: process.env.S3_BUCKET!,
-          Key: key,
-          Body: req.file.buffer,
-          ContentType: req.file.mimetype,
-        })
-      );
-
-      const url = `${process.env.S3_PUBLIC_URL}/${key}`;
+      const url = await uploadImage(compressed, `menu/${uuidv4()}.jpg`, "image/jpeg");
       res.json({ data: { url } });
     } catch (e) {
       next(e);

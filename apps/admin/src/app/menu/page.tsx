@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
-import { adminApi } from "@/lib/api";
+import { adminApi, resolveApiBase } from "@/lib/api";
 import type { MenuCategory, MenuItem, ModifierGroup } from "@blessed-ave/types";
 import toast from "react-hot-toast";
 
@@ -67,6 +67,7 @@ export default function MenuPage() {
   const [itemForm, setItemForm] = useState<ItemFormState>(emptyItem(""));
   const [editItem, setEditItem] = useState<MenuItem | null>(null);
   const [savingItem, setSavingItem] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   // Modifier modal (nested inside item view)
   const [showModModal, setShowModModal] = useState(false);
@@ -152,13 +153,35 @@ export default function MenuPage() {
     setShowItemModal(true);
   }
 
+  async function handlePhotoUpload(file: File) {
+    setUploadingPhoto(true);
+    try {
+      const API = await resolveApiBase();
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch(`${API}/api/upload/image`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+        body,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Upload failed");
+      const url: string = json.data.url.startsWith("http") ? json.data.url : `${API}${json.data.url}`;
+      setItemForm((p) => ({ ...p, imageUrl: url }));
+    } catch (err: any) {
+      toast.error(err.message ?? "Photo upload failed");
+    } finally {
+      setUploadingPhoto(false);
+    }
+  }
+
   async function saveItem() {
     setSavingItem(true);
     try {
       const body = {
         ...itemForm,
         price: Math.round(parseFloat(itemForm.price || "0") * 100),
-        imageUrl: itemForm.imageUrl || undefined,
+        imageUrl: itemForm.imageUrl || null,
         description: itemForm.description || undefined,
       };
       if (editItem) {
@@ -438,8 +461,39 @@ export default function MenuPage() {
                 <input className={iCls} value={itemForm.description} onChange={(e) => setItemForm((p) => ({ ...p, description: e.target.value }))} />
               </div>
               <div className="col-span-2">
-                <label className={lCls}>Image URL (optional)</label>
-                <input className={iCls} placeholder="https://…" value={itemForm.imageUrl} onChange={(e) => setItemForm((p) => ({ ...p, imageUrl: e.target.value }))} />
+                <label className={lCls}>Photo (optional)</label>
+                <div className="flex items-center gap-3">
+                  {itemForm.imageUrl && (
+                    <img src={itemForm.imageUrl} alt="" className="h-14 w-14 flex-shrink-0 rounded-lg object-cover border border-slate-200" />
+                  )}
+                  <div className="flex-1 flex items-center gap-2">
+                    <label className={`flex-1 cursor-pointer rounded-lg border border-dashed px-3 py-2.5 text-center text-xs font-semibold transition ${
+                      uploadingPhoto ? "border-slate-200 text-slate-300" : "border-slate-300 text-slate-500 hover:border-slate-400 hover:text-slate-700"
+                    }`}>
+                      {uploadingPhoto ? "Uploading…" : itemForm.imageUrl ? "Replace photo" : "Upload photo"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={uploadingPhoto}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handlePhotoUpload(file);
+                          e.target.value = "";
+                        }}
+                      />
+                    </label>
+                    {itemForm.imageUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setItemForm((p) => ({ ...p, imageUrl: "" }))}
+                        className="text-xs font-semibold text-red-400 hover:text-red-600 transition"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
             <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">

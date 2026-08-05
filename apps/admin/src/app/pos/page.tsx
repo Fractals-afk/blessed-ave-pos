@@ -910,10 +910,15 @@ export default function POSPage() {
             <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4">
               {activeItems.map((item) => (
                 <button key={item.id} onClick={() => addToCart(item)}
-                  className="rounded-2xl bg-white border border-slate-200 p-5 text-left hover:border-slate-300 hover:shadow-md transition active:scale-[0.97] min-h-[104px]">
-                  <p className="font-semibold text-slate-800 text-base leading-tight">{item.name}</p>
-                  {item.description && <p className="text-sm text-slate-400 mt-1 line-clamp-1">{item.description}</p>}
-                  <p className="mt-2 text-base font-bold text-green-600">₱{(item.price / 100).toFixed(2)}</p>
+                  className="overflow-hidden rounded-2xl bg-white border border-slate-200 text-left hover:border-slate-300 hover:shadow-md transition active:scale-[0.97] min-h-[104px]">
+                  {item.imageUrl && (
+                    <img src={item.imageUrl} alt="" loading="lazy" className="h-20 w-full object-cover" />
+                  )}
+                  <div className="p-4">
+                    <p className="font-semibold text-slate-800 text-base leading-tight">{item.name}</p>
+                    {item.description && <p className="text-sm text-slate-400 mt-1 line-clamp-1">{item.description}</p>}
+                    <p className="mt-2 text-base font-bold text-green-600">₱{(item.price / 100).toFixed(2)}</p>
+                  </div>
                 </button>
               ))}
             </div>

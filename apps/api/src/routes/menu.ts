@@ -109,7 +109,7 @@ const itemSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
   price: z.number().int().positive(), // centavos
-  imageUrl: z.string().url().optional(),
+  imageUrl: z.string().url().nullable().optional(),
   available: z.boolean().optional(),
 });
 
