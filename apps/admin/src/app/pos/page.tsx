@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { QrPlaceholder } from "@/components/QrPlaceholder";
 import { enqueueOrder, loadMenuCache, newOfflineId, pendingCount, saveMenuCache } from "@/lib/offline";
 import { syncOfflineQueue } from "@/lib/sync";
+import { printReceipt, type ReceiptData } from "@/lib/printer";
 
 const ACTIVE_STATUSES = ["PENDING", "CONFIRMED", "PREPARING", "READY"];
 
@@ -62,6 +63,51 @@ function previewCartTotals(cart: { unitPrice: number; quantity: number; discount
     vat += line.vat;
   }
   return { total, discount, vat };
+}
+
+function discountLabel(discountType: DiscountType, discountAmount: number): string | undefined {
+  if (discountType === "SENIOR_PWD") return "Senior/PWD -20%";
+  if (discountType === "CUSTOM" && discountAmount > 0) return `Discount -P${(discountAmount / 100).toFixed(2)}`;
+  return undefined;
+}
+
+// Base receipt (items/totals/label) from the cart being built at checkout —
+// used for the "new order, pay immediately" flow. Payment-specific fields
+// (method/tendered/change) get filled in at print time, once known.
+function cartToReceiptBase(cart: POSItem[], vatEnabled: boolean, orderLabel: string): Omit<ReceiptData, "paymentMethod" | "tendered" | "change"> {
+  const lines = cart.map((i) => {
+    const p = previewLine(i.unitPrice * i.quantity, i.discountType, i.discountAmount, vatEnabled);
+    const optNames = i.selectedOptions.map((o) => o.name).join(", ");
+    return {
+      name: optNames ? `${i.menuItem.name} (${optNames})` : i.menuItem.name,
+      qty: i.quantity, unitPrice: i.unitPrice, lineTotal: p.total,
+      discountLabel: discountLabel(i.discountType, p.discount),
+    };
+  });
+  const totals = previewCartTotals(cart, vatEnabled);
+  return {
+    storeName: "Blessed Ave", orderLabel, timestamp: new Date(), lines,
+    subtotal: totals.total + totals.discount, discount: totals.discount,
+    vat: totals.vat, vatEnabled, total: totals.total,
+  };
+}
+
+// Same, but from a server-side Order — used when paying an existing table
+// order, where the authoritative item/total breakdown already exists.
+function orderToReceiptBase(order: Order, vatEnabled: boolean, orderLabel: string): Omit<ReceiptData, "paymentMethod" | "tendered" | "change"> {
+  const lines = order.items.map((i) => {
+    const optNames = (i.selectedOptions ?? []).map((o) => o.name).join(", ");
+    return {
+      name: optNames ? `${i.menuItemName} (${optNames})` : i.menuItemName,
+      qty: i.quantity, unitPrice: i.unitPrice, lineTotal: i.subtotal,
+      discountLabel: discountLabel(i.discountType, i.discountAmount),
+    };
+  });
+  return {
+    storeName: "Blessed Ave", orderLabel, timestamp: new Date(), lines,
+    subtotal: order.subtotal, discount: Math.max(0, order.subtotal - order.total),
+    vat: order.vatAmount, vatEnabled, total: order.total,
+  };
 }
 
 function tableSort(a: CafeTable, b: CafeTable) {
@@ -144,6 +190,10 @@ export default function POSPage() {
   const [cashTendered,  setCashTendered]  = useState("");
   const [cashConfirming, setCashConfirming] = useState(false);
   const [cashOnPaid,    setCashOnPaid]    = useState<(() => void) | null>(null);
+  // Item/total breakdown for the customer-copy receipt, captured at the
+  // moment a payment flow starts (cart or existing order — whichever's
+  // available then) and printed once that payment actually confirms.
+  const [pendingReceipt, setPendingReceipt] = useState<Omit<ReceiptData, "paymentMethod" | "tendered" | "change"> | null>(null);
 
   // Split payment modal — bill divided across 2+ methods, must sum to the due amount
   const [splitOrderId,    setSplitOrderId]    = useState<string | null>(null);
@@ -504,6 +554,8 @@ export default function POSPage() {
         // network until confirmCashPayment/confirmQrPayment enqueue it.
         const preview = previewCartTotals(cart, vatEnabled);
         const offlineId = newOfflineId();
+        const offlineLabel = tableId ? tables.find((t) => t.id === tableId)?.name ?? "Table" : `Order #${offlineId.slice(-4).toUpperCase()}`;
+        setPendingReceipt(cartToReceiptBase(cart, vatEnabled, offlineLabel));
         setOfflinePending({ offlineId, orderBody });
         if (payMethod === "CASH") {
           setCashOrderId(offlineId);
@@ -525,6 +577,7 @@ export default function POSPage() {
       const resBody = await res.json();
       if (!res.ok) throw new Error(resBody.error ?? "Failed to place order");
       const order = resBody.data;
+      setPendingReceipt(cartToReceiptBase(cart, vatEnabled, order.table?.name ?? `Order #${order.id.slice(-4).toUpperCase()}`));
 
       if (payMethod === "CASH") {
         setCashOrderId(order.id);
@@ -562,8 +615,10 @@ export default function POSPage() {
         });
         setQueuedCount(pendingCount());
         toast.success(`${qrMethod === "GCASH" ? "QR" : "Credit Card"} sale saved offline — will sync when online`);
+        if (pendingReceipt) printReceipt({ ...pendingReceipt, paymentMethod: qrMethod }).catch((e: any) => toast.error(`Printer: ${e.message ?? "failed to print"}`));
         setOfflinePending(null);
         setQrOrderId(null);
+        setPendingReceipt(null);
         setCart([]); setNotes(""); setDiscountIdNumber("");
         return;
       }
@@ -574,7 +629,9 @@ export default function POSPage() {
       });
       if (!res.ok) throw new Error((await res.json()).error ?? "Failed to confirm");
       toast.success(`Order #${qrOrderId.slice(-4).toUpperCase()} — ${qrMethod} paid ✓`);
+      if (pendingReceipt) printReceipt({ ...pendingReceipt, paymentMethod: qrMethod }).catch((e: any) => toast.error(`Printer: ${e.message ?? "failed to print"}`));
       setQrOrderId(null);
+      setPendingReceipt(null);
       setCart([]); setNotes(""); setDiscountIdNumber("");
       setSelectedTable(null);
     } catch (err: any) {
@@ -598,12 +655,14 @@ export default function POSPage() {
   }
 
   function requestPayment(order: Order, method: "GCASH" | "MAYA") {
+    setPendingReceipt(orderToReceiptBase(order, vatEnabled, order.table?.name ?? `Order #${order.id.slice(-4).toUpperCase()}`));
     setQrMethod(method);
     setQrAmount(order.total);
     setQrOrderId(order.id);
   }
 
   function requestCashPayment(order: Order) {
+    setPendingReceipt(orderToReceiptBase(order, vatEnabled, order.table?.name ?? `Order #${order.id.slice(-4).toUpperCase()}`));
     setCashOrderId(order.id);
     setCashDue(order.total);
     setCashTendered("");
@@ -618,6 +677,7 @@ export default function POSPage() {
   }
 
   function requestSplitPayment(order: Order) {
+    setPendingReceipt(orderToReceiptBase(order, vatEnabled, order.table?.name ?? `Order #${order.id.slice(-4).toUpperCase()}`));
     openSplitModal(order.id, order.total, () => setSelectedTable(null));
   }
 
@@ -637,6 +697,8 @@ export default function POSPage() {
       });
       if (!res.ok) throw new Error((await res.json()).error ?? "Split payment failed");
       toast.success(`Order #${splitOrderId.slice(-4).toUpperCase()} — Split payment ✓`);
+      if (pendingReceipt) printReceipt({ ...pendingReceipt, paymentMethod: "SPLIT" }).catch((e: any) => toast.error(`Printer: ${e.message ?? "failed to print"}`));
+      setPendingReceipt(null);
       splitOnPaid?.();
       setSplitOrderId(null);
     } catch (err: any) {
@@ -650,6 +712,8 @@ export default function POSPage() {
     if (!cashOrderId) return;
     setCashConfirming(true);
     try {
+      const tendered = Math.round((parseFloat(cashTendered || "0") || 0) * 100);
+      const change = Math.max(0, tendered - cashDue);
       if (offlinePending && offlinePending.offlineId === cashOrderId) {
         enqueueOrder({
           offlineId: offlinePending.offlineId, createdAt: new Date().toISOString(),
@@ -658,7 +722,9 @@ export default function POSPage() {
         });
         setQueuedCount(pendingCount());
         toast.success("Cash sale saved offline — will sync when online");
+        if (pendingReceipt) printReceipt({ ...pendingReceipt, paymentMethod: "CASH", tendered, change }).catch((e: any) => toast.error(`Printer: ${e.message ?? "failed to print"}`));
         setOfflinePending(null);
+        setPendingReceipt(null);
         cashOnPaid?.();
         setCashOrderId(null);
         return;
@@ -670,6 +736,8 @@ export default function POSPage() {
       });
       if (!res.ok) throw new Error((await res.json()).error ?? "Cash payment failed");
       toast.success(`Order #${cashOrderId.slice(-4).toUpperCase()} — Cash paid ✓`);
+      if (pendingReceipt) printReceipt({ ...pendingReceipt, paymentMethod: "CASH", tendered, change }).catch((e: any) => toast.error(`Printer: ${e.message ?? "failed to print"}`));
+      setPendingReceipt(null);
       cashOnPaid?.();
       setCashOrderId(null);
     } catch (err: any) {
