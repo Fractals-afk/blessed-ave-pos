@@ -13,15 +13,23 @@ const selectedOptionSchema = z.object({
   modifierOptionId: z.string(),
 });
 
-const orderItemSchema = z.object({
-  menuItemId: z.string(),
-  quantity: z.number().int().positive(),
-  selectedOptions: z.array(selectedOptionSchema).default([]),
-  notes: z.string().optional(),
-  // Marks this line as qualifying for a SENIOR_PWD discount (RA9994 covers
-  // only the senior's own items, not the whole order) — see seniorPwdDiscount.
-  seniorDiscount: z.boolean().optional().default(false),
-});
+// Discount lives per line, not per order — RA9994 (senior/PWD) covers only
+// the senior's own items, and a manager can knock a custom peso amount off
+// any individual line. discountAmount here is the *requested* peso amount
+// for CUSTOM lines; SENIOR_PWD's amount is always computed server-side.
+const orderItemSchema = z
+  .object({
+    menuItemId: z.string(),
+    quantity: z.number().int().positive(),
+    selectedOptions: z.array(selectedOptionSchema).default([]),
+    notes: z.string().optional(),
+    discountType: z.enum(["NONE", "SENIOR_PWD", "CUSTOM"]).default("NONE"),
+    discountAmount: z.number().int().positive().optional(),
+  })
+  .refine((i) => i.discountType !== "CUSTOM" || (i.discountAmount ?? 0) > 0, {
+    message: "Custom discount needs a positive amount",
+    path: ["discountAmount"],
+  });
 
 // Shared by order creation and item edits — resolves each requested line
 // against the menu server-side (never trusts client-supplied prices) and
@@ -39,12 +47,51 @@ interface MenuItemWithModifiers {
   }[];
 }
 
+// Computes one line's total/discount/VAT given its (already-priced) subtotal
+// and requested discount. SENIOR_PWD strips VAT first then takes 20% off
+// (RA 9994 / RA 10754); CUSTOM takes a manual peso amount off and VAT still
+// applies to what's left; NONE just passes the subtotal through.
+function computeLineDiscount(
+  itemSubtotal: number,
+  discountType: "NONE" | "SENIOR_PWD" | "CUSTOM",
+  requestedAmount: number | undefined,
+  vatEnabled: boolean
+) {
+  if (discountType === "SENIOR_PWD") {
+    const { total, discountAmount } = seniorPwdDiscount(itemSubtotal, vatEnabled);
+    return { total, discountAmount, vatAmount: 0 };
+  }
+  if (discountType === "CUSTOM") {
+    const discountAmount = Math.min(requestedAmount ?? 0, itemSubtotal);
+    const total = itemSubtotal - discountAmount;
+    return { total, discountAmount, vatAmount: vatPortion(total, vatEnabled) };
+  }
+  return { total: itemSubtotal, discountAmount: 0, vatAmount: vatPortion(itemSubtotal, vatEnabled) };
+}
+
+// Order.discountType is a display-only aggregate (the order-level badge) —
+// all the actual math happens per line. SENIOR_PWD/CUSTOM if every
+// discounted line shares that type, CUSTOM as the generic bucket when lines
+// are mixed, NONE if nothing's discounted.
+function aggregateDiscountType(items: { discountType: string }[]): "NONE" | "SENIOR_PWD" | "CUSTOM" {
+  const types = new Set(items.map((i) => i.discountType).filter((t) => t !== "NONE"));
+  if (types.size === 0) return "NONE";
+  if (types.size === 1) return [...types][0] as "SENIOR_PWD" | "CUSTOM";
+  return "CUSTOM";
+}
+
 function resolveOrderItems(
   items: z.infer<typeof orderItemSchema>[],
-  menuMap: Map<string, MenuItemWithModifiers>
+  menuMap: Map<string, MenuItemWithModifiers>,
+  vatEnabled: boolean,
+  isManager: boolean
 ) {
   let subtotal = 0;
-  let qualifyingSubtotal = 0;
+  let total = 0;
+  let discountAmount = 0;
+  let vatAmount = 0;
+  let needsSeniorId = false;
+
   const orderItemsData = items.map((item) => {
     const menuItem = menuMap.get(item.menuItemId)!;
 
@@ -74,11 +121,19 @@ function resolveOrderItems(
       }
     }
 
+    if (item.discountType === "CUSTOM" && !isManager) {
+      throw new AppError("Only managers can apply a custom discount", 403);
+    }
+    if (item.discountType === "SENIOR_PWD") needsSeniorId = true;
+
     const unitPrice =
       menuItem.price + options.reduce((sum, o) => sum + o.priceAdjustment, 0);
     const itemSubtotal = unitPrice * item.quantity;
+    const line = computeLineDiscount(itemSubtotal, item.discountType, item.discountAmount, vatEnabled);
     subtotal += itemSubtotal;
-    if (item.seniorDiscount) qualifyingSubtotal += itemSubtotal;
+    total += line.total;
+    discountAmount += line.discountAmount;
+    vatAmount += line.vatAmount;
 
     return {
       menuItemId: menuItem.id,
@@ -87,7 +142,8 @@ function resolveOrderItems(
       unitPrice,
       subtotal: itemSubtotal,
       notes: item.notes,
-      seniorDiscount: item.seniorDiscount,
+      discountType: item.discountType,
+      discountAmount: line.discountAmount,
       selectedOptions: {
         create: options.map((o) => ({
           modifierOptionId: o.id,
@@ -98,23 +154,7 @@ function resolveOrderItems(
     };
   });
 
-  return { orderItemsData, subtotal, qualifyingSubtotal };
-}
-
-// Computes the SENIOR_PWD total/discount/VAT for an order given its full
-// subtotal and the subtotal of just the marked (qualifying) lines. Falls
-// back to discounting the whole subtotal when nothing is marked, so orders
-// created before per-line marking existed (or discounted via the table-order
-// view, which never marks lines) keep working exactly as before.
-function applySeniorPwdDiscount(subtotal: number, qualifyingSubtotal: number, vatEnabled: boolean) {
-  const qualifying = qualifyingSubtotal > 0 ? qualifyingSubtotal : subtotal;
-  const nonQualifying = subtotal - qualifying;
-  const { total: qualifyingTotal, discountAmount } = seniorPwdDiscount(qualifying, vatEnabled);
-  return {
-    total: qualifyingTotal + nonQualifying,
-    discountAmount,
-    vatAmount: vatPortion(nonQualifying, vatEnabled),
-  };
+  return { orderItemsData, subtotal, total, discountAmount, vatAmount, needsSeniorId };
 }
 
 const createOrderSchema = z.object({
@@ -128,6 +168,8 @@ const createOrderSchema = z.object({
   // Client-generated UUID set by offline carts so a retried sync doesn't
   // create a duplicate order once connectivity returns.
   offlineId: z.string().optional(),
+  // OSCA / PWD ID number — required if any item's discountType is SENIOR_PWD.
+  discountIdNumber: z.string().optional(),
 });
 
 // POST /api/orders — create a new order (public for ONLINE & QR, auth for POS)
@@ -170,7 +212,14 @@ ordersRouter.post("/", tryAuth, async (req, res, next) => {
     }
 
     const menuMap = new Map(menuItems.map((m) => [m.id, m]));
-    const { orderItemsData, subtotal } = resolveOrderItems(body.items, menuMap);
+    const vatEnabled = await isVatEnabled();
+    const isManager = !!req.user && ["OWNER", "MANAGER"].includes(req.user.role);
+    const { orderItemsData, subtotal, total, discountAmount, vatAmount, needsSeniorId } =
+      resolveOrderItems(body.items, menuMap, vatEnabled, isManager);
+
+    if (needsSeniorId && !body.discountIdNumber?.trim()) {
+      throw new AppError("Senior/PWD ID number is required");
+    }
 
     const order = await (prisma.order.create as any)({
       data: {
@@ -183,8 +232,11 @@ ordersRouter.post("/", tryAuth, async (req, res, next) => {
         customerEmail: body.customerEmail,
         notes: body.notes,
         subtotal,
-        total: subtotal,
-        vatAmount: vatPortion(subtotal, await isVatEnabled()),
+        total,
+        discountType: aggregateDiscountType(orderItemsData),
+        discountAmount,
+        discountIdNumber: needsSeniorId ? body.discountIdNumber!.trim() : undefined,
+        vatAmount,
         items: { create: orderItemsData },
       },
       include: {
@@ -337,95 +389,6 @@ ordersRouter.patch("/:id/notes", requireAuth, async (req, res, next) => {
   }
 });
 
-// PATCH /api/orders/:id/discount — apply or remove a discount before payment.
-// SENIOR_PWD (RA 9994 / RA 10754): any staff member, requires an ID number.
-// CUSTOM: manager/owner only, manual peso amount off.
-const discountSchema = z.union([
-  z.object({ discountType: z.literal("NONE") }),
-  // itemIds: which lines qualify (RA9994 covers only the senior's own
-  // items). Omitted/empty falls back to discounting the whole order — kept
-  // for callers that don't have a per-line picker.
-  z.object({ discountType: z.literal("SENIOR_PWD"), discountIdNumber: z.string().min(1), itemIds: z.array(z.string()).optional() }),
-  z.object({ discountType: z.literal("CUSTOM"), amount: z.number().int().positive() }),
-]);
-
-ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
-  try {
-    const body = discountSchema.parse(req.body);
-
-    if (body.discountType === "CUSTOM" && !["OWNER", "MANAGER"].includes(req.user!.role)) {
-      throw new AppError("Only managers can apply a custom discount", 403);
-    }
-
-    const order = await prisma.order.findUnique({ where: { id: req.params.id }, include: { items: true } });
-    if (!order) throw new AppError("Order not found", 404);
-    if (order.status !== "PENDING") {
-      throw new AppError("Discount can only be applied before payment is confirmed");
-    }
-
-    const vatEnabled = await isVatEnabled();
-
-    let data: {
-      discountType: "NONE" | "SENIOR_PWD" | "CUSTOM";
-      discountAmount: number;
-      discountIdNumber: string | null;
-      total: number;
-      vatAmount: number;
-    };
-
-    if (body.discountType === "NONE") {
-      data = {
-        discountType: "NONE",
-        discountAmount: 0,
-        discountIdNumber: null,
-        total: order.subtotal,
-        vatAmount: vatPortion(order.subtotal, vatEnabled),
-      };
-    } else if (body.discountType === "SENIOR_PWD") {
-      if (body.itemIds) {
-        const marked = new Set(body.itemIds);
-        await prisma.$transaction(
-          order.items.map((i) =>
-            prisma.orderItem.update({ where: { id: i.id }, data: { seniorDiscount: marked.has(i.id) } })
-          )
-        );
-        order.items = order.items.map((i) => ({ ...i, seniorDiscount: marked.has(i.id) }));
-      }
-      const qualifyingSubtotal = order.items.filter((i) => i.seniorDiscount).reduce((s, i) => s + i.subtotal, 0);
-      const { total, discountAmount, vatAmount } = applySeniorPwdDiscount(order.subtotal, qualifyingSubtotal, vatEnabled);
-      data = {
-        discountType: "SENIOR_PWD",
-        discountAmount,
-        discountIdNumber: body.discountIdNumber,
-        total,
-        vatAmount,
-      };
-    } else {
-      if (body.amount > order.subtotal) throw new AppError("Discount cannot exceed order subtotal");
-      const total = order.subtotal - body.amount;
-      data = {
-        discountType: "CUSTOM",
-        discountAmount: body.amount,
-        discountIdNumber: null,
-        total,
-        vatAmount: vatPortion(total, vatEnabled),
-      };
-    }
-
-    const updated = await prisma.order.update({
-      where: { id: req.params.id },
-      data,
-      include: { items: { include: { selectedOptions: true } }, table: true, payment: true },
-    });
-
-    emitOrderStatusUpdate(io, updated.id, updated.status, updated);
-
-    res.json({ data: updated });
-  } catch (e) {
-    next(e);
-  }
-});
-
 // PATCH /api/orders/:id/items — cashier edits the item list of an order
 // (add/remove/change quantity). Allowed any time before the order is
 // collected or cancelled. If the order has already been paid, changing the
@@ -440,6 +403,8 @@ const settlementSchema = z.object({
 const updateItemsSchema = z.object({
   items: z.array(orderItemSchema).min(1),
   settlement: settlementSchema.optional(),
+  // OSCA / PWD ID number — required if any item's discountType is SENIOR_PWD.
+  discountIdNumber: z.string().optional(),
 });
 const EDITABLE_STATUSES = ["PENDING", "CONFIRMED", "PREPARING", "READY"];
 
@@ -463,22 +428,13 @@ ordersRouter.patch("/:id/items", requireAuth, async (req, res, next) => {
     }
 
     const menuMap = new Map(menuItems.map((m) => [m.id, m]));
-    const { orderItemsData, subtotal, qualifyingSubtotal } = resolveOrderItems(body.items, menuMap);
-
     const vatEnabled = await isVatEnabled();
-    let discountAmount = 0;
-    let total = subtotal;
-    let vatAmount = vatPortion(subtotal, vatEnabled);
+    const isManager = ["OWNER", "MANAGER"].includes(req.user!.role);
+    const { orderItemsData, subtotal, total, discountAmount, vatAmount, needsSeniorId } =
+      resolveOrderItems(body.items, menuMap, vatEnabled, isManager);
 
-    if (order.discountType === "SENIOR_PWD") {
-      const discount = applySeniorPwdDiscount(subtotal, qualifyingSubtotal, vatEnabled);
-      total = discount.total;
-      discountAmount = discount.discountAmount;
-      vatAmount = discount.vatAmount;
-    } else if (order.discountType === "CUSTOM") {
-      discountAmount = Math.min(order.discountAmount, subtotal);
-      total = subtotal - discountAmount;
-      vatAmount = vatPortion(total, vatEnabled);
+    if (needsSeniorId && !body.discountIdNumber?.trim()) {
+      throw new AppError("Senior/PWD ID number is required");
     }
 
     // Paid orders must have the refund/extra-owed delta settled in this
@@ -527,7 +483,12 @@ ordersRouter.patch("/:id/items", requireAuth, async (req, res, next) => {
       }
       return tx.order.update({
         where: { id: order.id },
-        data: { subtotal, total, vatAmount, discountAmount, items: { create: orderItemsData } },
+        data: {
+          subtotal, total, vatAmount, discountAmount,
+          discountType: aggregateDiscountType(orderItemsData),
+          discountIdNumber: needsSeniorId ? body.discountIdNumber!.trim() : null,
+          items: { create: orderItemsData },
+        },
         include: { items: { include: { selectedOptions: true } }, table: true, payment: true },
       });
     });

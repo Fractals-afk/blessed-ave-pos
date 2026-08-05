@@ -1,7 +1,7 @@
 // Drains the offline order queue (see offline.ts) once the cart is back
-// online: creates each queued order server-side (idempotent via offlineId),
-// re-applies any discount, then confirms the payment the same way the
-// cashier already recorded it locally.
+// online: creates each queued order server-side (idempotent via offlineId —
+// discounts are embedded per-line in orderBody.items already), then confirms
+// the payment the same way the cashier already recorded it locally.
 import { resolveApiBase } from "./api";
 import { getQueue, updateQueuedOrder, type QueuedOrder } from "./offline";
 
@@ -22,17 +22,6 @@ async function syncOne(entry: QueuedOrder, API: string): Promise<void> {
     if (!res.ok) throw new Error(body.error ?? "Sync: failed to create order");
     orderId = body.data.id;
     updateQueuedOrder(entry.offlineId, { serverOrderId: orderId });
-  }
-
-  if (entry.discount && entry.discount.discountType !== "NONE") {
-    const discountBody =
-      entry.discount.discountType === "SENIOR_PWD"
-        ? { discountType: "SENIOR_PWD", discountIdNumber: entry.discount.discountIdNumber }
-        : { discountType: "CUSTOM", amount: entry.discount.amount };
-    const res = await fetch(`${API}/api/orders/${orderId}/discount`, {
-      method: "PATCH", headers: auth(), body: JSON.stringify(discountBody),
-    });
-    if (!res.ok) throw new Error((await res.json()).error ?? "Sync: failed to apply discount");
   }
 
   const paymentPath = entry.payment.method === "CASH" ? "/api/payments/cash" : "/api/payments/qr-confirm";

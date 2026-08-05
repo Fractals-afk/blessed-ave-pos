@@ -102,7 +102,8 @@ export interface OrderItem {
   selectedOptions: SelectedOption[];
   subtotal: number;
   notes?: string;
-  seniorDiscount?: boolean;
+  discountType: DiscountType;
+  discountAmount: number;
 }
 
 export interface SelectedOption {

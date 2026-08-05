@@ -163,9 +163,9 @@ model Order {
   notes         String?
   subtotal      Int         // centavos, before discount
   total         Int         // centavos (subtotal after any discounts) — the amount actually charged
-  discountType   DiscountType @default(NONE)
-  discountAmount Int          @default(0) // centavos
-  discountIdNumber String?    // OSCA / PWD ID number when discountType = SENIOR_PWD
+  discountType   DiscountType @default(NONE) // aggregate across items — NONE/SENIOR_PWD/CUSTOM if all discounted lines share a type, CUSTOM if mixed. Display only; math lives per-line on OrderItem.
+  discountAmount Int          @default(0) // centavos, sum of item discountAmounts
+  discountIdNumber String?    // OSCA / PWD ID number — required once any line is SENIOR_PWD
   vatAmount     Int         @default(0) // centavos, VAT portion of total (0 when VAT-exempt via SENIOR_PWD)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
@@ -190,7 +190,8 @@ model OrderItem {
   unitPrice    Int    // centavos, snapshot at time of order
   subtotal     Int    // centavos
   notes        String?
-  seniorDiscount Boolean @default(false) // marked as qualifying for the order's SENIOR_PWD discount (RA9994 covers only the senior's own items, not the whole order)
+  discountType   DiscountType @default(NONE) // per-line — RA9994 covers only the senior's own items, not the whole table
+  discountAmount Int          @default(0)    // centavos off this line, computed server-side
 
   order           Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
   menuItem        MenuItem         @relation(fields: [menuItemId], references: [id])

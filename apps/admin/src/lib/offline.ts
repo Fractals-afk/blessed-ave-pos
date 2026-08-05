@@ -29,9 +29,8 @@ export function loadMenuCache(): MenuCategory[] | null {
 export interface QueuedOrder {
   offlineId: string;
   createdAt: string;
-  orderBody: Record<string, unknown>;
+  orderBody: Record<string, unknown>; // discount info (if any) is embedded per-line in orderBody.items, plus a top-level discountIdNumber
   payment: { method: "CASH" | "GCASH" | "MAYA" };
-  discount?: { discountType: string; discountIdNumber?: string; amount?: number };
   synced: boolean;
   // Populated once the order half of the sync succeeds, so a retry of the
   // payment step doesn't need to re-create the order.

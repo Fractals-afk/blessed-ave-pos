@@ -96,15 +96,10 @@ export const adminApi = {
         method: "PATCH",
         body: JSON.stringify({ notes }),
       }),
-    setDiscount: (id: string, body: unknown) =>
-      apiFetch<{ data: import("@blessed-ave/types").Order }>(`/api/orders/${id}/discount`, {
-        method: "PATCH",
-        body: JSON.stringify(body),
-      }),
-    updateItems: (id: string, items: unknown, settlement?: { method: "CASH" | "GCASH" | "MAYA"; amount: number }) =>
+    updateItems: (id: string, items: unknown, settlement?: { method: "CASH" | "GCASH" | "MAYA"; amount: number }, discountIdNumber?: string) =>
       apiFetch<{ data: import("@blessed-ave/types").Order }>(`/api/orders/${id}/items`, {
         method: "PATCH",
-        body: JSON.stringify({ items, settlement }),
+        body: JSON.stringify({ items, settlement, discountIdNumber }),
       }),
   },
   till: {

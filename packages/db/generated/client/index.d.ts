@@ -11568,12 +11568,14 @@ export namespace Prisma {
     quantity: number | null
     unitPrice: number | null
     subtotal: number | null
+    discountAmount: number | null
   }
 
   export type OrderItemSumAggregateOutputType = {
     quantity: number | null
     unitPrice: number | null
     subtotal: number | null
+    discountAmount: number | null
   }
 
   export type OrderItemMinAggregateOutputType = {
@@ -11585,7 +11587,8 @@ export namespace Prisma {
     unitPrice: number | null
     subtotal: number | null
     notes: string | null
-    seniorDiscount: boolean | null
+    discountType: $Enums.DiscountType | null
+    discountAmount: number | null
   }
 
   export type OrderItemMaxAggregateOutputType = {
@@ -11597,7 +11600,8 @@ export namespace Prisma {
     unitPrice: number | null
     subtotal: number | null
     notes: string | null
-    seniorDiscount: boolean | null
+    discountType: $Enums.DiscountType | null
+    discountAmount: number | null
   }
 
   export type OrderItemCountAggregateOutputType = {
@@ -11609,7 +11613,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes: number
-    seniorDiscount: number
+    discountType: number
+    discountAmount: number
     _all: number
   }
 
@@ -11618,12 +11623,14 @@ export namespace Prisma {
     quantity?: true
     unitPrice?: true
     subtotal?: true
+    discountAmount?: true
   }
 
   export type OrderItemSumAggregateInputType = {
     quantity?: true
     unitPrice?: true
     subtotal?: true
+    discountAmount?: true
   }
 
   export type OrderItemMinAggregateInputType = {
@@ -11635,7 +11642,8 @@ export namespace Prisma {
     unitPrice?: true
     subtotal?: true
     notes?: true
-    seniorDiscount?: true
+    discountType?: true
+    discountAmount?: true
   }
 
   export type OrderItemMaxAggregateInputType = {
@@ -11647,7 +11655,8 @@ export namespace Prisma {
     unitPrice?: true
     subtotal?: true
     notes?: true
-    seniorDiscount?: true
+    discountType?: true
+    discountAmount?: true
   }
 
   export type OrderItemCountAggregateInputType = {
@@ -11659,7 +11668,8 @@ export namespace Prisma {
     unitPrice?: true
     subtotal?: true
     notes?: true
-    seniorDiscount?: true
+    discountType?: true
+    discountAmount?: true
     _all?: true
   }
 
@@ -11758,7 +11768,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes: string | null
-    seniorDiscount: boolean
+    discountType: $Enums.DiscountType
+    discountAmount: number
     _count: OrderItemCountAggregateOutputType | null
     _avg: OrderItemAvgAggregateOutputType | null
     _sum: OrderItemSumAggregateOutputType | null
@@ -11789,7 +11800,8 @@ export namespace Prisma {
     unitPrice?: boolean
     subtotal?: boolean
     notes?: boolean
-    seniorDiscount?: boolean
+    discountType?: boolean
+    discountAmount?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
     menuItem?: boolean | MenuItemDefaultArgs<ExtArgs>
     selectedOptions?: boolean | OrderItem$selectedOptionsArgs<ExtArgs>
@@ -11805,7 +11817,8 @@ export namespace Prisma {
     unitPrice?: boolean
     subtotal?: boolean
     notes?: boolean
-    seniorDiscount?: boolean
+    discountType?: boolean
+    discountAmount?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
     menuItem?: boolean | MenuItemDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orderItem"]>
@@ -11819,7 +11832,8 @@ export namespace Prisma {
     unitPrice?: boolean
     subtotal?: boolean
     notes?: boolean
-    seniorDiscount?: boolean
+    discountType?: boolean
+    discountAmount?: boolean
   }
 
   export type OrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11849,7 +11863,8 @@ export namespace Prisma {
       unitPrice: number
       subtotal: number
       notes: string | null
-      seniorDiscount: boolean
+      discountType: $Enums.DiscountType
+      discountAmount: number
     }, ExtArgs["result"]["orderItem"]>
     composites: {}
   }
@@ -12254,7 +12269,8 @@ export namespace Prisma {
     readonly unitPrice: FieldRef<"OrderItem", 'Int'>
     readonly subtotal: FieldRef<"OrderItem", 'Int'>
     readonly notes: FieldRef<"OrderItem", 'String'>
-    readonly seniorDiscount: FieldRef<"OrderItem", 'Boolean'>
+    readonly discountType: FieldRef<"OrderItem", 'DiscountType'>
+    readonly discountAmount: FieldRef<"OrderItem", 'Int'>
   }
     
 
@@ -25584,7 +25600,8 @@ export namespace Prisma {
     unitPrice: 'unitPrice',
     subtotal: 'subtotal',
     notes: 'notes',
-    seniorDiscount: 'seniorDiscount'
+    discountType: 'discountType',
+    discountAmount: 'discountAmount'
   };
 
   export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
@@ -26652,7 +26669,8 @@ export namespace Prisma {
     unitPrice?: IntFilter<"OrderItem"> | number
     subtotal?: IntFilter<"OrderItem"> | number
     notes?: StringNullableFilter<"OrderItem"> | string | null
-    seniorDiscount?: BoolFilter<"OrderItem"> | boolean
+    discountType?: EnumDiscountTypeFilter<"OrderItem"> | $Enums.DiscountType
+    discountAmount?: IntFilter<"OrderItem"> | number
     order?: XOR<OrderRelationFilter, OrderWhereInput>
     menuItem?: XOR<MenuItemRelationFilter, MenuItemWhereInput>
     selectedOptions?: SelectedOptionListRelationFilter
@@ -26667,7 +26685,8 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrderInput | SortOrder
-    seniorDiscount?: SortOrder
+    discountType?: SortOrder
+    discountAmount?: SortOrder
     order?: OrderOrderByWithRelationInput
     menuItem?: MenuItemOrderByWithRelationInput
     selectedOptions?: SelectedOptionOrderByRelationAggregateInput
@@ -26685,7 +26704,8 @@ export namespace Prisma {
     unitPrice?: IntFilter<"OrderItem"> | number
     subtotal?: IntFilter<"OrderItem"> | number
     notes?: StringNullableFilter<"OrderItem"> | string | null
-    seniorDiscount?: BoolFilter<"OrderItem"> | boolean
+    discountType?: EnumDiscountTypeFilter<"OrderItem"> | $Enums.DiscountType
+    discountAmount?: IntFilter<"OrderItem"> | number
     order?: XOR<OrderRelationFilter, OrderWhereInput>
     menuItem?: XOR<MenuItemRelationFilter, MenuItemWhereInput>
     selectedOptions?: SelectedOptionListRelationFilter
@@ -26700,7 +26720,8 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrderInput | SortOrder
-    seniorDiscount?: SortOrder
+    discountType?: SortOrder
+    discountAmount?: SortOrder
     _count?: OrderItemCountOrderByAggregateInput
     _avg?: OrderItemAvgOrderByAggregateInput
     _max?: OrderItemMaxOrderByAggregateInput
@@ -26720,7 +26741,8 @@ export namespace Prisma {
     unitPrice?: IntWithAggregatesFilter<"OrderItem"> | number
     subtotal?: IntWithAggregatesFilter<"OrderItem"> | number
     notes?: StringNullableWithAggregatesFilter<"OrderItem"> | string | null
-    seniorDiscount?: BoolWithAggregatesFilter<"OrderItem"> | boolean
+    discountType?: EnumDiscountTypeWithAggregatesFilter<"OrderItem"> | $Enums.DiscountType
+    discountAmount?: IntWithAggregatesFilter<"OrderItem"> | number
   }
 
   export type SelectedOptionWhereInput = {
@@ -28280,7 +28302,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
     order: OrderCreateNestedOneWithoutItemsInput
     menuItem: MenuItemCreateNestedOneWithoutOrderItemsInput
     selectedOptions?: SelectedOptionCreateNestedManyWithoutOrderItemInput
@@ -28295,7 +28318,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
     selectedOptions?: SelectedOptionUncheckedCreateNestedManyWithoutOrderItemInput
   }
 
@@ -28306,7 +28330,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
     order?: OrderUpdateOneRequiredWithoutItemsNestedInput
     menuItem?: MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
     selectedOptions?: SelectedOptionUpdateManyWithoutOrderItemNestedInput
@@ -28321,7 +28346,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
     selectedOptions?: SelectedOptionUncheckedUpdateManyWithoutOrderItemNestedInput
   }
 
@@ -28334,7 +28360,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
   }
 
   export type OrderItemUpdateManyMutationInput = {
@@ -28344,7 +28371,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
   }
 
   export type OrderItemUncheckedUpdateManyInput = {
@@ -28356,7 +28384,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
   }
 
   export type SelectedOptionCreateInput = {
@@ -29970,13 +29999,15 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrder
-    seniorDiscount?: SortOrder
+    discountType?: SortOrder
+    discountAmount?: SortOrder
   }
 
   export type OrderItemAvgOrderByAggregateInput = {
     quantity?: SortOrder
     unitPrice?: SortOrder
     subtotal?: SortOrder
+    discountAmount?: SortOrder
   }
 
   export type OrderItemMaxOrderByAggregateInput = {
@@ -29988,7 +30019,8 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrder
-    seniorDiscount?: SortOrder
+    discountType?: SortOrder
+    discountAmount?: SortOrder
   }
 
   export type OrderItemMinOrderByAggregateInput = {
@@ -30000,13 +30032,15 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrder
-    seniorDiscount?: SortOrder
+    discountType?: SortOrder
+    discountAmount?: SortOrder
   }
 
   export type OrderItemSumOrderByAggregateInput = {
     quantity?: SortOrder
     unitPrice?: SortOrder
     subtotal?: SortOrder
+    discountAmount?: SortOrder
   }
 
   export type OrderItemRelationFilter = {
@@ -33108,7 +33142,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
     order: OrderCreateNestedOneWithoutItemsInput
     selectedOptions?: SelectedOptionCreateNestedManyWithoutOrderItemInput
   }
@@ -33121,7 +33156,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
     selectedOptions?: SelectedOptionUncheckedCreateNestedManyWithoutOrderItemInput
   }
 
@@ -33244,7 +33280,8 @@ export namespace Prisma {
     unitPrice?: IntFilter<"OrderItem"> | number
     subtotal?: IntFilter<"OrderItem"> | number
     notes?: StringNullableFilter<"OrderItem"> | string | null
-    seniorDiscount?: BoolFilter<"OrderItem"> | boolean
+    discountType?: EnumDiscountTypeFilter<"OrderItem"> | $Enums.DiscountType
+    discountAmount?: IntFilter<"OrderItem"> | number
   }
 
   export type RecipeItemUpsertWithWhereUniqueWithoutMenuItemInput = {
@@ -33637,7 +33674,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
     menuItem: MenuItemCreateNestedOneWithoutOrderItemsInput
     selectedOptions?: SelectedOptionCreateNestedManyWithoutOrderItemInput
   }
@@ -33650,7 +33688,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
     selectedOptions?: SelectedOptionUncheckedCreateNestedManyWithoutOrderItemInput
   }
 
@@ -34055,7 +34094,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
     order: OrderCreateNestedOneWithoutItemsInput
     menuItem: MenuItemCreateNestedOneWithoutOrderItemsInput
   }
@@ -34069,7 +34109,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
   }
 
   export type OrderItemCreateOrConnectWithoutSelectedOptionsInput = {
@@ -34114,7 +34155,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
     order?: OrderUpdateOneRequiredWithoutItemsNestedInput
     menuItem?: MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
   }
@@ -34128,7 +34170,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
   }
 
   export type ModifierOptionUpsertWithoutSelectedOptionsInput = {
@@ -35717,7 +35760,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
   }
 
   export type RecipeItemCreateManyMenuItemInput = {
@@ -35759,7 +35803,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
     order?: OrderUpdateOneRequiredWithoutItemsNestedInput
     selectedOptions?: SelectedOptionUpdateManyWithoutOrderItemNestedInput
   }
@@ -35772,7 +35817,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
     selectedOptions?: SelectedOptionUncheckedUpdateManyWithoutOrderItemNestedInput
   }
 
@@ -35784,7 +35830,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
   }
 
   export type RecipeItemUpdateWithoutMenuItemInput = {
@@ -35963,7 +36010,8 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
-    seniorDiscount?: boolean
+    discountType?: $Enums.DiscountType
+    discountAmount?: number
   }
 
   export type OrderItemUpdateWithoutOrderInput = {
@@ -35973,7 +36021,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
     menuItem?: MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
     selectedOptions?: SelectedOptionUpdateManyWithoutOrderItemNestedInput
   }
@@ -35986,7 +36035,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
     selectedOptions?: SelectedOptionUncheckedUpdateManyWithoutOrderItemNestedInput
   }
 
@@ -35998,7 +36048,8 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
-    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discountType?: EnumDiscountTypeFieldUpdateOperationsInput | $Enums.DiscountType
+    discountAmount?: IntFieldUpdateOperationsInput | number
   }
 
   export type SelectedOptionCreateManyOrderItemInput = {
