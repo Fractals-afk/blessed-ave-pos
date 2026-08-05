@@ -100,7 +100,7 @@ export default function KitchenPage() {
 
   return (
     <AdminLayout>
-      <audio ref={audioRef} src="/notification.mp3" preload="auto" />
+      <audio ref={audioRef} src="/notification.wav" preload="auto" />
 
       {/* Page header */}
       <div className="border-b border-slate-200 bg-white px-8 py-5 flex items-center justify-between">
