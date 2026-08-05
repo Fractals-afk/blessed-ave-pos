@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { io } from "socket.io-client";
 import { AdminLayout } from "@/components/AdminLayout";
 import { adminApi, resolveApiBase } from "@/lib/api";
@@ -121,6 +122,11 @@ export default function POSPage() {
   // items, keyed e.g. "cart-2" / "edit-0" so only one can be open at a time.
   const [discountPopupKey,    setDiscountPopupKey]    = useState<string | null>(null);
   const [discountPopupAmount, setDiscountPopupAmount] = useState("");
+  // Screen position for the open popup — portaled to <body> (see
+  // discountBadge below) so it always renders above everything instead of
+  // getting clipped by a scrolling ancestor (the cart list, the table
+  // modal's item list, etc).
+  const [discountPopupPos, setDiscountPopupPos] = useState<{ top: number; left: number; openUp: boolean } | null>(null);
 
   // Tables with an active order or a check awaiting payment
   const [tables,       setTables]       = useState<CafeTable[]>([]);
@@ -720,10 +726,25 @@ export default function POSPage() {
   ) {
     const isOpen = discountPopupKey === popupKey;
     const preview = previewLine(lineTotal, current.discountType, current.discountAmount, vatEnabled);
+    const POPUP_WIDTH = 176; // w-44
+    const POPUP_EST_HEIGHT = 170; // rough max (senior + custom input/button + remove), for flip-up decision
+
+    function openPopup(e: React.MouseEvent<HTMLButtonElement>) {
+      if (isOpen) { setDiscountPopupKey(null); return; }
+      const rect = e.currentTarget.getBoundingClientRect();
+      const openUp = window.innerHeight - rect.bottom < POPUP_EST_HEIGHT;
+      setDiscountPopupPos({
+        left: Math.max(8, Math.min(rect.right - POPUP_WIDTH, window.innerWidth - POPUP_WIDTH - 8)),
+        top: openUp ? rect.top - 4 : rect.bottom + 4,
+        openUp,
+      });
+      setDiscountPopupKey(popupKey);
+      setDiscountPopupAmount("");
+    }
+
     return (
       <div className="relative flex-shrink-0">
-        <button type="button"
-          onClick={() => { setDiscountPopupKey(isOpen ? null : popupKey); setDiscountPopupAmount(""); }}
+        <button type="button" onClick={openPopup}
           className={`rounded-md border px-1.5 py-0.5 text-[10px] font-semibold transition ${
             current.discountType !== "NONE" ? "border-green-600 bg-green-50 text-green-700" : "border-slate-200 text-slate-400 hover:border-slate-300"
           }`}>
@@ -731,9 +752,16 @@ export default function POSPage() {
             : current.discountType === "CUSTOM" ? `✓ Custom −₱${(preview.discount / 100).toFixed(2)}`
             : "Discount"}
         </button>
-        {isOpen && (
+        {isOpen && discountPopupPos && typeof document !== "undefined" && createPortal(
           <div onClick={(e) => e.stopPropagation()}
-            className="absolute right-0 top-full z-20 mt-1 w-44 rounded-lg border border-slate-200 bg-white p-2 shadow-lg space-y-1">
+            style={{
+              position: "fixed",
+              left: discountPopupPos.left,
+              top: discountPopupPos.openUp ? undefined : discountPopupPos.top,
+              bottom: discountPopupPos.openUp ? window.innerHeight - discountPopupPos.top : undefined,
+              width: POPUP_WIDTH,
+            }}
+            className="z-[100] rounded-lg border border-slate-200 bg-white p-2 shadow-lg space-y-1">
             <button type="button"
               onClick={() => { onPick("SENIOR_PWD", 0); setDiscountPopupKey(null); }}
               className="w-full rounded-md px-2 py-1.5 text-left text-xs font-medium text-slate-700 hover:bg-slate-50">
@@ -764,7 +792,8 @@ export default function POSPage() {
                 Remove discount
               </button>
             )}
-          </div>
+          </div>,
+          document.body
         )}
       </div>
     );
