@@ -1,10 +1,16 @@
 "use client";
 
-// Bluetooth Low-Energy thermal receipt printing (ESC/POS over a generic
-// serial-style GATT characteristic). Covers the common chip families used by
-// cheap 58/80mm BLE thermal printers. Printers using classic Bluetooth (SPP)
-// instead of BLE cannot be reached from a browser at all — those need to be
-// paired at the OS level and used as a regular/USB printer instead.
+// Receipt printing, two paths:
+//  1. Bluetooth Low-Energy — raw ESC/POS over a generic serial-style GATT
+//     characteristic. Covers the common chip families used by cheap 58/80mm
+//     BLE thermal printers. Printers using classic Bluetooth (SPP) instead
+//     of BLE cannot be reached this way at all — the browser has no API for
+//     classic Bluetooth.
+//  2. System print dialog fallback — works with whatever printer Windows
+//     already knows about (USB, network, or a classic-Bluetooth printer
+//     paired at the OS level). printReceipt() always tries BLE first and
+//     falls back to this automatically, so it works regardless of which
+//     kind of printer is actually plugged in.
 
 const SERVICE_CANDIDATES = [
   "000018f0-0000-1000-8000-00805f9b34fb", // common cheap BLE printer service
@@ -15,6 +21,18 @@ const SERVICE_CANDIDATES = [
 
 const DEVICE_ID_KEY = "printer_device_id";
 const DEVICE_NAME_KEY = "printer_device_name";
+const PAPER_WIDTH_KEY = "printer_paper_width";
+
+export type PaperWidth = "58" | "80";
+
+export function getPaperWidth(): PaperWidth {
+  if (typeof window === "undefined") return "58";
+  return (localStorage.getItem(PAPER_WIDTH_KEY) as PaperWidth) || "58";
+}
+
+export function setPaperWidth(width: PaperWidth) {
+  localStorage.setItem(PAPER_WIDTH_KEY, width);
+}
 
 let cachedDevice: BluetoothDevice | null = null;
 let cachedChar: BluetoothRemoteGATTCharacteristic | null = null;
@@ -111,9 +129,14 @@ async function writeBytes(char: BluetoothRemoteGATTCharacteristic, data: Uint8Ar
   }
 }
 
-// ── ESC/POS receipt building ────────────────────────────────────────────
+// ── Receipt building ─────────────────────────────────────────────────────
+// Shared between the two print paths: raw ESC/POS bytes over Bluetooth, and
+// a monospace HTML block for the OS print dialog fallback. Character width
+// depends on paper size (58mm ≈ 32 cols, 80mm ≈ 48 cols at default font).
 
-const WIDTH = 32; // characters per line on a 58mm printer at default font
+function charsForWidth(width: PaperWidth): number {
+  return width === "80" ? 48 : 32;
+}
 
 export interface ReceiptLine {
   name: string;
@@ -140,21 +163,49 @@ export interface ReceiptData {
 
 function peso(cents: number) { return `P${(cents / 100).toFixed(2)}`; }
 
-function padLine(left: string, right: string) {
-  const space = Math.max(1, WIDTH - left.length - right.length);
+function padLine(left: string, right: string, width: number) {
+  const space = Math.max(1, width - left.length - right.length);
   return left + " ".repeat(space) + right;
 }
 
-function center(s: string) {
-  const pad = Math.max(0, Math.floor((WIDTH - s.length) / 2));
+function center(s: string, width: number) {
+  const pad = Math.max(0, Math.floor((width - s.length) / 2));
   return " ".repeat(pad) + s;
 }
 
-function wrap(s: string): string[] {
-  if (s.length <= WIDTH) return [s];
+function wrap(s: string, width: number): string[] {
+  if (s.length <= width) return [s];
   const out: string[] = [];
-  for (let i = 0; i < s.length; i += WIDTH) out.push(s.slice(i, i + WIDTH));
+  for (let i = 0; i < s.length; i += width) out.push(s.slice(i, i + width));
   return out;
+}
+
+function receiptTextLines(data: ReceiptData, width: number): string[] {
+  const lines: string[] = [];
+  lines.push(center(data.storeName, width));
+  lines.push(center("Customer Copy", width));
+  lines.push("-".repeat(width));
+  lines.push(data.orderLabel);
+  lines.push(data.timestamp.toLocaleString("en-PH"));
+  lines.push("-".repeat(width));
+
+  for (const l of data.lines) {
+    lines.push(...wrap(`${l.qty} x ${l.name}`, width));
+    lines.push(padLine(`  @ ${peso(l.unitPrice)}`, peso(l.lineTotal), width));
+    if (l.discountLabel) lines.push(`  (${l.discountLabel})`);
+  }
+
+  lines.push("-".repeat(width));
+  lines.push(padLine("Subtotal", peso(data.subtotal), width));
+  if (data.discount > 0) lines.push(padLine("Discount", `-${peso(data.discount)}`, width));
+  if (data.vatEnabled) lines.push(padLine("VAT incl.", peso(data.vat), width));
+  lines.push(padLine("TOTAL", peso(data.total), width));
+  lines.push(padLine("Payment", data.paymentMethod, width));
+  if (data.tendered != null) lines.push(padLine("Tendered", peso(data.tendered), width));
+  if (data.change != null) lines.push(padLine("Change", peso(data.change), width));
+  lines.push("-".repeat(width));
+  lines.push(center("Thank you!", width));
+  return lines;
 }
 
 function concatBytes(chunks: Uint8Array[]): Uint8Array {
@@ -165,36 +216,9 @@ function concatBytes(chunks: Uint8Array[]): Uint8Array {
   return out;
 }
 
-export function buildReceipt(data: ReceiptData): Uint8Array {
-  const lines: string[] = [];
-  lines.push(center(data.storeName));
-  lines.push(center("Customer Copy"));
-  lines.push("-".repeat(WIDTH));
-  lines.push(data.orderLabel);
-  lines.push(data.timestamp.toLocaleString("en-PH"));
-  lines.push("-".repeat(WIDTH));
-
-  for (const l of data.lines) {
-    lines.push(...wrap(`${l.qty} x ${l.name}`));
-    lines.push(padLine(`  @ ${peso(l.unitPrice)}`, peso(l.lineTotal)));
-    if (l.discountLabel) lines.push(`  (${l.discountLabel})`);
-  }
-
-  lines.push("-".repeat(WIDTH));
-  lines.push(padLine("Subtotal", peso(data.subtotal)));
-  if (data.discount > 0) lines.push(padLine("Discount", `-${peso(data.discount)}`));
-  if (data.vatEnabled) lines.push(padLine("VAT incl.", peso(data.vat)));
-  lines.push(padLine("TOTAL", peso(data.total)));
-  lines.push(padLine("Payment", data.paymentMethod));
-  if (data.tendered != null) lines.push(padLine("Tendered", peso(data.tendered)));
-  if (data.change != null) lines.push(padLine("Change", peso(data.change)));
-  lines.push("-".repeat(WIDTH));
-  lines.push(center("Thank you!"));
-  lines.push("");
-  lines.push("");
-  lines.push("");
-
-  const body = new TextEncoder().encode(lines.join("\n") + "\n");
+export function buildReceipt(data: ReceiptData, width: number): Uint8Array {
+  const text = receiptTextLines(data, width).join("\n") + "\n\n\n\n";
+  const body = new TextEncoder().encode(text);
   return concatBytes([
     new Uint8Array([0x1b, 0x40]),       // ESC @  — init
     new Uint8Array([0x1b, 0x61, 0x00]), // ESC a 0 — left align
@@ -203,7 +227,58 @@ export function buildReceipt(data: ReceiptData): Uint8Array {
   ]);
 }
 
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function buildReceiptHtml(data: ReceiptData, width: number, mmWidth: PaperWidth): string {
+  const text = receiptTextLines(data, width).join("\n");
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Receipt</title>
+<style>
+  @page { size: ${mmWidth}mm auto; margin: 0; }
+  html, body { margin: 0; padding: 0; }
+  body { padding: 2mm 3mm; }
+  pre { margin: 0; font-family: "Courier New", monospace; font-size: 11px; line-height: 1.3; white-space: pre-wrap; word-break: break-word; }
+</style></head><body><pre>${escapeHtml(text)}</pre></body></html>`;
+}
+
+// Fallback that works with ANY printer the OS knows about — USB, network, or
+// a classic-Bluetooth printer paired in Windows — by handing the receipt to
+// the browser's normal print dialog instead of talking ESC/POS directly.
+// Not silent (the user picks the printer/hits print once), but it always
+// works, unlike the BLE path which depends on printer hardware we can't see.
+function printViaSystemDialog(data: ReceiptData, mmWidth: PaperWidth) {
+  const width = charsForWidth(mmWidth);
+  const html = buildReceiptHtml(data, width, mmWidth);
+  const iframe = document.createElement("iframe");
+  iframe.style.position = "fixed";
+  iframe.style.right = "0";
+  iframe.style.bottom = "0";
+  iframe.style.width = "0";
+  iframe.style.height = "0";
+  iframe.style.border = "0";
+  document.body.appendChild(iframe);
+  const doc = iframe.contentWindow?.document;
+  if (!doc) { document.body.removeChild(iframe); return; }
+  iframe.onload = () => {
+    iframe.contentWindow?.focus();
+    iframe.contentWindow?.print();
+    setTimeout(() => iframe.remove(), 2000);
+  };
+  doc.open();
+  doc.write(html);
+  doc.close();
+}
+
+// Prints via the connected/saved BLE printer if one's available, otherwise
+// falls back to the system print dialog — always resolves, never leaves a
+// sale un-receipted just because Bluetooth isn't set up.
 export async function printReceipt(data: ReceiptData): Promise<void> {
-  const char = await ensureConnected();
-  await writeBytes(char, buildReceipt(data));
+  const paperWidth = getPaperWidth();
+  try {
+    const char = await ensureConnected();
+    await writeBytes(char, buildReceipt(data, charsForWidth(paperWidth)));
+  } catch {
+    printViaSystemDialog(data, paperWidth);
+  }
 }

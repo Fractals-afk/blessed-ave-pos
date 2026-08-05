@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import {
   hasBluetooth, savedPrinterName, isPrinterConnected,
   pairNewPrinter, reconnectSavedPrinter, forgetPrinter, printReceipt,
+  getPaperWidth, setPaperWidth, type PaperWidth,
 } from "@/lib/printer";
 
 export default function PrinterSettingsPage() {
@@ -15,6 +16,11 @@ export default function PrinterSettingsPage() {
   const [testing, setTesting] = useState(false);
   const [connectedName, setConnectedName] = useState<string | null>(null);
   const [savedName, setSavedName] = useState<string | null>(null);
+  const [paperWidth, setPaperWidthState] = useState<PaperWidth>("58");
+
+  useEffect(() => {
+    setPaperWidthState(getPaperWidth());
+  }, []);
 
   useEffect(() => {
     setSavedName(savedPrinterName());
@@ -48,6 +54,11 @@ export default function PrinterSettingsPage() {
     toast.success("Printer forgotten");
   }
 
+  function handlePaperWidth(width: PaperWidth) {
+    setPaperWidth(width);
+    setPaperWidthState(width);
+  }
+
   async function handleTestPrint() {
     setTesting(true);
     try {
@@ -77,12 +88,16 @@ export default function PrinterSettingsPage() {
       <div className="mx-auto max-w-xl px-6 py-8">
         <h1 className="text-lg font-bold text-slate-900">Receipt Printer</h1>
         <p className="mt-1 text-sm text-slate-500">
-          Connect a Bluetooth (BLE) thermal printer. Customer-copy receipts print automatically once payment is confirmed on an order.
+          Customer-copy receipts print automatically once payment is confirmed on an order — via
+          Bluetooth if you connect a printer below, otherwise through your computer's regular
+          print dialog. Either way, it prints.
         </p>
 
         {!supported && (
           <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            This browser doesn't support Web Bluetooth. Use Chrome or Edge on this device.
+            This browser doesn't support Web Bluetooth — Bluetooth pairing is unavailable, but
+            receipts will still print via the regular print dialog below. Use Chrome or Edge if
+            you want direct Bluetooth printing.
           </div>
         )}
 
@@ -110,17 +125,40 @@ export default function PrinterSettingsPage() {
                 Forget
               </button>
             )}
-            <button onClick={handleTestPrint} disabled={!connected || testing}
+            <button onClick={handleTestPrint} disabled={testing}
               className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 disabled:opacity-50">
               {testing ? "Printing…" : "Test Print"}
             </button>
           </div>
         </div>
 
-        <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-500 leading-relaxed">
-          Only BLE (Bluetooth Low Energy) printers can connect here — most Chinese-made 58mm/80mm thermal
-          printers advertise this way. If yours is classic Bluetooth (SPP) instead, pair it in Windows'
-          Bluetooth settings first and it'll behave like a regular local printer instead of showing up here.
+        <div className="mt-6 rounded-xl border border-slate-200 bg-white p-5">
+          <p className="text-sm font-semibold text-slate-900">Paper width</p>
+          <p className="mt-0.5 text-xs text-slate-500">Match your printer's receipt roll so lines don't wrap oddly.</p>
+          <div className="mt-3 flex gap-2">
+            {(["58", "80"] as const).map((w) => (
+              <button key={w} onClick={() => handlePaperWidth(w)}
+                className={`rounded-lg border px-4 py-2 text-sm font-medium transition ${
+                  paperWidth === w ? "border-brand-500 bg-brand-50 text-brand-700" : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                }`}>
+                {w}mm
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-500 leading-relaxed space-y-2">
+          <p>
+            <strong>Bluetooth here</strong> only works with BLE printers — most cheap Chinese-made
+            58mm/80mm thermal printers advertise this way. It prints silently, no dialog.
+          </p>
+          <p>
+            <strong>Don't know what you have, or it's classic Bluetooth / USB / network?</strong>{" "}
+            Skip the Bluetooth button — just set the printer as your default printer in Windows
+            (pair it in Windows' Bluetooth settings first if needed). Receipts will print through
+            the normal print dialog automatically; hit Print once and it works from then on the
+            same way any webpage prints.
+          </p>
         </div>
       </div>
     </AdminLayout>
