@@ -781,8 +781,10 @@ export default function POSPage() {
           {online ? `Syncing — ${queuedCount} offline sale${queuedCount === 1 ? "" : "s"} pending` : `Offline — ${queuedCount} sale${queuedCount === 1 ? "" : "s"} queued, will sync automatically`}
         </div>
       )}
-      <div className="flex flex-1 flex-col overflow-hidden">
-      <div className="flex h-[68%] overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
+
+        {/* ── Left column: menu + tables, 2/3 width on lg+ ────────── */}
+        <div className="flex flex-1 flex-col overflow-hidden lg:w-2/3 lg:flex-none">
 
         {/* ── Menu panel ───────────────────────────────────────── */}
         <div className="flex flex-1 flex-col overflow-hidden bg-slate-50">
@@ -821,11 +823,34 @@ export default function POSPage() {
           </div>
         </div>
 
-        {/* ── Cart panel (static sidebar on lg+, off-canvas drawer below) ── */}
+        {/* ── Tables bar ───────────────────────────────────────── */}
+        <div className="flex h-[32%] flex-col border-t border-slate-200 bg-white overflow-hidden">
+          <div className="flex-1 overflow-y-auto p-2">
+            <div className="grid h-full grid-cols-5 grid-rows-3 gap-2">
+              {sortedTables.map((table) => {
+                const order = ordersByTable.get(table.id)?.[0];
+                const count = ordersByTable.get(table.id)?.length ?? 0;
+                const badge = tableBadge(order?.status);
+                return (
+                  <button key={table.id} onClick={() => openTable(table)}
+                    className={`flex flex-col items-center justify-center gap-0.5 rounded-lg border-2 text-center transition hover:shadow-md active:scale-[0.98] ${badge.cls}`}>
+                    <span className="text-base font-bold">{table.name}</span>
+                    <span className="text-xs opacity-70">{badge.label}</span>
+                    {count > 1 && <span className="text-[10px] opacity-70">({count} orders)</span>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        </div>
+
+        {/* ── Cart panel — 1/3 width, full height on lg+; off-canvas drawer below lg ── */}
         {cartOpen && (
           <div className="fixed inset-0 z-40 bg-black/40 lg:hidden" onClick={() => setCartOpen(false)} />
         )}
-        <div className={`flex w-80 max-w-[85vw] flex-col border-l border-slate-200 bg-white fixed inset-y-0 right-0 z-50 transform transition-transform duration-300 lg:static lg:z-auto lg:max-w-none lg:translate-x-0 ${
+        <div className={`flex w-80 max-w-[85vw] flex-col border-l border-slate-200 bg-white fixed inset-y-0 right-0 z-50 transform transition-transform duration-300 lg:static lg:z-auto lg:w-1/3 lg:flex-none lg:max-w-none lg:translate-x-0 ${
           cartOpen ? "translate-x-0" : "translate-x-full"
         }`}>
           <div className="border-b border-slate-100 px-4 py-4 flex items-center justify-between">
@@ -953,28 +978,6 @@ export default function POSPage() {
           )}
         </button>
       )}
-
-      {/* ── Tables bar ───────────────────────────────────────── */}
-      <div className="flex h-[32%] flex-col border-t border-slate-200 bg-white overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-2">
-          <div className="grid h-full grid-cols-5 grid-rows-3 gap-2">
-            {sortedTables.map((table) => {
-              const order = ordersByTable.get(table.id)?.[0];
-              const count = ordersByTable.get(table.id)?.length ?? 0;
-              const badge = tableBadge(order?.status);
-              return (
-                <button key={table.id} onClick={() => openTable(table)}
-                  className={`flex flex-col items-center justify-center gap-0.5 rounded-lg border-2 text-center transition hover:shadow-md active:scale-[0.98] ${badge.cls}`}>
-                  <span className="text-base font-bold">{table.name}</span>
-                  <span className="text-xs opacity-70">{badge.label}</span>
-                  {count > 1 && <span className="text-[10px] opacity-70">({count} orders)</span>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-      </div>
       </div>
 
       {/* ── Table detail modal ──────────────────────────────────── */}
