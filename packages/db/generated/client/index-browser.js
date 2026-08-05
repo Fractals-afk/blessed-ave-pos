@@ -218,7 +218,8 @@ exports.Prisma.OrderItemScalarFieldEnum = {
   quantity: 'quantity',
   unitPrice: 'unitPrice',
   subtotal: 'subtotal',
-  notes: 'notes'
+  notes: 'notes',
+  seniorDiscount: 'seniorDiscount'
 };
 
 exports.Prisma.SelectedOptionScalarFieldEnum = {

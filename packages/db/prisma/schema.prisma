@@ -190,6 +190,7 @@ model OrderItem {
   unitPrice    Int    // centavos, snapshot at time of order
   subtotal     Int    // centavos
   notes        String?
+  seniorDiscount Boolean @default(false) // marked as qualifying for the order's SENIOR_PWD discount (RA9994 covers only the senior's own items, not the whole order)
 
   order           Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
   menuItem        MenuItem         @relation(fields: [menuItemId], references: [id])

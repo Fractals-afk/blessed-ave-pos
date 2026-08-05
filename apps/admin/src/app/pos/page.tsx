@@ -32,15 +32,24 @@ function tableBadge(status?: string) {
   return { label: "Free", cls: "border-slate-200 bg-white text-slate-400" };
 }
 
-// Client-side preview only — server recomputes authoritatively from the
-// order's own subtotal once the discount is applied. When VAT is off
-// (non-VAT registered business) there's no VAT to strip, so senior/PWD is a
-// straight 20% off and no VAT portion is shown.
-function previewDiscount(subtotal: number, type: DiscountType, customAmount: string, vatEnabled: boolean) {
+// Client-side preview only — server recomputes authoritatively once the
+// discount is applied (see the matching fallback logic in
+// apps/api/src/routes/orders.ts). When VAT is off (non-VAT registered
+// business) there's no VAT to strip, so senior/PWD is a straight 20% off and
+// no VAT portion is shown.
+//
+// SENIOR_PWD only discounts the cart lines marked seniorDiscount — RA9994
+// covers the senior's own order, not the whole table. If nothing is marked
+// (legacy/whole-order callers), it falls back to discounting everything.
+function previewDiscount(cart: { unitPrice: number; quantity: number; seniorDiscount: boolean }[], type: DiscountType, customAmount: string, vatEnabled: boolean) {
+  const subtotal = cart.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
   if (type === "SENIOR_PWD") {
-    const base = vatEnabled ? Math.round(subtotal / 1.12) : subtotal;
+    const marked = cart.filter((i) => i.seniorDiscount);
+    const qualifying = marked.length > 0 ? marked.reduce((s, i) => s + i.unitPrice * i.quantity, 0) : subtotal;
+    const nonQualifying = subtotal - qualifying;
+    const base = vatEnabled ? Math.round(qualifying / 1.12) : qualifying;
     const discount = Math.round(base * 0.2);
-    return { total: base - discount, discount, vat: 0 };
+    return { total: (base - discount) + nonQualifying, discount, vat: vatEnabled ? Math.round(nonQualifying - nonQualifying / 1.12) : 0 };
   }
   if (type === "CUSTOM") {
     const cents = Math.round(parseFloat(customAmount || "0") * 100) || 0;
@@ -62,6 +71,7 @@ interface POSItem {
   quantity: number;
   selectedOptions: ModifierOption[];
   unitPrice: number;
+  seniorDiscount: boolean;
 }
 
 interface EditItem {
@@ -80,6 +90,7 @@ export default function POSPage() {
   const [activeGroup,    setActiveGroup]    = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [cart,           setCart]           = useState<POSItem[]>([]);
+  const [cartOpen,       setCartOpen]       = useState(false);
   const [selectedItem,   setSelectedItem]   = useState<MenuItem | null>(null);
   const [itemOptions,    setItemOptions]    = useState<Record<string, ModifierOption[]>>({});
   const [payMethod,      setPayMethod]      = useState<"GCASH" | "MAYA" | "CASH" | "SPLIT">("CASH");
@@ -424,7 +435,7 @@ export default function POSPage() {
           JSON.stringify(options.map((o) => o.id).sort())
       );
       if (existing) return prev.map((i) => i === existing ? { ...i, quantity: i.quantity + 1 } : i);
-      return [...prev, { menuItem: item, quantity: 1, selectedOptions: options, unitPrice }];
+      return [...prev, { menuItem: item, quantity: 1, selectedOptions: options, unitPrice, seniorDiscount: discountType === "SENIOR_PWD" }];
     });
     setSelectedItem(null);
   }
@@ -486,6 +497,7 @@ export default function POSPage() {
         items: cart.map((i) => ({
           menuItemId: i.menuItem.id, quantity: i.quantity,
           selectedOptions: i.selectedOptions.map((o) => ({ modifierOptionId: o.id })),
+          seniorDiscount: i.seniorDiscount,
         })),
       };
 
@@ -498,7 +510,7 @@ export default function POSPage() {
         // No connection — stash the order locally and let the cashier still
         // pick cash/QR and enter the tendered amount; nothing hits the
         // network until confirmCashPayment/confirmQrPayment enqueue it.
-        const preview = previewDiscount(total, discountType, customDiscount, vatEnabled);
+        const preview = previewDiscount(cart, discountType, customDiscount, vatEnabled);
         const offlineId = newOfflineId();
         setOfflinePending({ offlineId, orderBody, discount: discountForSync() });
         if (payMethod === "CASH") {
@@ -780,8 +792,13 @@ export default function POSPage() {
           </div>
         </div>
 
-        {/* ── Cart panel ───────────────────────────────────────── */}
-        <div className="flex w-80 flex-col border-l border-slate-200 bg-white">
+        {/* ── Cart panel (static sidebar on lg+, off-canvas drawer below) ── */}
+        {cartOpen && (
+          <div className="fixed inset-0 z-40 bg-black/40 lg:hidden" onClick={() => setCartOpen(false)} />
+        )}
+        <div className={`flex w-80 max-w-[85vw] flex-col border-l border-slate-200 bg-white fixed inset-y-0 right-0 z-50 transform transition-transform duration-300 lg:static lg:z-auto lg:max-w-none lg:translate-x-0 ${
+          cartOpen ? "translate-x-0" : "translate-x-full"
+        }`}>
           <div className="border-b border-slate-100 px-4 py-4 flex items-center justify-between">
             <h2 className="font-semibold text-slate-900 text-sm">Current Order</h2>
             <div className="flex items-center gap-2">
@@ -791,6 +808,10 @@ export default function POSPage() {
                   Cancel Order
                 </button>
               )}
+              <button onClick={() => setCartOpen(false)} aria-label="Close cart"
+                className="lg:hidden flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 text-lg leading-none">
+                ×
+              </button>
             </div>
           </div>
 
@@ -809,6 +830,15 @@ export default function POSPage() {
                     <p className="text-xs text-slate-400 truncate">{item.selectedOptions.map((o) => o.name).join(", ")}</p>
                   )}
                   <p className="text-xs font-semibold text-green-600 mt-0.5">₱{((item.unitPrice * item.quantity) / 100).toFixed(2)}</p>
+                  {discountType === "SENIOR_PWD" && (
+                    <button
+                      onClick={() => setCart((prev) => prev.map((it, i) => i === idx ? { ...it, seniorDiscount: !it.seniorDiscount } : it))}
+                      className={`mt-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold transition ${
+                        item.seniorDiscount ? "border-green-600 bg-green-50 text-green-700" : "border-slate-200 text-slate-400 hover:border-slate-300"
+                      }`}>
+                      {item.seniorDiscount ? "✓ Senior/PWD" : "Mark Senior/PWD"}
+                    </button>
+                  )}
                 </div>
                 <div className="flex items-center gap-2 ml-2 flex-shrink-0">
                   <button
@@ -859,7 +889,10 @@ export default function POSPage() {
               <div className="grid grid-cols-3 gap-1.5">
                 {(["NONE", "SENIOR_PWD", "CUSTOM"] as const).map((t) => (
                   <button key={t} disabled={t === "CUSTOM" && !isManager}
-                    onClick={() => setDiscountType(t)}
+                    onClick={() => {
+                      setDiscountType(t);
+                      if (t === "SENIOR_PWD") setCart((prev) => prev.map((i) => ({ ...i, seniorDiscount: true })));
+                    }}
                     className={`rounded-lg border py-2 text-xs font-semibold transition disabled:opacity-30 ${
                       discountType === t ? "border-slate-800 bg-slate-800 text-white" : "border-slate-200 text-slate-600 hover:border-slate-300"
                     }`}>
@@ -868,8 +901,11 @@ export default function POSPage() {
                 ))}
               </div>
               {discountType === "SENIOR_PWD" && (
-                <input value={discountId} onChange={(e) => setDiscountId(e.target.value)}
-                  placeholder="OSCA / PWD ID number" className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500" />
+                <>
+                  <input value={discountId} onChange={(e) => setDiscountId(e.target.value)}
+                    placeholder="OSCA / PWD ID number" className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  <p className="mt-1.5 text-[11px] text-slate-400">Tap items in the cart to mark which ones qualify — only marked items get 20% off.</p>
+                </>
               )}
               {discountType === "CUSTOM" && (
                 <input type="number" min="0" step="0.01" value={customDiscount} onChange={(e) => setCustomDiscount(e.target.value)}
@@ -878,7 +914,7 @@ export default function POSPage() {
             </div>
 
             {(() => {
-              const preview = previewDiscount(total, discountType, customDiscount, vatEnabled);
+              const preview = previewDiscount(cart, discountType, customDiscount, vatEnabled);
               return (
                 <div className="space-y-1 text-sm">
                   {discountType !== "NONE" && (
@@ -902,6 +938,17 @@ export default function POSPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Floating "View Cart" trigger (below lg only) ───────── */}
+      {!cartOpen && (
+        <button onClick={() => setCartOpen(true)}
+          className="lg:hidden fixed bottom-4 right-4 z-30 flex items-center gap-2 rounded-full bg-[#0f172a] px-5 py-3.5 text-sm font-semibold text-white shadow-lg active:scale-[0.97] transition">
+          🛒 View Cart
+          {itemCount > 0 && (
+            <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs">{itemCount} · ₱{(total / 100).toFixed(2)}</span>
+          )}
+        </button>
+      )}
 
       {/* ── Tables bar ───────────────────────────────────────── */}
       <div className="flex h-[32%] flex-col border-t border-slate-200 bg-white overflow-hidden">

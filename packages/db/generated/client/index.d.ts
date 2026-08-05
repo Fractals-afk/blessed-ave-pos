@@ -11585,6 +11585,7 @@ export namespace Prisma {
     unitPrice: number | null
     subtotal: number | null
     notes: string | null
+    seniorDiscount: boolean | null
   }
 
   export type OrderItemMaxAggregateOutputType = {
@@ -11596,6 +11597,7 @@ export namespace Prisma {
     unitPrice: number | null
     subtotal: number | null
     notes: string | null
+    seniorDiscount: boolean | null
   }
 
   export type OrderItemCountAggregateOutputType = {
@@ -11607,6 +11609,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes: number
+    seniorDiscount: number
     _all: number
   }
 
@@ -11632,6 +11635,7 @@ export namespace Prisma {
     unitPrice?: true
     subtotal?: true
     notes?: true
+    seniorDiscount?: true
   }
 
   export type OrderItemMaxAggregateInputType = {
@@ -11643,6 +11647,7 @@ export namespace Prisma {
     unitPrice?: true
     subtotal?: true
     notes?: true
+    seniorDiscount?: true
   }
 
   export type OrderItemCountAggregateInputType = {
@@ -11654,6 +11659,7 @@ export namespace Prisma {
     unitPrice?: true
     subtotal?: true
     notes?: true
+    seniorDiscount?: true
     _all?: true
   }
 
@@ -11752,6 +11758,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes: string | null
+    seniorDiscount: boolean
     _count: OrderItemCountAggregateOutputType | null
     _avg: OrderItemAvgAggregateOutputType | null
     _sum: OrderItemSumAggregateOutputType | null
@@ -11782,6 +11789,7 @@ export namespace Prisma {
     unitPrice?: boolean
     subtotal?: boolean
     notes?: boolean
+    seniorDiscount?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
     menuItem?: boolean | MenuItemDefaultArgs<ExtArgs>
     selectedOptions?: boolean | OrderItem$selectedOptionsArgs<ExtArgs>
@@ -11797,6 +11805,7 @@ export namespace Prisma {
     unitPrice?: boolean
     subtotal?: boolean
     notes?: boolean
+    seniorDiscount?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
     menuItem?: boolean | MenuItemDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["orderItem"]>
@@ -11810,6 +11819,7 @@ export namespace Prisma {
     unitPrice?: boolean
     subtotal?: boolean
     notes?: boolean
+    seniorDiscount?: boolean
   }
 
   export type OrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11839,6 +11849,7 @@ export namespace Prisma {
       unitPrice: number
       subtotal: number
       notes: string | null
+      seniorDiscount: boolean
     }, ExtArgs["result"]["orderItem"]>
     composites: {}
   }
@@ -12243,6 +12254,7 @@ export namespace Prisma {
     readonly unitPrice: FieldRef<"OrderItem", 'Int'>
     readonly subtotal: FieldRef<"OrderItem", 'Int'>
     readonly notes: FieldRef<"OrderItem", 'String'>
+    readonly seniorDiscount: FieldRef<"OrderItem", 'Boolean'>
   }
     
 
@@ -25571,7 +25583,8 @@ export namespace Prisma {
     quantity: 'quantity',
     unitPrice: 'unitPrice',
     subtotal: 'subtotal',
-    notes: 'notes'
+    notes: 'notes',
+    seniorDiscount: 'seniorDiscount'
   };
 
   export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
@@ -26639,6 +26652,7 @@ export namespace Prisma {
     unitPrice?: IntFilter<"OrderItem"> | number
     subtotal?: IntFilter<"OrderItem"> | number
     notes?: StringNullableFilter<"OrderItem"> | string | null
+    seniorDiscount?: BoolFilter<"OrderItem"> | boolean
     order?: XOR<OrderRelationFilter, OrderWhereInput>
     menuItem?: XOR<MenuItemRelationFilter, MenuItemWhereInput>
     selectedOptions?: SelectedOptionListRelationFilter
@@ -26653,6 +26667,7 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrderInput | SortOrder
+    seniorDiscount?: SortOrder
     order?: OrderOrderByWithRelationInput
     menuItem?: MenuItemOrderByWithRelationInput
     selectedOptions?: SelectedOptionOrderByRelationAggregateInput
@@ -26670,6 +26685,7 @@ export namespace Prisma {
     unitPrice?: IntFilter<"OrderItem"> | number
     subtotal?: IntFilter<"OrderItem"> | number
     notes?: StringNullableFilter<"OrderItem"> | string | null
+    seniorDiscount?: BoolFilter<"OrderItem"> | boolean
     order?: XOR<OrderRelationFilter, OrderWhereInput>
     menuItem?: XOR<MenuItemRelationFilter, MenuItemWhereInput>
     selectedOptions?: SelectedOptionListRelationFilter
@@ -26684,6 +26700,7 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrderInput | SortOrder
+    seniorDiscount?: SortOrder
     _count?: OrderItemCountOrderByAggregateInput
     _avg?: OrderItemAvgOrderByAggregateInput
     _max?: OrderItemMaxOrderByAggregateInput
@@ -26703,6 +26720,7 @@ export namespace Prisma {
     unitPrice?: IntWithAggregatesFilter<"OrderItem"> | number
     subtotal?: IntWithAggregatesFilter<"OrderItem"> | number
     notes?: StringNullableWithAggregatesFilter<"OrderItem"> | string | null
+    seniorDiscount?: BoolWithAggregatesFilter<"OrderItem"> | boolean
   }
 
   export type SelectedOptionWhereInput = {
@@ -28262,6 +28280,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
     order: OrderCreateNestedOneWithoutItemsInput
     menuItem: MenuItemCreateNestedOneWithoutOrderItemsInput
     selectedOptions?: SelectedOptionCreateNestedManyWithoutOrderItemInput
@@ -28276,6 +28295,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
     selectedOptions?: SelectedOptionUncheckedCreateNestedManyWithoutOrderItemInput
   }
 
@@ -28286,6 +28306,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
     order?: OrderUpdateOneRequiredWithoutItemsNestedInput
     menuItem?: MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
     selectedOptions?: SelectedOptionUpdateManyWithoutOrderItemNestedInput
@@ -28300,6 +28321,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
     selectedOptions?: SelectedOptionUncheckedUpdateManyWithoutOrderItemNestedInput
   }
 
@@ -28312,6 +28334,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
   }
 
   export type OrderItemUpdateManyMutationInput = {
@@ -28321,6 +28344,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type OrderItemUncheckedUpdateManyInput = {
@@ -28332,6 +28356,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SelectedOptionCreateInput = {
@@ -29945,6 +29970,7 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrder
+    seniorDiscount?: SortOrder
   }
 
   export type OrderItemAvgOrderByAggregateInput = {
@@ -29962,6 +29988,7 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrder
+    seniorDiscount?: SortOrder
   }
 
   export type OrderItemMinOrderByAggregateInput = {
@@ -29973,6 +30000,7 @@ export namespace Prisma {
     unitPrice?: SortOrder
     subtotal?: SortOrder
     notes?: SortOrder
+    seniorDiscount?: SortOrder
   }
 
   export type OrderItemSumOrderByAggregateInput = {
@@ -33080,6 +33108,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
     order: OrderCreateNestedOneWithoutItemsInput
     selectedOptions?: SelectedOptionCreateNestedManyWithoutOrderItemInput
   }
@@ -33092,6 +33121,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
     selectedOptions?: SelectedOptionUncheckedCreateNestedManyWithoutOrderItemInput
   }
 
@@ -33214,6 +33244,7 @@ export namespace Prisma {
     unitPrice?: IntFilter<"OrderItem"> | number
     subtotal?: IntFilter<"OrderItem"> | number
     notes?: StringNullableFilter<"OrderItem"> | string | null
+    seniorDiscount?: BoolFilter<"OrderItem"> | boolean
   }
 
   export type RecipeItemUpsertWithWhereUniqueWithoutMenuItemInput = {
@@ -33606,6 +33637,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
     menuItem: MenuItemCreateNestedOneWithoutOrderItemsInput
     selectedOptions?: SelectedOptionCreateNestedManyWithoutOrderItemInput
   }
@@ -33618,6 +33650,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
     selectedOptions?: SelectedOptionUncheckedCreateNestedManyWithoutOrderItemInput
   }
 
@@ -34022,6 +34055,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
     order: OrderCreateNestedOneWithoutItemsInput
     menuItem: MenuItemCreateNestedOneWithoutOrderItemsInput
   }
@@ -34035,6 +34069,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
   }
 
   export type OrderItemCreateOrConnectWithoutSelectedOptionsInput = {
@@ -34079,6 +34114,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
     order?: OrderUpdateOneRequiredWithoutItemsNestedInput
     menuItem?: MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
   }
@@ -34092,6 +34128,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ModifierOptionUpsertWithoutSelectedOptionsInput = {
@@ -35680,6 +35717,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
   }
 
   export type RecipeItemCreateManyMenuItemInput = {
@@ -35721,6 +35759,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
     order?: OrderUpdateOneRequiredWithoutItemsNestedInput
     selectedOptions?: SelectedOptionUpdateManyWithoutOrderItemNestedInput
   }
@@ -35733,6 +35772,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
     selectedOptions?: SelectedOptionUncheckedUpdateManyWithoutOrderItemNestedInput
   }
 
@@ -35744,6 +35784,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type RecipeItemUpdateWithoutMenuItemInput = {
@@ -35922,6 +35963,7 @@ export namespace Prisma {
     unitPrice: number
     subtotal: number
     notes?: string | null
+    seniorDiscount?: boolean
   }
 
   export type OrderItemUpdateWithoutOrderInput = {
@@ -35931,6 +35973,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
     menuItem?: MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
     selectedOptions?: SelectedOptionUpdateManyWithoutOrderItemNestedInput
   }
@@ -35943,6 +35986,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
     selectedOptions?: SelectedOptionUncheckedUpdateManyWithoutOrderItemNestedInput
   }
 
@@ -35954,6 +35998,7 @@ export namespace Prisma {
     unitPrice?: IntFieldUpdateOperationsInput | number
     subtotal?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    seniorDiscount?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SelectedOptionCreateManyOrderItemInput = {

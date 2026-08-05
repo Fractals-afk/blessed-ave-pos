@@ -18,6 +18,9 @@ const orderItemSchema = z.object({
   quantity: z.number().int().positive(),
   selectedOptions: z.array(selectedOptionSchema).default([]),
   notes: z.string().optional(),
+  // Marks this line as qualifying for a SENIOR_PWD discount (RA9994 covers
+  // only the senior's own items, not the whole order) — see seniorPwdDiscount.
+  seniorDiscount: z.boolean().optional().default(false),
 });
 
 // Shared by order creation and item edits — resolves each requested line
@@ -41,6 +44,7 @@ function resolveOrderItems(
   menuMap: Map<string, MenuItemWithModifiers>
 ) {
   let subtotal = 0;
+  let qualifyingSubtotal = 0;
   const orderItemsData = items.map((item) => {
     const menuItem = menuMap.get(item.menuItemId)!;
 
@@ -74,6 +78,7 @@ function resolveOrderItems(
       menuItem.price + options.reduce((sum, o) => sum + o.priceAdjustment, 0);
     const itemSubtotal = unitPrice * item.quantity;
     subtotal += itemSubtotal;
+    if (item.seniorDiscount) qualifyingSubtotal += itemSubtotal;
 
     return {
       menuItemId: menuItem.id,
@@ -82,6 +87,7 @@ function resolveOrderItems(
       unitPrice,
       subtotal: itemSubtotal,
       notes: item.notes,
+      seniorDiscount: item.seniorDiscount,
       selectedOptions: {
         create: options.map((o) => ({
           modifierOptionId: o.id,
@@ -92,7 +98,23 @@ function resolveOrderItems(
     };
   });
 
-  return { orderItemsData, subtotal };
+  return { orderItemsData, subtotal, qualifyingSubtotal };
+}
+
+// Computes the SENIOR_PWD total/discount/VAT for an order given its full
+// subtotal and the subtotal of just the marked (qualifying) lines. Falls
+// back to discounting the whole subtotal when nothing is marked, so orders
+// created before per-line marking existed (or discounted via the table-order
+// view, which never marks lines) keep working exactly as before.
+function applySeniorPwdDiscount(subtotal: number, qualifyingSubtotal: number, vatEnabled: boolean) {
+  const qualifying = qualifyingSubtotal > 0 ? qualifyingSubtotal : subtotal;
+  const nonQualifying = subtotal - qualifying;
+  const { total: qualifyingTotal, discountAmount } = seniorPwdDiscount(qualifying, vatEnabled);
+  return {
+    total: qualifyingTotal + nonQualifying,
+    discountAmount,
+    vatAmount: vatPortion(nonQualifying, vatEnabled),
+  };
 }
 
 const createOrderSchema = z.object({
@@ -332,7 +354,7 @@ ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
       throw new AppError("Only managers can apply a custom discount", 403);
     }
 
-    const order = await prisma.order.findUnique({ where: { id: req.params.id } });
+    const order = await prisma.order.findUnique({ where: { id: req.params.id }, include: { items: true } });
     if (!order) throw new AppError("Order not found", 404);
     if (order.status !== "PENDING") {
       throw new AppError("Discount can only be applied before payment is confirmed");
@@ -357,13 +379,14 @@ ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
         vatAmount: vatPortion(order.subtotal, vatEnabled),
       };
     } else if (body.discountType === "SENIOR_PWD") {
-      const { total, discountAmount } = seniorPwdDiscount(order.subtotal, vatEnabled);
+      const qualifyingSubtotal = order.items.filter((i) => i.seniorDiscount).reduce((s, i) => s + i.subtotal, 0);
+      const { total, discountAmount, vatAmount } = applySeniorPwdDiscount(order.subtotal, qualifyingSubtotal, vatEnabled);
       data = {
         discountType: "SENIOR_PWD",
         discountAmount,
         discountIdNumber: body.discountIdNumber,
         total,
-        vatAmount: 0, // VAT-exempt
+        vatAmount,
       };
     } else {
       if (body.amount > order.subtotal) throw new AppError("Discount cannot exceed order subtotal");
@@ -428,7 +451,7 @@ ordersRouter.patch("/:id/items", requireAuth, async (req, res, next) => {
     }
 
     const menuMap = new Map(menuItems.map((m) => [m.id, m]));
-    const { orderItemsData, subtotal } = resolveOrderItems(body.items, menuMap);
+    const { orderItemsData, subtotal, qualifyingSubtotal } = resolveOrderItems(body.items, menuMap);
 
     const vatEnabled = await isVatEnabled();
     let discountAmount = 0;
@@ -436,10 +459,10 @@ ordersRouter.patch("/:id/items", requireAuth, async (req, res, next) => {
     let vatAmount = vatPortion(subtotal, vatEnabled);
 
     if (order.discountType === "SENIOR_PWD") {
-      const discount = seniorPwdDiscount(subtotal, vatEnabled);
+      const discount = applySeniorPwdDiscount(subtotal, qualifyingSubtotal, vatEnabled);
       total = discount.total;
       discountAmount = discount.discountAmount;
-      vatAmount = 0;
+      vatAmount = discount.vatAmount;
     } else if (order.discountType === "CUSTOM") {
       discountAmount = Math.min(order.discountAmount, subtotal);
       total = subtotal - discountAmount;
