@@ -110,6 +110,7 @@ export default function POSPage() {
   const [tableDiscountType, setTableDiscountType] = useState<DiscountType>("NONE");
   const [tableDiscountId,   setTableDiscountId]   = useState("");
   const [tableCustomDiscount, setTableCustomDiscount] = useState("");
+  const [tableDiscountItemIds, setTableDiscountItemIds] = useState<Set<string>>(new Set());
   const [applyingDiscount,  setApplyingDiscount]  = useState(false);
 
   // Tables with an active order or a check awaiting payment
@@ -456,11 +457,11 @@ export default function POSPage() {
 
   // Applies the currently-selected discount to a PENDING order; returns the
   // updated order (with recomputed total) or throws.
-  async function applyDiscount(orderId: string, type: DiscountType, idNumber: string, customAmount: string): Promise<Order> {
+  async function applyDiscount(orderId: string, type: DiscountType, idNumber: string, customAmount: string, itemIds?: string[]): Promise<Order> {
     let body: unknown;
     if (type === "SENIOR_PWD") {
       if (!idNumber.trim()) throw new Error("Senior/PWD ID number is required");
-      body = { discountType: "SENIOR_PWD", discountIdNumber: idNumber.trim() };
+      body = { discountType: "SENIOR_PWD", discountIdNumber: idNumber.trim(), ...(itemIds ? { itemIds } : {}) };
     } else if (type === "CUSTOM") {
       const cents = Math.round(parseFloat(customAmount || "0") * 100);
       if (isNaN(cents) || cents <= 0) throw new Error("Enter a valid discount amount");
@@ -603,6 +604,8 @@ export default function POSPage() {
     setTableDiscountType(order?.discountType ?? "NONE");
     setTableDiscountId(order?.discountIdNumber ?? "");
     setTableCustomDiscount("");
+    const marked = order?.items.filter((i) => i.seniorDiscount).map((i) => i.id) ?? [];
+    setTableDiscountItemIds(new Set(marked.length > 0 ? marked : order?.items.map((i) => i.id) ?? []));
     setEditItems(null);
     setAddItemPicker(false);
   }
@@ -615,7 +618,8 @@ export default function POSPage() {
   async function applyTableDiscount(order: Order) {
     setApplyingDiscount(true);
     try {
-      await applyDiscount(order.id, tableDiscountType, tableDiscountId, tableCustomDiscount);
+      const itemIds = tableDiscountType === "SENIOR_PWD" ? Array.from(tableDiscountItemIds) : undefined;
+      await applyDiscount(order.id, tableDiscountType, tableDiscountId, tableCustomDiscount, itemIds);
       toast.success(tableDiscountType === "NONE" ? "Discount removed" : "Discount applied");
     } catch (err: any) {
       toast.error(err.message ?? "Failed to apply discount");
@@ -1011,9 +1015,24 @@ export default function POSPage() {
                       </div>
                       <ul className="space-y-1">
                         {selectedOrder.items.map((item) => (
-                          <li key={item.id} className="text-sm flex justify-between">
+                          <li key={item.id} className="text-sm flex justify-between items-center gap-2">
                             <span className="text-slate-700">{item.quantity}× {item.menuItemName}</span>
-                            <span className="text-slate-500">₱{(item.subtotal / 100).toFixed(2)}</span>
+                            <span className="flex items-center gap-1.5 flex-shrink-0">
+                              {selectedOrder.status === "PENDING" && tableDiscountType === "SENIOR_PWD" && (
+                                <button
+                                  onClick={() => setTableDiscountItemIds((prev) => {
+                                    const next = new Set(prev);
+                                    next.has(item.id) ? next.delete(item.id) : next.add(item.id);
+                                    return next;
+                                  })}
+                                  className={`rounded-md border px-1.5 py-0.5 text-[10px] font-semibold transition ${
+                                    tableDiscountItemIds.has(item.id) ? "border-green-600 bg-green-50 text-green-700" : "border-slate-200 text-slate-400 hover:border-slate-300"
+                                  }`}>
+                                  {tableDiscountItemIds.has(item.id) ? "✓ Senior/PWD" : "Mark Senior/PWD"}
+                                </button>
+                              )}
+                              <span className="text-slate-500">₱{(item.subtotal / 100).toFixed(2)}</span>
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -1124,7 +1143,10 @@ export default function POSPage() {
                       <div className="grid grid-cols-3 gap-1.5">
                         {(["NONE", "SENIOR_PWD", "CUSTOM"] as const).map((t) => (
                           <button key={t} disabled={t === "CUSTOM" && !isManager}
-                            onClick={() => setTableDiscountType(t)}
+                            onClick={() => {
+                              setTableDiscountType(t);
+                              if (t === "SENIOR_PWD") setTableDiscountItemIds(new Set(selectedOrder.items.map((i) => i.id)));
+                            }}
                             className={`rounded-lg border py-1.5 text-xs font-semibold transition disabled:opacity-30 ${
                               tableDiscountType === t ? "border-slate-800 bg-slate-800 text-white" : "border-slate-200 text-slate-600 hover:border-slate-300"
                             }`}>

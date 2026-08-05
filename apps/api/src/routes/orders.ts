@@ -342,7 +342,10 @@ ordersRouter.patch("/:id/notes", requireAuth, async (req, res, next) => {
 // CUSTOM: manager/owner only, manual peso amount off.
 const discountSchema = z.union([
   z.object({ discountType: z.literal("NONE") }),
-  z.object({ discountType: z.literal("SENIOR_PWD"), discountIdNumber: z.string().min(1) }),
+  // itemIds: which lines qualify (RA9994 covers only the senior's own
+  // items). Omitted/empty falls back to discounting the whole order — kept
+  // for callers that don't have a per-line picker.
+  z.object({ discountType: z.literal("SENIOR_PWD"), discountIdNumber: z.string().min(1), itemIds: z.array(z.string()).optional() }),
   z.object({ discountType: z.literal("CUSTOM"), amount: z.number().int().positive() }),
 ]);
 
@@ -379,6 +382,15 @@ ordersRouter.patch("/:id/discount", requireAuth, async (req, res, next) => {
         vatAmount: vatPortion(order.subtotal, vatEnabled),
       };
     } else if (body.discountType === "SENIOR_PWD") {
+      if (body.itemIds) {
+        const marked = new Set(body.itemIds);
+        await prisma.$transaction(
+          order.items.map((i) =>
+            prisma.orderItem.update({ where: { id: i.id }, data: { seniorDiscount: marked.has(i.id) } })
+          )
+        );
+        order.items = order.items.map((i) => ({ ...i, seniorDiscount: marked.has(i.id) }));
+      }
       const qualifyingSubtotal = order.items.filter((i) => i.seniorDiscount).reduce((s, i) => s + i.subtotal, 0);
       const { total, discountAmount, vatAmount } = applySeniorPwdDiscount(order.subtotal, qualifyingSubtotal, vatEnabled);
       data = {
