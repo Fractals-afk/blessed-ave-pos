@@ -91,37 +91,20 @@ pnpm --filter @blessed-ave/mobile start   # Expo mobile app
 
 ---
 
-## PayMongo setup
+## Payments
 
-1. Sign up at [paymongo.com](https://paymongo.com)
-2. Go to **Developers → API Keys** and copy your live secret + public keys
-3. Go to **Developers → Webhooks** and create a webhook pointing to:
-   `https://api.blessedave.com/api/payments/webhook`
-   Subscribe to events: `source.chargeable`, `payment.paid`
-4. Copy the webhook secret into `PAYMONGO_WEBHOOK_SECRET`
+No online payment gateway is wired up. Payment is manual: cash or GCash/Maya QR,
+scan-and-confirm by staff. The `PAYMONGO_*` env vars above are unused placeholders
+left over from an earlier plan — leave them blank.
 
 ---
 
 ## Deployment
 
-### API + Database → Railway
-
-1. Create a new Railway project
-2. Add a **PostgreSQL** service — Railway gives you a `DATABASE_URL`
-3. Add a **Node.js** service pointing to `apps/api`
-4. Set all environment variables from `apps/api/.env.example`
-5. Deploy
-
-### Customer Website → Vercel
-
-1. Import the repo into Vercel
-2. Set root to `apps/web`
-3. Add `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_PAYMONGO_PUBLIC_KEY`
-4. Deploy
-
-### Admin Web App → Vercel
-
-Same as above but root is `apps/admin`.
+Live production runs as self-hosted Docker Compose on a shared Hostinger VPS, not
+Railway/Vercel. See [DEPLOY.md](./DEPLOY.md) for the actual architecture, first-time
+deploy steps, and update workflow — it supersedes any deployment info that used to be
+here.
 
 ### Mobile App → Expo EAS
 

@@ -178,6 +178,9 @@ model Order {
   items   OrderItem[]
   payment Payment?
 
+  @@index([status, createdAt]) // hot path: kitchen display polls WHERE status IN (...) ORDER BY createdAt
+  @@index([tableId])
+  @@index([staffId])
   @@map("orders")
 }
 

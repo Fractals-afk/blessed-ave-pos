@@ -63,7 +63,7 @@ export default function KitchenPage() {
     adminApi.orders.kitchen().then((r) => setOrders(r.data));
     let socket: ReturnType<typeof io> | undefined;
     resolveApiBase().then((base) => {
-      socket = io(base);
+      socket = io(base, { auth: { token: localStorage.getItem("accessToken") } });
       socket.emit("join:kitchen");
       socket.on("order:new", (order: Order) => {
         setOrders((prev) => [order, ...prev]);

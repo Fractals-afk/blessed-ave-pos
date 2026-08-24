@@ -328,7 +328,7 @@ export default function POSPage() {
 
     let socket: ReturnType<typeof io> | undefined;
     resolveApiBase().then((base) => {
-      socket = io(base);
+      socket = io(base, { auth: { token: localStorage.getItem("accessToken") } });
       socket.emit("join:kitchen");
       socket.on("order:new", (order: Order) => {
         if (ACTIVE_STATUSES.includes(order.status)) setActiveOrders((prev) => [order, ...prev]);

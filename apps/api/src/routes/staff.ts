@@ -36,6 +36,10 @@ staffRouter.post(
         })
         .parse(req.body);
 
+      if (role === "OWNER" && req.user!.role !== "OWNER") {
+        throw new AppError("Only an owner can grant the owner role", 403);
+      }
+
       const existing = await prisma.user.findUnique({ where: { email } });
       if (existing) throw new AppError("Email already in use");
 
@@ -65,6 +69,10 @@ staffRouter.patch(
           active: z.boolean().optional(),
         })
         .parse(req.body);
+
+      if (data.role === "OWNER" && req.user!.role !== "OWNER") {
+        throw new AppError("Only an owner can grant the owner role", 403);
+      }
 
       const user = await prisma.user.update({
         where: { id: req.params.id },
